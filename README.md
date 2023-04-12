@@ -1,0 +1,1 @@
+Acesta este repository-ul pentru proiectul IP.

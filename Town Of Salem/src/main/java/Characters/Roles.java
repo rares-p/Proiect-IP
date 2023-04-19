@@ -1,4 +1,4 @@
-package com.github.raresp.proiectip.TownOfSalem.models.characters;
+package Characters;
 
 public enum Roles {
     Escort,

@@ -1,10 +1,10 @@
-package Characters;
+package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 public class Sheriff extends Character {
     public Sheriff(String playerUsername) {
         super(playerUsername);
-        this.attack = AttackTypes.None;
-        this.defense = DefenseTypes.None;
+        this.attack = AttackTypes.NONE;
+        this.defense = DefenseTypes.NONE;
         this.innocent = true;
     }
 }

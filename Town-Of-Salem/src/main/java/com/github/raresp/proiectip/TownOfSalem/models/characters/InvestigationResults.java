@@ -1,4 +1,4 @@
-package Characters;
+package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,6 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public abstract class Character {
     public Interaction lastInteraction;
     public DefenseTypes defense;
     public AttackTypes attack;
+    public ImmunityTypes immunity;
 
     @OneToMany
     @JoinColumn(name = "night_results")
@@ -42,6 +44,8 @@ public abstract class Character {
     public void ResetNightResults() {
         nightResults.clear();
     }
+    public abstract void resetDefense();
+    public abstract void act (List<Character> listOfTargets);
 
     public boolean IsInnocent() {
         return innocent;

@@ -72,6 +72,8 @@ public class Game {
                     long selectionRemainingTime = timeOfCurrentState.getTimeInMillis() - getCurrentUtcTime().getTimeInMillis();
                     while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
                     Object o = votingSession.calculateOutcome();    //get voting result
+
+                    gameState = GameState.Selection;
                     timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
                 }
             }

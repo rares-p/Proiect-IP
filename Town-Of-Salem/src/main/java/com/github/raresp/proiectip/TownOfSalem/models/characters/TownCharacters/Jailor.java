@@ -10,7 +10,6 @@ public class Jailor extends TownCharacter {
         this.attack = AttackTypes.Unstoppable ;//it says that it can forcefully execute the prisoner
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
-
     }
 
     @Override
@@ -20,6 +19,11 @@ public class Jailor extends TownCharacter {
 
     @Override
     public void act(List<Character> listOfTargets) {
+
+    }
+
+    @Override
+    public void act() {
 
     }
 }

@@ -43,4 +43,9 @@ public class SerialKiller extends NeutralCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
+    @Override
+    public void act() {
+
+    }
 }

@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 import jakarta.persistence.*;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-public abstract class Character {
+public abstract class Character implements Comparable<Character> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,7 +19,10 @@ public abstract class Character {
     protected boolean roleBlocked;
     protected boolean innocent;
     protected boolean framed;
+    public boolean healed;
     protected String playerUsername;
+    @OneToMany
+    protected List<Character> targets = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Interaction lastInteraction;
     protected DefenseTypes defense;
@@ -34,6 +38,7 @@ public abstract class Character {
         this.framed = false;
         this.roleBlocked = false;
         this.isAlive = true;
+        this.healed = false;
     }
 
     protected Character() {}
@@ -47,6 +52,7 @@ public abstract class Character {
     }
     public abstract void resetDefense();
     public abstract void act (List<Character> listOfTargets);
+    public abstract void act ();
 
     public boolean IsInnocent() {
         return innocent;
@@ -56,6 +62,7 @@ public abstract class Character {
         framed = false;
         roleBlocked = false;
         lastInteraction = null;
+        healed = false;
     }
 
     public DefenseTypes getDefense() {
@@ -124,5 +131,16 @@ public abstract class Character {
 
     public String getRole() {
         return this.getClass().getSimpleName();
+    }
+
+    public void resetStats()
+    {
+        this.roleBlocked = false;
+        this.healed = false;
+        this.nightResults.clear();
+    }
+
+    public void AddTarget(Character c){
+        this.targets.add(c);
     }
 }

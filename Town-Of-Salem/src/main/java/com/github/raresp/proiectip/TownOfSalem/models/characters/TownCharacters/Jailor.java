@@ -27,4 +27,9 @@ public class Jailor extends TownCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
+    @Override
+    public void act() {
+
+    }
 }

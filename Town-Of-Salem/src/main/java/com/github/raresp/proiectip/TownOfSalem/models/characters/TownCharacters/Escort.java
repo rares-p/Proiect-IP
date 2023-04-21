@@ -27,4 +27,11 @@ public class Escort extends TownCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
+    @Override
+    public void act() {
+        Character target = this.targets.get(0);
+        target.roleBlocked = true;
+        target.AddNightResult("Someone occupied your night. You were role blocked!");
+    }
 }

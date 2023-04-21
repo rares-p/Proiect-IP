@@ -1,4 +1,4 @@
-package com.github.raresp.proiectip.TownOfSalem.API;
+package com.github.raresp.proiectip.TownOfSalem.API.advices;
 
 import com.github.raresp.proiectip.TownOfSalem.exceptions.LobbyNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 class LobbyNotFoundAdvice {
-
     @ResponseBody
     @ExceptionHandler(LobbyNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String employeeNotFoundHandler(LobbyNotFoundException ex) {
-        return ex.getMessage();
+    String lobbyNotFoundHandler(LobbyNotFoundException ex) {
+        return "{\"error\": " + ex.getMessage() + "\"}";
     }
 }

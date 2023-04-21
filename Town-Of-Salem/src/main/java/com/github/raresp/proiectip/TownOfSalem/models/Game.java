@@ -1,11 +1,13 @@
 package com.github.raresp.proiectip.TownOfSalem.models;
 
+import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -14,7 +16,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "game_characters")
     private List<Character> characters;
 
@@ -24,11 +26,11 @@ public class Game {
         this.characters = characters;
     }
 
-    public Character getCharacterByName(String name) {
+    public Character getCharacterByName(String name) throws CharacterNotFoundException {
         for(Character c : characters)
-            if(c.playerUsername == name)
+            if(Objects.equals(c.getPlayerUsername(), name))
                 return c;
-        return null;
+        throw new CharacterNotFoundException();
     }
 
     public void removeCharacter(Character c) throws InvalidCharacterException {
@@ -39,5 +41,9 @@ public class Game {
 
     public List<Character> getCharacters() {
         return characters;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

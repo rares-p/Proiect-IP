@@ -1,5 +1,6 @@
 package com.github.raresp.proiectip.TownOfSalem.models;
 
+import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidLobbyException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
@@ -16,7 +17,7 @@ public class Lobby {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Game game;
 
     @ElementCollection
@@ -27,19 +28,20 @@ public class Lobby {
     public Lobby() {
         this.waitingToJoin = new ArrayList<>();
         this.game = null;
+        this.state = LobbyState.WAITING_PLAYERS;
     }
 
     public void addPlayerInLobby(String player) throws InvalidLobbyException {
         if(state != LobbyState.WAITING_PLAYERS)
-            throw new InvalidLobbyException();
+            throw new InvalidLobbyException("The Lobby is not in waiting state");
         if(waitingToJoin.contains(player))
-            throw new InvalidLobbyException();
+            throw new InvalidLobbyException("The player already exists in the lobby");
         waitingToJoin.add(player);
     }
 
-    public void removePlayerFromLobby(String player) throws InvalidCharacterException, InvalidLobbyException {
+    public void removePlayerFromLobby(String player) throws InvalidCharacterException, InvalidLobbyException, CharacterNotFoundException {
         if(!waitingToJoin.contains(player))
-            throw new InvalidLobbyException();
+            throw new InvalidLobbyException("The player does not exist in this Lobby");
         if(state == LobbyState.STARTED)
             this.game.removeCharacter(this.game.getCharacterByName(player));
         waitingToJoin.remove(player);
@@ -51,16 +53,19 @@ public class Lobby {
 
     public void startGame() throws InvalidLobbyException {
         if(waitingToJoin.size() < MINIMUM_PLAYERS)
-            throw new InvalidLobbyException();
+            throw new InvalidLobbyException("Not enough players to start the game");
+        if(state != LobbyState.WAITING_PLAYERS)
+            throw new InvalidLobbyException("The Lobby is not in waiting state");
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
         this.game = new Game(characters);
+        this.state = LobbyState.STARTED;
     }
 
     public Game getGame() {
         return game;
     }
 
-    public static int getMinimumPlayers() {
+    public int getMinimumPlayers() {
         return MINIMUM_PLAYERS;
     }
 

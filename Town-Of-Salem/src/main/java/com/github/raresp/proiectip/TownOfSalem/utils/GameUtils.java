@@ -2,7 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.utils;
 
 import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Sheriff;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.Sheriff;
 
 import java.util.ArrayList;
 import java.util.List;

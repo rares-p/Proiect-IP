@@ -17,6 +17,7 @@ public class Game {
     public final int votingTime = 15;
     public final int nightTime = 30;
     public Calendar timeOfCurrentState;
+    @ManyToMany
     public HashMap<Character, Character> selections = new HashMap<>();
 
     @Id

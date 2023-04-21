@@ -11,16 +11,18 @@ import java.util.UUID;
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class Character implements Comparable<Character> {
+
+    protected Roles role;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    protected Roles role;
     public boolean isAlive = true;
     public boolean roleBlocked = false;
     protected boolean innocent;
     public boolean framed = false;
     public boolean healed = false;
     public String playerUsername;
+    @OneToMany
     protected List<Character> targets = new ArrayList<>();
 
     @OneToOne

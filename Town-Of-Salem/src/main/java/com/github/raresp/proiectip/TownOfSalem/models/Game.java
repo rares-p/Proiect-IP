@@ -3,6 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.models;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -45,5 +46,22 @@ public class Game {
 
     public Long getId() {
         return id;
+    }
+
+    public List<MafiaCharacter> getMafiaCharacters() {
+        return characters.stream()
+                .filter(c -> c instanceof MafiaCharacter)
+                .map(c -> (MafiaCharacter) c)
+                .toList();
+    }
+
+    public List<MafiaCharacter> getMafiaCharactersIfCharacterIsMafia(Character c) {
+        if(c instanceof MafiaCharacter && characters.contains(c))
+            return getMafiaCharacters();
+        return new ArrayList<>();
+    }
+
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
     }
 }

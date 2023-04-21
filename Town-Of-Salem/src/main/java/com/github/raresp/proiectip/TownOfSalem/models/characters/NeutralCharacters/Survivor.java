@@ -1,9 +1,11 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Survivor extends NeutralCharacter {
     private int bulletVestsCount = 4;
 
@@ -14,6 +16,10 @@ public class Survivor extends NeutralCharacter {
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.innocent = true;
+    }
+
+    protected Survivor() {
+        super();
     }
 
     @Override

@@ -1,9 +1,11 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Vigilante extends TownCharacter {
     /*if you shoot another townie, you commit suicide because of the guilt*/
 
@@ -13,6 +15,10 @@ public class Vigilante extends TownCharacter {
         this.attack = AttackTypes.Basic;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+    }
+
+    protected Vigilante() {
+        super();
     }
 
     @Override

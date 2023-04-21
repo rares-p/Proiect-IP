@@ -1,21 +1,25 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
 public class Mafioso extends MafiaCharacter {
-
-    //cannot be initialized in the constructor because there is a circular
-    //dependency from Mafioso to Godfather and you don't know who "is creates" first.
-    //in the end when all the characters are created, the godfather and the mafioso fields will be assigned
-
+    @OneToOne(mappedBy = "mafioso", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private GodFather godFather;
+
     public Mafioso(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Basic;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.innocent = false;
+    }
+
+    protected Mafioso() {
+        super();
     }
 
     @Override

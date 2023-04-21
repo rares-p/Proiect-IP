@@ -8,34 +8,35 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public boolean isAlive = true;
-    public boolean roleBlocked = false;
+    protected boolean isAlive;
+    protected boolean roleBlocked;
     protected boolean innocent;
-    public boolean framed = false;
-    public String playerUsername;
-    @OneToOne
-    public Interaction lastInteraction;
-    public DefenseTypes defense;
-    public AttackTypes attack;
-    public ImmunityTypes immunity;
+    protected boolean framed;
+    protected String playerUsername;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    protected Interaction lastInteraction;
+    protected DefenseTypes defense;
+    protected AttackTypes attack;
+    protected ImmunityTypes immunity;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "night_results")
-    private ArrayList<NightResult> nightResults;
+    private List<NightResult> nightResults;
 
     public Character(String playerUsername) {
         this.playerUsername = playerUsername;
+        this.framed = false;
+        this.roleBlocked = false;
+        this.isAlive = true;
     }
 
-    public Character() {
-
-    }
+    protected Character() {}
 
     public void AddNightResult(String ...messages) {
         for (String message : messages)
@@ -57,5 +58,71 @@ public abstract class Character {
         lastInteraction = null;
     }
 
+    public DefenseTypes getDefense() {
+        return defense;
+    }
 
+    public AttackTypes getAttack() {
+        return attack;
+    }
+
+    public String getPlayerUsername() {
+        return playerUsername;
+    }
+
+    public Interaction getLastInteraction() {
+        return lastInteraction;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<NightResult> getNightResults() {
+        return nightResults;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public void setAttack(AttackTypes attack) {
+        this.attack = attack;
+    }
+
+    public void setDefense(DefenseTypes defense) {
+        this.defense = defense;
+    }
+
+    public void setFramed(boolean framed) {
+        this.framed = framed;
+    }
+
+    public void setImmunity(ImmunityTypes immunity) {
+        this.immunity = immunity;
+    }
+
+    public void setInnocent(boolean innocent) {
+        this.innocent = innocent;
+    }
+
+    public void setLastInteraction(Interaction lastInteraction) {
+        this.lastInteraction = lastInteraction;
+    }
+
+    public void setPlayerUsername(String playerUsername) {
+        this.playerUsername = playerUsername;
+    }
+
+    public void setNightResults(ArrayList<NightResult> nightResults) {
+        this.nightResults = nightResults;
+    }
+
+    public void setRoleBlocked(boolean roleBlocked) {
+        this.roleBlocked = roleBlocked;
+    }
+
+    public String getRole() {
+        return this.getClass().getSimpleName();
+    }
 }

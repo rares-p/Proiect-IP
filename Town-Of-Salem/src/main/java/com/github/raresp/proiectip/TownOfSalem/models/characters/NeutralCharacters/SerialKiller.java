@@ -1,9 +1,11 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class SerialKiller extends NeutralCharacter {
     /*if the SerialKiller is roleblocked, he kills the rollblocker in addition to his target;
     Roleblockers killed by the SerialKiller have their will destroyed;
@@ -17,6 +19,10 @@ public class SerialKiller extends NeutralCharacter {
         //visits the SK, the SK dies?
         this.innocent = true;//?
         this.immunity = ImmunityTypes.Roleblock;
+    }
+
+    protected SerialKiller() {
+        super();
     }
 
     @Override

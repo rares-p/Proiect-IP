@@ -1,16 +1,21 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Sheriff extends TownCharacter {
     public Sheriff(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+    }
 
+    protected Sheriff() {
+        super();
     }
 
     @Override

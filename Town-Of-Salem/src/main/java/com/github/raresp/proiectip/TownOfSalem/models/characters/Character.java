@@ -2,7 +2,6 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 import jakarta.persistence.*;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -10,19 +9,16 @@ import java.util.UUID;
 
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public abstract class Character implements Comparable<Character> {
+public abstract class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    protected Roles role;
+
     public boolean isAlive = true;
     public boolean roleBlocked = false;
     protected boolean innocent;
     public boolean framed = false;
-    public boolean healed = false;
     public String playerUsername;
-    protected List<Character> targets = new ArrayList<>();
-
     @OneToOne
     public Interaction lastInteraction;
     public DefenseTypes defense;
@@ -40,9 +36,7 @@ public abstract class Character implements Comparable<Character> {
     public Character() {
 
     }
-    public Roles getRole() {
-        return role;
-    }
+
     public void AddNightResult(String ...messages) {
         for (String message : messages)
             nightResults.add(new NightResult(message));
@@ -52,7 +46,6 @@ public abstract class Character implements Comparable<Character> {
     }
     public abstract void resetDefense();
     public abstract void act (List<Character> listOfTargets);
-    public abstract void act ();
 
     public boolean IsInnocent() {
         return innocent;
@@ -62,22 +55,7 @@ public abstract class Character implements Comparable<Character> {
         framed = false;
         roleBlocked = false;
         lastInteraction = null;
-        healed = false;
     }
 
-    @Override
-    public int compareTo(Character other) {
-        return role.compareTo(other.getRole());
-    }
 
-    public void resetStats()
-    {
-        this.roleBlocked = false;
-        this.healed = false;
-        this.nightResults.clear();
-    }
-
-    public void AddTarget(Character c){
-        this.targets.add(c);
-    }
 }

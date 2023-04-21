@@ -10,6 +10,14 @@ import java.util.UUID;
 
 @Entity
 public class Game {
+
+    public final int discussionTime = 30;
+    public final int selectionTime = 30;
+    public final int votingTime = 15;
+    public final int nightTime = 30;
+    public Calendar timeOfCurrentState;
+    @ManyToMany
+    public HashMap<Character, Character> selections = new HashMap<>();
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

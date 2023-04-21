@@ -28,4 +28,9 @@ public class Survivor extends NeutralCharacter {
         bulletVestsCount--;
         this.defense = DefenseTypes.Powerful;
     }
+
+    @Override
+    public void act() {
+
+    }
 }

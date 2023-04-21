@@ -54,7 +54,7 @@ public class Game {
 
     public void StartGame()
     {
-        while(true)
+        while(true)     //Game is not over
         {
             gameState = GameState.Discussion;
             timeOfCurrentState = getCurrentUtcTime(discussionTime);
@@ -68,13 +68,13 @@ public class Game {
                     VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
 
                     gameState = GameState.Voting;
-                    timeOfCurrentState = getCurrentUtcTime(nightTime);
+                    timeOfCurrentState = getCurrentUtcTime(votingTime);
                     long selectionRemainingTime = timeOfCurrentState.getTimeInMillis() - getCurrentUtcTime().getTimeInMillis();
                     while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
                     Object o = votingSession.calculateOutcome();    //get voting result
 
                     gameState = GameState.Selection;
-                    timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
+                    timeOfCurrentState = getCurrentUtcTime((int)selectionRemainingTime * 1000);
                 }
             }
 

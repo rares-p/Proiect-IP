@@ -32,14 +32,14 @@ public class VotingSession {
         for (Character player : players) {
             if (playerVotes.get(player) == VoteType.Innocent) {
                 innocentVotes++;
-                votingLog.add(player.playerUsername + " has voted " + playerVotes.get(player) + ".");
+                votingLog.add(player.getPlayerUsername() + " has voted " + playerVotes.get(player) + ".");
             }
             else if (playerVotes.get(player) == VoteType.Guilty) {
                 guiltyVotes++;
-                votingLog.add(player.playerUsername + " has voted " + playerVotes.get(player) + ".");
+                votingLog.add(player.getPlayerUsername() + " has voted " + playerVotes.get(player) + ".");
             }
             else
-                votingLog.add(player.playerUsername + " has abstained.");
+                votingLog.add(player.getPlayerUsername() + " has abstained.");
         }
         return (guiltyVotes > innocentVotes);
     }

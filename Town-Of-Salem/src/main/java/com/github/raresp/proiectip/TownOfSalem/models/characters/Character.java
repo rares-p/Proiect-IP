@@ -9,42 +9,40 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class Character implements Comparable<Character> {
-
-    protected Roles role;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    public boolean isAlive = true;
-    public boolean roleBlocked = false;
+
+    protected boolean isAlive;
+    protected boolean roleBlocked;
     protected boolean innocent;
-    public boolean framed = false;
-    public boolean healed = false;
-    public String playerUsername;
+    protected boolean framed;
+    public boolean healed;
+    protected String playerUsername;
     @OneToMany
     protected List<Character> targets = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    protected Interaction lastInteraction;
+    protected DefenseTypes defense;
+    protected AttackTypes attack;
+    protected ImmunityTypes immunity;
 
-    @OneToOne
-    public Interaction lastInteraction;
-    public DefenseTypes defense;
-    public AttackTypes attack;
-    public ImmunityTypes immunity;
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "night_results")
-    private ArrayList<NightResult> nightResults;
+    private List<NightResult> nightResults;
 
     public Character(String playerUsername) {
         this.playerUsername = playerUsername;
+        this.framed = false;
+        this.roleBlocked = false;
+        this.isAlive = true;
+        this.healed = false;
     }
 
-    public Character() {
+    protected Character() {}
 
-    }
-    public Roles getRole() {
-        return role;
-    }
     public void AddNightResult(String ...messages) {
         for (String message : messages)
             nightResults.add(new NightResult(message));
@@ -67,9 +65,72 @@ public abstract class Character implements Comparable<Character> {
         healed = false;
     }
 
-    @Override
-    public int compareTo(Character other) {
-        return role.compareTo(other.getRole());
+    public DefenseTypes getDefense() {
+        return defense;
+    }
+
+    public AttackTypes getAttack() {
+        return attack;
+    }
+
+    public String getPlayerUsername() {
+        return playerUsername;
+    }
+
+    public Interaction getLastInteraction() {
+        return lastInteraction;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<NightResult> getNightResults() {
+        return nightResults;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public void setAttack(AttackTypes attack) {
+        this.attack = attack;
+    }
+
+    public void setDefense(DefenseTypes defense) {
+        this.defense = defense;
+    }
+
+    public void setFramed(boolean framed) {
+        this.framed = framed;
+    }
+
+    public void setImmunity(ImmunityTypes immunity) {
+        this.immunity = immunity;
+    }
+
+    public void setInnocent(boolean innocent) {
+        this.innocent = innocent;
+    }
+
+    public void setLastInteraction(Interaction lastInteraction) {
+        this.lastInteraction = lastInteraction;
+    }
+
+    public void setPlayerUsername(String playerUsername) {
+        this.playerUsername = playerUsername;
+    }
+
+    public void setNightResults(ArrayList<NightResult> nightResults) {
+        this.nightResults = nightResults;
+    }
+
+    public void setRoleBlocked(boolean roleBlocked) {
+        this.roleBlocked = roleBlocked;
+    }
+
+    public String getRole() {
+        return this.getClass().getSimpleName();
     }
 
     public void resetStats()
@@ -81,5 +142,10 @@ public abstract class Character implements Comparable<Character> {
 
     public void AddTarget(Character c){
         this.targets.add(c);
+    }
+
+    @Override
+    public int compareTo(Character o) {
+        return this.getRole().compareTo(o.getRole());
     }
 }

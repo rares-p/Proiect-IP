@@ -1,9 +1,12 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import jakarta.persistence.Entity;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.util.List;
 
+@Entity
 public class Doctor extends TownCharacter {
     //will be set true when he heals himself
     private boolean hasHealedHimself = false;
@@ -13,8 +16,10 @@ public class Doctor extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
-        this.role = Roles.Doctor;
+    }
 
+    protected Doctor() {
+        super();
     }
 
     @Override
@@ -34,7 +39,7 @@ public class Doctor extends TownCharacter {
             this.AddNightResult("Someone occupied your night. You were role blocked!");
         else {
             target.healed = true;
-            this.AddNightResult("You decided to heal " + target.playerUsername + " tonight!");
+            this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
         }
     }
 

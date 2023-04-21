@@ -10,6 +10,7 @@ public class Escort extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.Roleblock;
+        this.role = Roles.Escort;
 
     }
 
@@ -21,5 +22,12 @@ public class Escort extends TownCharacter {
     @Override
     public void act(List<Character> listOfTargets) {
 
+    }
+
+    @Override
+    public void act() {
+        Character target = this.targets.get(0);
+        target.roleBlocked = true;
+        target.AddNightResult("Someone occupied your night. You were role blocked!");
     }
 }

@@ -10,6 +10,7 @@ public class Sheriff extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+        this.role = Roles.Sheriff;
 
     }
 
@@ -21,6 +22,17 @@ public class Sheriff extends TownCharacter {
     @Override
     public void act(List<Character> listOfTargets) {
 
+    }
+
+    @Override
+    public void act() {
+        Character target = this.targets.get(0);
+        if(roleBlocked)
+            this.AddNightResult("Someone occupied your night. You were role blocked!");
+        else {
+            this.AddNightResult("You decided to investigate " + target.playerUsername + " !");
+            this.AddNightResult("Your target seems " + ((target.IsInnocent())?"Innocent!":"Suspicious!"));
+        }
     }
 
 

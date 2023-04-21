@@ -24,4 +24,9 @@ public class GodFather extends MafiaCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
+    @Override
+    public void act() {
+
+    }
 }

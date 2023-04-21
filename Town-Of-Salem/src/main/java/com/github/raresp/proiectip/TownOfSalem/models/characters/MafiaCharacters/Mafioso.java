@@ -16,7 +16,6 @@ public class Mafioso extends MafiaCharacter {
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.innocent = false;
-        this.role = Roles.Mafioso;
     }
 
     protected Mafioso() {

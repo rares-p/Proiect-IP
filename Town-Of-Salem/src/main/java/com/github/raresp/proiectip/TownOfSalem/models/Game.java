@@ -25,7 +25,7 @@ public class Game {
     public final int nightTime = 30;
     public Calendar timeOfCurrentState;
     @ManyToMany
-    public HashMap<Character, Character> selections = new HashMap<>();
+    public Map<Character, Character> selections = new HashMap<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,7 +80,7 @@ public class Game {
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
     }
-}
+
     public void StartGame()
     {
         while(true)

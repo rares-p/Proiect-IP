@@ -34,7 +34,7 @@ public class Sheriff extends TownCharacter {
         if(roleBlocked)
             this.AddNightResult("Someone occupied your night. You were role blocked!");
         else {
-            this.AddNightResult("You decided to investigate " + target.playerUsername + " !");
+            this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
             this.AddNightResult("Your target seems " + ((target.IsInnocent())?"Innocent!":"Suspicious!"));
         }
     }

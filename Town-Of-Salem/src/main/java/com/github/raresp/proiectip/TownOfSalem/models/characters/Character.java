@@ -143,4 +143,9 @@ public abstract class Character implements Comparable<Character> {
     public void AddTarget(Character c){
         this.targets.add(c);
     }
+
+    @Override
+    public int compareTo(Character o) {
+        return this.getRole().compareTo(o.getRole());
+    }
 }

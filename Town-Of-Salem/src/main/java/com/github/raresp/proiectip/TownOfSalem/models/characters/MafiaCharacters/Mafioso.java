@@ -36,12 +36,12 @@ public class Mafioso extends MafiaCharacter {
         Character target = this.targets.get(0);
         if(roleBlocked)
             this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else if(target.defense.ordinal() >= this.attack.ordinal()) {
-            this.AddNightResult("You tried to attack " + target.playerUsername + " but his defense was too strong!");
+        else if(target.getDefense().ordinal() >= this.attack.ordinal()) {
+            this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
             target.AddNightResult("Someone attacked you last night but your defense was too strong!");
         }
         else {
-            this.AddNightResult("You attacked " + target.playerUsername + " !");
+            this.AddNightResult("You attacked " + target.getPlayerUsername() + " !");
             if(target.healed)
                 target.AddNightResult("You were attacked last night but someone nursed you back to health");
             else

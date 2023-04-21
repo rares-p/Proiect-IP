@@ -29,7 +29,7 @@ public class GameAPI {
         return gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
     }
 
-    @GetMapping("/game/{id}/{username}")
+    @GetMapping("/game/{id}/user/{username}")
     IndividualGameResponse gameByIDUsername(@PathVariable Long id, @PathVariable String username) throws GameNotFoundException, CharacterNotFoundException {
         Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
         Character character = game.getCharacterByName(username);

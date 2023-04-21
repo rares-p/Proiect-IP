@@ -39,7 +39,7 @@ public class Doctor extends TownCharacter {
             this.AddNightResult("Someone occupied your night. You were role blocked!");
         else {
             target.healed = true;
-            this.AddNightResult("You decided to heal " + target.playerUsername + " tonight!");
+            this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
         }
     }
 

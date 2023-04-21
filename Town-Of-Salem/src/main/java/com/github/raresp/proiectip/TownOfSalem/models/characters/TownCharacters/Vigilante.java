@@ -34,4 +34,9 @@ public class Vigilante extends TownCharacter {
         /*performs action;chooses another player to kill*/;
         bulletsLeft--;
     }
+
+    @Override
+    public void act() {
+
+    }
 }

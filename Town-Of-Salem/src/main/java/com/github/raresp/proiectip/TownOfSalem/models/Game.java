@@ -20,10 +20,13 @@ import java.util.*;
 
 @Entity
 public class Game {
-    public final int discussionTime = 5;
+    private UUID lobbyId;
+    public final int discussionTime = 10;
     public final int selectionTime = 5;
     public final int votingTime = 5;
     public final int nightTime = 5;
+    public final int dayEndingTime = 5;
+    public final int nightEndingTime = 5;
     @Temporal(TemporalType.TIMESTAMP)
     public LocalDateTime timeOfCurrentState;
     @ManyToMany
@@ -52,12 +55,15 @@ public class Game {
         this.gameState = gameState;
     }
 
-    protected Game() {}
+    protected Game() {
+        //this.lobbyId = lobbyId;
+    }
 
-    public Game(List<Character> characters) {
+    public Game(List<Character> characters, UUID lobbyID) {
         this.characters = characters;
         this.timeOfCurrentState = LocalDateTime.now().plusSeconds(discussionTime);
         this.gameState = GameState.Discussion;
+        this.lobbyId = lobbyID;
     }
 
     public Character getCharacterByName(String name) throws CharacterNotFoundException {
@@ -172,6 +178,10 @@ public class Game {
             return LocalDateTime.now().plusSeconds(votingTime);
         if (gameState == GameState.Night)
             return LocalDateTime.now().plusSeconds(nightTime);
+        if (gameState == GameState.DayEnding)
+            return LocalDateTime.now().plusSeconds(dayEndingTime);
+        if (gameState == GameState.NightEnding)
+            return LocalDateTime.now().plusSeconds(nightEndingTime);
         return null;
     }
 

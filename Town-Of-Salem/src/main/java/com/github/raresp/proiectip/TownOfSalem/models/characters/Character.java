@@ -23,6 +23,7 @@ public abstract class Character implements Comparable<Character> {
     protected boolean framed;
     public boolean healed;
     protected String playerUsername;
+    public Integer numberOfSelection = 1;
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "targets")
     public List<Character> targets = new ArrayList<>();
@@ -154,5 +155,13 @@ public abstract class Character implements Comparable<Character> {
     @Override
     public int compareTo(Character o) {
         return this.getRole().compareTo(o.getRole());
+    }
+
+    public Integer getNumberOfSelection() {
+        return numberOfSelection;
+    }
+
+    public void setNumberOfSelection(Integer numberOfSelection) {
+        this.numberOfSelection = numberOfSelection;
     }
 }

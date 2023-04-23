@@ -58,11 +58,17 @@ public class GameRunner{
             case Night:
                 runGameIfNightTime(game);
                 break;
+            case NightEnding:
+                runGameIfNightEndingTime(game);
+                break;
             case Voting:
                 runGameIfVotingTime(game);
                 break;
             case Discussion:
                 runGameIfDiscussionTime(game);
+                break;
+            case DayEnding:
+                runGameIfDayEndingTime(game);
                 break;
             case Selection:
                 runGameIfSelectionTime(game);
@@ -118,6 +124,14 @@ public class GameRunner{
         }*/
     }
 
+    private void runGameIfDayEndingTime(Game game) {
+        game.setGameState(GameState.Night);
+    }
+
+    private void runGameIfNightEndingTime(Game game) {
+        game.setGameState(GameState.Discussion);
+    }
+
     private void runGameIfDiscussionTime(Game game) {
         game.setGameState(GameState.Selection);
     }
@@ -132,9 +146,9 @@ public class GameRunner{
 
     private void runGameIfNightTime(Game game) {
         game.selectedCharacter = null;
-        game.setGameState(GameState.Discussion);
         TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters());
         turnInteractions.computeInteractionsOutcome();
+        game.setGameState(GameState.NightEnding);
         gameService.updateGame(game);
 
         //for(Character c : game.getCharacters())

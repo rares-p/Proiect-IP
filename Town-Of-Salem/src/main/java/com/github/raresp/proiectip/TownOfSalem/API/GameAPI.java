@@ -88,7 +88,7 @@ public class GameAPI {
         {
             return ResponseEntity.ok(gameRepository.findById(id));
         }
-        System.out.println("da ajuns aici");
+        
         Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
         Character character = game.getCharacterByName(username);
         return ResponseEntity.ok(new IndividualCharacterResponse(game, character));

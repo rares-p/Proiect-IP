@@ -9,7 +9,8 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundExcep
 import com.github.raresp.proiectip.TownOfSalem.exceptions.GameNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.LobbyNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
-import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
+import com.github.raresp.proiectip.TownOfSalem.models.GameState;
+import com.github.raresp.proiectip.TownOfSalem.models.VoteType;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
 import com.github.raresp.proiectip.TownOfSalem.repositories.LobbyRepository;
@@ -77,6 +78,7 @@ public class GameAPI {
     ResponseEntity<Character> test(@PathVariable Long id, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException {
         Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
         Character character = game.getCharacterByName(request.username);
+
         character.targets.clear();
         for(String username : request.targets)
             game.getCharacterByName(request.username).targets.add(game.getCharacterByName(username));

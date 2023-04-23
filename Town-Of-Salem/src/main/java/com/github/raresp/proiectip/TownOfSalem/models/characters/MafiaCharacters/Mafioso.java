@@ -47,7 +47,7 @@ public class Mafioso extends MafiaCharacter {
             target.AddNightResult("Someone attacked you last night but your defense was too strong!");
         }
         else {
-            this.AddNightResult("You attacked " + target.getPlayerUsername() + " !");
+            this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
             if(target.healed)
                 target.AddNightResult("You were attacked last night but someone nursed you back to health");
             else

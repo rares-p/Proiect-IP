@@ -57,13 +57,6 @@ public class GameAPI {
         return new GameStateResponse(game);
     }
 
-    @GetMapping("/state/{id}")
-    IndividualCharacterResponse characterStateByUsername(@PathVariable Long id, @RequestParam String username) throws GameNotFoundException, CharacterNotFoundException {
-        Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
-        Character character = game.getCharacterByName(username);
-        return new IndividualCharacterResponse(game, character);
-    }
-
     /*@PostMapping(path = "/lobbies/{id}/add_user",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,5 +80,17 @@ public class GameAPI {
             System.out.println(c.targets);
         gameRepository.save(game);
         return new ResponseEntity<>(character, HttpStatus.OK);
+    }
+
+    @GetMapping("/state/{id}")
+    ResponseEntity<?> characterStateByUsername(@PathVariable Long id, @RequestParam(required=false) String username) throws GameNotFoundException, CharacterNotFoundException {
+        if(username == null)
+        {
+            return ResponseEntity.ok(gameRepository.findById(id));
+        }
+        System.out.println("da ajuns aici");
+        Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
+        Character character = game.getCharacterByName(username);
+        return ResponseEntity.ok(new IndividualCharacterResponse(game, character));
     }
 }

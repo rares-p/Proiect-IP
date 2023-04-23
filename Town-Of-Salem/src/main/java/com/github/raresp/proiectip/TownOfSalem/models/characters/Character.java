@@ -31,12 +31,11 @@ public abstract class Character implements Comparable<Character> {
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "night_results")
-    //@ElementCollection(fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")
-    //@GeneratedValue(strategy = GenerationType.AUTO)
-    private List<NightResult> nightResults = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "night_results")
+    public List<String> nightResults = new ArrayList<>();
 
     public Character(String playerUsername) {
         this.playerUsername = playerUsername;
@@ -50,7 +49,7 @@ public abstract class Character implements Comparable<Character> {
 
     public void AddNightResult(String ...messages) {
         for (String message : messages)
-            nightResults.add(new NightResult(message));
+            nightResults.add(message);
     }
     public void ResetNightResults() {
         nightResults.clear();

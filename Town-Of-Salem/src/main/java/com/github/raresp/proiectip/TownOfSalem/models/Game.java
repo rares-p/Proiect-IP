@@ -4,6 +4,7 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundExcep
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSession;
 import com.github.raresp.proiectip.TownOfSalem.utils.GameManager;
 import jakarta.persistence.*;
 
@@ -21,7 +22,7 @@ import java.util.*;
 public class Game {
     public final int discussionTime = 5;
     public final int selectionTime = 5;
-    public final int votingTime = 0;
+    public final int votingTime = 5;
     public final int nightTime = 5;
     @Temporal(TemporalType.TIMESTAMP)
     public LocalDateTime timeOfCurrentState;
@@ -37,6 +38,12 @@ public class Game {
     private List<Character> characters;
 
     public GameState gameState;
+
+    @OneToOne
+    public Character selectedCharacter;
+    @ElementCollection
+    public List<String> votingLog = new ArrayList<>();
+
     public GameState getGameState() {
         return gameState;
     }
@@ -111,13 +118,13 @@ public class Game {
             while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
                 //perform voting checks and instantiate voting session
                 if(selections.values().stream().filter(v -> v.equals(new Sheriff("test"))).count() > 2) {    //voting session
-                    VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
+                    //VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
 
                     gameState = GameState.Voting;
                     timeOfCurrentState = getCurrentUtcTime(nightTime);
                     long selectionRemainingTime = timeOfCurrentState.toInstant(ZoneOffset.UTC).toEpochMilli() - getCurrentUtcTime().toInstant(ZoneOffset.UTC).toEpochMilli();
                     while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
-                    Object o = votingSession.calculateOutcome();    //get voting result
+                    //Object o = votingSession.calculateOutcome();    //get voting result
                     timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
                 }
             }
@@ -171,6 +178,8 @@ public class Game {
     public boolean isOver(){
         return false;
     }
+
+
 //    @Override
 //    public void run() {
 //        StartGame();

@@ -7,8 +7,10 @@ import com.github.raresp.proiectip.TownOfSalem.models.GameState;
 import com.github.raresp.proiectip.TownOfSalem.models.TurnInteractions;
 import com.github.raresp.proiectip.TownOfSalem.models.VotingSession;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSession;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Sheriff;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -18,8 +20,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -122,19 +123,41 @@ public class GameRunner{
     }
 
     private void runGameIfVotingTime(Game game) {
+        VotingSession votingSession = new VotingSession(game.selectedCharacter, game.getCharacters());
+        if(votingSession.calculateOutcome()) game.selectedCharacter.isAlive = false;
+        game.votingLog = votingSession.getVotes();
         game.setGameState(GameState.Night);
+        System.out.println(game.votingLog);
     }
 
     private void runGameIfNightTime(Game game) {
+        game.selectedCharacter = null;
         game.setGameState(GameState.Discussion);
         TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters());
         turnInteractions.computeInteractionsOutcome();
         gameService.updateGame(game);
+
         //for(Character c : game.getCharacters())
           //  c.resetStats();
     }
 
+
     private void runGameIfSelectionTime(Game game) {
-        game.setGameState(GameState.Voting);
+        System.out.println(game.getCharacters());
+
+        SelectionSession selectionSession = new SelectionSession(game.getCharacters());
+        game.selectedCharacter = selectionSession.calculateOutcome();
+
+        System.out.println(game.getCharacters());
+
+        if(game.selectedCharacter == null) {
+            System.out.println("Nobody has been selected");
+            game.setGameState(GameState.Night);
+        }
+        else {
+            System.out.println(game.selectedCharacter + " has been selected");
+            game.setGameState(GameState.Voting);
+        }
+        System.out.println(game.getCharacters());
     }
 }

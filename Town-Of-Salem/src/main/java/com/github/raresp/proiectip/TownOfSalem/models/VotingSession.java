@@ -2,19 +2,26 @@ package com.github.raresp.proiectip.TownOfSalem.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import org.springframework.stereotype.Service;
 
 public class VotingSession {
     Character judgedCharacter;
-    HashMap<Character, VoteType> playerVotes = new HashMap<>();
+    Map<Character, VoteType> playerVotes = new HashMap<>();
     ArrayList<String> votingLog = new ArrayList<>();
-    ArrayList<Character> players = new ArrayList<>();
+    List<Character> players = new ArrayList<>();
     boolean isOver = false;
 
-    public VotingSession(Character judgedCharacter, List<Character> players) {
+    public VotingSession(Character judgedCharacter, List<Character> characters) {
         this.judgedCharacter = judgedCharacter;
-        this.players = new ArrayList<>(players);
+        this.players = characters;
+        for(Character c : players)
+            if(c.targets.size()>0)
+                if(c.targets.get(0).equals(judgedCharacter))
+                    playerVotes.put(c, VoteType.Guilty);
+                else playerVotes.put(c, VoteType.Innocent);
     }
 
     public void addVote(Character character, VoteType vote) {
@@ -24,12 +31,13 @@ public class VotingSession {
             playerVotes.put(character, vote);
     }
 
-    public Object calculateOutcome(){
+    public boolean calculateOutcome(){
         isOver = true;
         int guiltyVotes = 0;
         int innocentVotes = 0;
 
         for (Character player : players) {
+            //System.out.println(player.getPlayerUsername() + " " + player.lastVote);
             if (playerVotes.get(player) == VoteType.Innocent) {
                 innocentVotes++;
                 votingLog.add(player.getPlayerUsername() + " has voted " + playerVotes.get(player) + ".");

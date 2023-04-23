@@ -1,5 +1,6 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
+import com.github.raresp.proiectip.TownOfSalem.models.VoteType;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 

@@ -24,7 +24,8 @@ public abstract class Character implements Comparable<Character> {
     public boolean healed;
     protected String playerUsername;
     public Integer numberOfSelection = 1;
-    @OneToMany(fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "targets")
     public List<Character> targets = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

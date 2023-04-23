@@ -90,7 +90,7 @@ public class LobbyAPI {
     }
 
     @PostMapping(path = "/lobbies/{id}/start_game")
-    Lobby startGame(@PathVariable UUID id) throws LobbyNotFoundException, InvalidLobbyException {
+    Lobby startGame(@PathVariable UUID id) throws LobbyNotFoundException, InvalidLobbyException, GameNotFoundException {
         Lobby lobby = lobbyRepository.findById(id)
                 .orElseThrow(() -> new LobbyNotFoundException(id.toString()));
         //lobby.createGame();

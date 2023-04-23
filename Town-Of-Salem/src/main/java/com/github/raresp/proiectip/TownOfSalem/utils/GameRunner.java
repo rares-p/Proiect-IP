@@ -35,9 +35,12 @@ public class GameRunner{
 
     public GameRunner() {}
 
-    public void StartGame(Long gameId) {
+    public void StartGame(Long gameId) throws GameNotFoundException {
             CronTrigger cronTrigger
                     = new CronTrigger("0/1 * * * * ?");
+            Game onlyGame = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException());
+            gameRepository.deleteAll();
+            gameRepository.save(onlyGame);
             scheduler.schedule(() -> runGame(gameId), cronTrigger);
     }
 

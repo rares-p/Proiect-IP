@@ -22,7 +22,7 @@ import java.util.*;
 public class Game {
     private UUID lobbyId;
     public final int discussionTime = 10;
-    public final int selectionTime = 5;
+    public final int selectionTime = 20;
     public final int votingTime = 5;
     public final int nightTime = 5;
     public final int dayEndingTime = 5;

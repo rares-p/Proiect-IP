@@ -15,6 +15,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.Game;
 import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
+import com.github.raresp.proiectip.TownOfSalem.utils.GameRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +32,8 @@ public class GameAPI {
     private final GameRepository gameRepository;
     @Autowired
     public GameService gameService;
+    @Autowired
+    private GameRunner gameRunner;
 
     GameAPI(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
@@ -43,7 +46,9 @@ public class GameAPI {
 
     @GetMapping("/game/{id}/admin")
     Game lobbyByIDAdmin(@PathVariable Long id) throws GameNotFoundException {
-        return gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
+        Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
+        gameRunner.runGame(game.getId());
+        return game;
     }
 
     @GetMapping("/game/{id}/user/{username}")

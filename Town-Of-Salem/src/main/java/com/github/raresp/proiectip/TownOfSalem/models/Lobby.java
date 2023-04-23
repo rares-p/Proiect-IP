@@ -4,8 +4,10 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundExcep
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidLobbyException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.utils.GameRunner;
 import com.github.raresp.proiectip.TownOfSalem.utils.GameUtils;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +53,19 @@ public class Lobby {
         return waitingToJoin;
     }
 
-    public void startGame() throws InvalidLobbyException {
-        if(waitingToJoin.size() < MINIMUM_PLAYERS)
-            throw new InvalidLobbyException("Not enough players to start the game");
-        if(state != LobbyState.WAITING_PLAYERS)
-            throw new InvalidLobbyException("The Lobby is not in waiting state");
+    public void createGame() {
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
         this.game = new Game(characters);
-        new Thread(this.game).start();
+        this.state = LobbyState.STARTED;
+    }
+
+    public void startGame() throws InvalidLobbyException {
+//        if(waitingToJoin.size() < MINIMUM_PLAYERS)
+//            throw new InvalidLobbyException("Not enough players to start the game");
+//        if(state != LobbyState.WAITING_PLAYERS)
+//            throw new InvalidLobbyException("The Lobby is not in waiting state");
+        List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
+        this.game = new Game(characters);
         this.state = LobbyState.STARTED;
     }
 

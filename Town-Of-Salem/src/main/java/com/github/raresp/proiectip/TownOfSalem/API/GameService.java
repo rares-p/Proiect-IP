@@ -18,9 +18,14 @@ public class GameService {
     }
 
     @Transactional
-    public void updateGameState(Long id,GameState gameState) {
+    public void updateGameState(Long id, GameState gameState) {
         Game game = gameRepository.findPublicGameById(id);
         game.gameState = gameState;
+        gameRepository.save(game);
+    }
+
+    @Transactional
+    public void updateGame(Game game) {
         gameRepository.save(game);
     }
 }

@@ -9,6 +9,8 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidLobbyException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.LobbyNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
 import com.github.raresp.proiectip.TownOfSalem.repositories.LobbyRepository;
+import com.github.raresp.proiectip.TownOfSalem.utils.GameRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import java.util.UUID;
 @RestController
 public class LobbyAPI {
     private final LobbyRepository lobbyRepository;
+    @Autowired
+    private GameRunner gameRunner;
 
     LobbyAPI(LobbyRepository lobbyRepository) {
         this.lobbyRepository = lobbyRepository;
@@ -78,8 +82,9 @@ public class LobbyAPI {
     Lobby startGame(@PathVariable UUID id) throws LobbyNotFoundException, InvalidLobbyException {
         Lobby lobby = lobbyRepository.findById(id)
                 .orElseThrow(() -> new LobbyNotFoundException(id.toString()));
-        lobby.startGame();
+        lobby.createGame();
         lobbyRepository.save(lobby);
+        gameRunner.runGame(lobby.getGame().getId());
         return lobby;
     }
 

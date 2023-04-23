@@ -136,7 +136,7 @@ public class GameRunner{
     }
 
     private void runGameIfVotingTime(Game game) {
-        game.setGameState(GameState.NightEnding);
+        game.setGameState(GameState.Night);
     }
 
     private void runGameIfNightTime(Game game) {

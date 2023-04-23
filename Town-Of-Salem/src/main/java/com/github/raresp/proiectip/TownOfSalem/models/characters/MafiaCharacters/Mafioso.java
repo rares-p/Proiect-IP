@@ -33,6 +33,12 @@ public class Mafioso extends MafiaCharacter {
 
     @Override
     public void act() {
+        if(this.targets.isEmpty())
+        {
+            this.AddNightResult("You decided to stay at home.");
+            return;
+        }
+
         Character target = this.targets.get(0);
         if(roleBlocked)
             this.AddNightResult("Someone occupied your night. You were role blocked!");

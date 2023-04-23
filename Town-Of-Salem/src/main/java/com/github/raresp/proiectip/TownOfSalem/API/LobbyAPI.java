@@ -30,6 +30,7 @@ public class LobbyAPI {
         return lobbyRepository.findBy();
     }
 
+
     @GetMapping("/lobbies/{id}")
     PublicLobby lobbyByID(@PathVariable UUID id) throws LobbyNotFoundException {
         return lobbyRepository.findPublicLobbyById(id);
@@ -79,6 +80,13 @@ public class LobbyAPI {
                 .orElseThrow(() -> new LobbyNotFoundException(id.toString()));
         lobby.startGame();
         lobbyRepository.save(lobby);
+        return lobby;
+    }
+
+    @GetMapping(path = "/gamestate/{id}")
+    Lobby gamestate(@PathVariable UUID id) throws LobbyNotFoundException, InvalidLobbyException {
+        Lobby lobby = lobbyRepository.findById(id)
+                .orElseThrow(() -> new LobbyNotFoundException(id.toString()));
         return lobby;
     }
 }

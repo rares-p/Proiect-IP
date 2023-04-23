@@ -3,22 +3,25 @@ package com.github.raresp.proiectip.TownOfSalem.models;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.utils.GameRunner;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
+
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Sheriff;
 
-import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Entity
-public class Game {
+public class Game implements Runnable{
+    //@Transient
+    //@Autowired
+    //private GameService gameService;
 
+    GameRunner gameRunner;
     public final int discussionTime = 30;
     public final int selectionTime = 30;
     public final int votingTime = 15;
@@ -36,6 +39,16 @@ public class Game {
     private List<Character> characters;
 
     public GameState gameState;
+    public GameState getGameState() {
+        return gameState;
+    }
+    //@Transactional
+    public void setGameState(GameState gameState){
+        //gameService = new GameService();
+        this.gameState = gameState;
+        //gameService.updateGameState(getId(), gameState);
+        //gameRunner = new GameRunner(this);
+    }
 
     protected Game() {}
 
@@ -85,11 +98,15 @@ public class Game {
     {
         while(true)
         {
-            gameState = GameState.Discussion;
+            System.out.println("A INCEPUT ");
+            this.gameState = GameState.Discussion;
+            setGameState(GameState.Discussion);
             timeOfCurrentState = getCurrentUtcTime(discussionTime);
             while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for discussion to finish
 
+            System.out.println("E selection");
             gameState = GameState.Selection;
+            setGameState(GameState.Selection);
             timeOfCurrentState = getCurrentUtcTime(selectionTime);
             while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
                 //perform voting checks and instantiate voting session
@@ -106,6 +123,7 @@ public class Game {
             }
 
             gameState = GameState.Night;
+            setGameState(GameState.Night);
             timeOfCurrentState = getCurrentUtcTime(nightTime);
             while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for night to finish
                 //get targets
@@ -133,5 +151,10 @@ public class Game {
         Calendar calendar = Calendar.getInstance(timeZone);
         calendar.add(Calendar.SECOND, secondsDelay);
         return calendar;
+    }
+
+    @Override
+    public void run() {
+        StartGame();
     }
 }

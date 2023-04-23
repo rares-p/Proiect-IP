@@ -15,14 +15,14 @@ public abstract class Character implements Comparable<Character> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    protected boolean isAlive;
+    public boolean isAlive;
     protected boolean roleBlocked;
     protected boolean innocent;
     protected boolean framed;
     public boolean healed;
     protected String playerUsername;
     @OneToMany
-    protected List<Character> targets = new ArrayList<>();
+    public List<Character> targets = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Interaction lastInteraction;
     protected DefenseTypes defense;
@@ -31,7 +31,7 @@ public abstract class Character implements Comparable<Character> {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "night_results")
-    private List<NightResult> nightResults;
+    private List<NightResult> nightResults = new ArrayList<>();
 
     public Character(String playerUsername) {
         this.playerUsername = playerUsername;

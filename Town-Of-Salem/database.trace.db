@@ -1,0 +1,9 @@
+2023-04-22 17:08:51 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'Night' (GAME: ""GAME_STATE"" SMALLINT)"; SQL statement:
+insert into game (discussion_time, game_state, night_time, selection_time, time_of_current_state, voting_time, id) values (?, ?, ?, ?, ?, ?, ?) [22018-214]
+2023-04-22 17:18:14 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'Night' (GAME: ""GAME_STATE"" SMALLINT)"; SQL statement:
+insert into game (discussion_time, game_state, night_time, selection_time, time_of_current_state, voting_time, id) values (?, ?, ?, ?, ?, ?, ?) [22018-214]
+2023-04-22 17:20:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'Night' (GAME: ""GAME_STATE"" SMALLINT)"; SQL statement:
+insert into game (discussion_time, game_state, night_time, selection_time, time_of_current_state, voting_time, id) values (?, ?, ?, ?, ?, ?, ?) [22018-214]

@@ -23,6 +23,8 @@ public class Game {
     public final int selectionTime = 5;
     public final int votingTime = 0;
     public final int nightTime = 5;
+    public final int dayEndingTime = 5;
+    public final int nightEndingTime = 5;
     @Temporal(TemporalType.TIMESTAMP)
     public LocalDateTime timeOfCurrentState;
     @ManyToMany
@@ -165,6 +167,10 @@ public class Game {
             return LocalDateTime.now().plusSeconds(votingTime);
         if (gameState == GameState.Night)
             return LocalDateTime.now().plusSeconds(nightTime);
+        if (gameState == GameState.DayEnding)
+            return LocalDateTime.now().plusSeconds(dayEndingTime);
+        if (gameState == GameState.NightEnding)
+            return LocalDateTime.now().plusSeconds(nightEndingTime);
         return null;
     }
 

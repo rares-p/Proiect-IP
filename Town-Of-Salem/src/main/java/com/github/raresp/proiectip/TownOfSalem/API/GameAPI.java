@@ -1,18 +1,12 @@
 package com.github.raresp.proiectip.TownOfSalem.API;
 
-import com.github.raresp.proiectip.TownOfSalem.API.projections.IndividualGame;
-import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicGame;
 import com.github.raresp.proiectip.TownOfSalem.API.requests.AddCharacterTargetRequest;
-import com.github.raresp.proiectip.TownOfSalem.API.requests.AddUserToLobbyRequest;
 import com.github.raresp.proiectip.TownOfSalem.API.responses.GameStateResponse;
 import com.github.raresp.proiectip.TownOfSalem.API.responses.IndividualCharacterResponse;
 import com.github.raresp.proiectip.TownOfSalem.API.responses.IndividualGameResponse;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.GameNotFoundException;
-import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidLobbyException;
-import com.github.raresp.proiectip.TownOfSalem.exceptions.LobbyNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
-import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
 import com.github.raresp.proiectip.TownOfSalem.utils.GameRunner;
@@ -22,10 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class GameAPI {
@@ -40,8 +31,8 @@ public class GameAPI {
     }
 
     @GetMapping("/game/{id}")
-    PublicGame lobbyByID(@PathVariable Long id) {
-        return gameRepository.findPublicGameById(id);
+    Optional<Game> lobbyByID(@PathVariable Long id) {
+        return gameRepository.findById(id);
     }
 
     @GetMapping("/game/{id}/admin")

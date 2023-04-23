@@ -1,6 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 
 import javax.management.relation.Role;
 import java.util.ArrayList;
@@ -9,19 +10,20 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class Character implements Comparable<Character> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     public boolean isAlive;
-    protected boolean roleBlocked;
+    public boolean roleBlocked;
     protected boolean innocent;
     protected boolean framed;
     public boolean healed;
     protected String playerUsername;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "targets")
     public List<Character> targets = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Interaction lastInteraction;
@@ -31,6 +33,9 @@ public abstract class Character implements Comparable<Character> {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "night_results")
+    //@ElementCollection(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "night_results")
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private List<NightResult> nightResults = new ArrayList<>();
 
     public Character(String playerUsername) {
@@ -51,6 +56,7 @@ public abstract class Character implements Comparable<Character> {
         nightResults.clear();
     }
     public abstract void resetDefense();
+
     public abstract void act (List<Character> listOfTargets);
     public abstract void act ();
 
@@ -85,9 +91,9 @@ public abstract class Character implements Comparable<Character> {
         return id;
     }
 
-    public List<NightResult> getNightResults() {
+    /*public List<NightResult> getNightResults() {
         return nightResults;
-    }
+    }*/
 
     public void setAlive(boolean alive) {
         isAlive = alive;
@@ -121,9 +127,9 @@ public abstract class Character implements Comparable<Character> {
         this.playerUsername = playerUsername;
     }
 
-    public void setNightResults(ArrayList<NightResult> nightResults) {
+    /*public void setNightResults(ArrayList<NightResult> nightResults) {
         this.nightResults = nightResults;
-    }
+    }*/
 
     public void setRoleBlocked(boolean roleBlocked) {
         this.roleBlocked = roleBlocked;
@@ -140,6 +146,7 @@ public abstract class Character implements Comparable<Character> {
         this.nightResults.clear();
     }
 
+    @Transactional
     public void AddTarget(Character c){
         this.targets.add(c);
     }

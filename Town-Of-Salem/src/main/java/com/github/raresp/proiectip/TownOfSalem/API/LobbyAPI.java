@@ -83,8 +83,9 @@ public class LobbyAPI {
         Lobby lobby = lobbyRepository.findById(id)
                 .orElseThrow(() -> new LobbyNotFoundException(id.toString()));
         lobby.createGame();
+        lobby.startGame();
         lobbyRepository.save(lobby);
-        gameRunner.runGame(lobby.getGame().getId());
+        gameRunner.StartGame(lobby.getGame().getId());
         return lobby;
     }
 

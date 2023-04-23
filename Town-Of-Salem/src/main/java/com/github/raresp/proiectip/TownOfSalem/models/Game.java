@@ -8,6 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.utils.GameManager;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,12 +19,12 @@ import java.util.*;
 
 @Entity
 public class Game {
-    public final int discussionTime = 30;
-    public final int selectionTime = 30;
-    public final int votingTime = 15;
-    public final int nightTime = 30;
+    public final int discussionTime = 5;
+    public final int selectionTime = 5;
+    public final int votingTime = 0;
+    public final int nightTime = 5;
     @Temporal(TemporalType.TIMESTAMP)
-    protected LocalDateTime timeOfCurrentState;
+    public LocalDateTime timeOfCurrentState;
     @ManyToMany
     public Map<Character, Character> selections = new HashMap<>();
 
@@ -90,49 +91,61 @@ public class Game {
         this.characters = characters;
     }
 
-//    public void StartGame()
-//    {
-//        while(true)
-//        {
-//            System.out.println("A INCEPUT ");
-//            this.gameState = GameState.Discussion;
-//            setGameState(GameState.Discussion);
-//            timeOfCurrentState = getCurrentUtcTime(discussionTime);
-//            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for discussion to finish
-//
-//            System.out.println("E selection");
-//            gameState = GameState.Selection;
-////            gameManager.setGameState(this, GameState.Selection);
-//            setGameState(GameState.Selection);
-//            timeOfCurrentState = getCurrentUtcTime(selectionTime);
-//            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
-//                //perform voting checks and instantiate voting session
-//                if(selections.values().stream().filter(v -> v.equals(new Sheriff("test"))).count() > 2) {    //voting session
-//                    VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
-//
-//                    gameState = GameState.Voting;
-//                    timeOfCurrentState = getCurrentUtcTime(nightTime);
-//                    long selectionRemainingTime = timeOfCurrentState.getTimeInMillis() - getCurrentUtcTime().getTimeInMillis();
-//                    while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
-//                    Object o = votingSession.calculateOutcome();    //get voting result
-//                    timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
-//                }
-//            }
-//
-//            gameState = GameState.Night;
-//            setGameState(GameState.Night);
-//            timeOfCurrentState = getCurrentUtcTime(nightTime);
-//            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for night to finish
-//                //get targets
-//            }
-//
-//            TurnInteractions turnInteractions = new TurnInteractions(characters);
-//            turnInteractions.computeInteractionsOutcome();
-//            for(Character c : characters)
-//                c.resetStats();
-//            //evaluate night actions
-//        }
-//    }
+    public void StartGame()
+    {
+        System.out.println("A INCEPUT SESIUNEA DE JOC");
+        while(true)
+        {
+            System.out.println("A INCEPUT ");
+            this.gameState = GameState.Discussion;
+            setGameState(GameState.Discussion);
+            timeOfCurrentState = getCurrentUtcTime(discussionTime);
+            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for discussion to finish
+
+            System.out.println("E selection");
+            characters.get(0).setRoleBlocked(true);
+            gameState = GameState.Selection;
+//            gameManager.setGameState(this, GameState.Selection);
+            setGameState(GameState.Selection);
+            timeOfCurrentState = getCurrentUtcTime(selectionTime);
+            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
+                //perform voting checks and instantiate voting session
+                if(selections.values().stream().filter(v -> v.equals(new Sheriff("test"))).count() > 2) {    //voting session
+                    VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
+
+                    gameState = GameState.Voting;
+                    timeOfCurrentState = getCurrentUtcTime(nightTime);
+                    long selectionRemainingTime = timeOfCurrentState.toInstant(ZoneOffset.UTC).toEpochMilli() - getCurrentUtcTime().toInstant(ZoneOffset.UTC).toEpochMilli();
+                    while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
+                    Object o = votingSession.calculateOutcome();    //get voting result
+                    timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
+                }
+            }
+
+            gameState = GameState.Night;
+            setGameState(GameState.Night);
+            timeOfCurrentState = getCurrentUtcTime(nightTime);
+            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for night to finish
+                //get targets
+            }
+
+            TurnInteractions turnInteractions = new TurnInteractions(characters);
+            turnInteractions.computeInteractionsOutcome();
+            for(Character c : characters)
+                c.resetStats();
+            //evaluate night actions
+        }
+    }
+
+    public LocalDateTime getCurrentUtcTime()
+    {
+        return LocalDateTime.now();
+    }
+
+    public LocalDateTime getCurrentUtcTime(int secondsDelay)
+    {
+        return LocalDateTime.now().plusSeconds(secondsDelay);
+    }
 
 
     public LocalDateTime getTimeOfCurrentState() {
@@ -142,7 +155,7 @@ public class Game {
     public void setTimeOfCurrentState(LocalDateTime timeOfCurrentState) {
         this.timeOfCurrentState = timeOfCurrentState;
     }
-
+    @Transient
     public LocalDateTime getTimeOfState() {
         if (gameState == GameState.Discussion)
             return LocalDateTime.now().plusSeconds(discussionTime);
@@ -154,4 +167,12 @@ public class Game {
             return LocalDateTime.now().plusSeconds(nightTime);
         return null;
     }
+
+    public boolean isOver(){
+        return false;
+    }
+//    @Override
+//    public void run() {
+//        StartGame();
+//    }
 }

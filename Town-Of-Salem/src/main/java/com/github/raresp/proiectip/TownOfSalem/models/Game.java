@@ -4,7 +4,6 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundExcep
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
-import com.github.raresp.proiectip.TownOfSalem.utils.GameManager;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -19,7 +18,8 @@ import java.util.*;
 
 @Entity
 public class Game {
-    public final int discussionTime = 5;
+    private UUID lobbyId;
+    public final int discussionTime = 10;
     public final int selectionTime = 5;
     public final int votingTime = 0;
     public final int nightTime = 5;
@@ -47,12 +47,15 @@ public class Game {
         this.gameState = gameState;
     }
 
-    protected Game() {}
+    protected Game() {
+        //this.lobbyId = lobbyId;
+    }
 
-    public Game(List<Character> characters) {
+    public Game(List<Character> characters, UUID lobbyID) {
         this.characters = characters;
         this.timeOfCurrentState = LocalDateTime.now().plusSeconds(discussionTime);
         this.gameState = GameState.Discussion;
+        this.lobbyId = lobbyID;
     }
 
     public Character getCharacterByName(String name) throws CharacterNotFoundException {

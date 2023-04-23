@@ -1,14 +1,18 @@
 package com.github.raresp.proiectip.TownOfSalem.API;
 
 import com.github.raresp.proiectip.TownOfSalem.API.requests.AddCharacterTargetRequest;
+import com.github.raresp.proiectip.TownOfSalem.API.responses.CurrentUserAllUsersResponse;
 import com.github.raresp.proiectip.TownOfSalem.API.responses.GameStateResponse;
 import com.github.raresp.proiectip.TownOfSalem.API.responses.IndividualCharacterResponse;
 import com.github.raresp.proiectip.TownOfSalem.API.responses.IndividualGameResponse;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.GameNotFoundException;
+import com.github.raresp.proiectip.TownOfSalem.exceptions.LobbyNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
+import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
+import com.github.raresp.proiectip.TownOfSalem.repositories.LobbyRepository;
 import com.github.raresp.proiectip.TownOfSalem.utils.GameRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,15 +86,32 @@ public class GameAPI {
         return new ResponseEntity<>(character, HttpStatus.OK);
     }
 
-    @GetMapping("/state/{id}")
-    ResponseEntity<?> characterStateByUsername(@PathVariable Long id, @RequestParam(required=false) String username) throws GameNotFoundException, CharacterNotFoundException {
+    /*@GetMapping("/state/{id}")
+    ResponseEntity<?> characterStateByUsername(@PathVariable Long id, @RequestParam String username) throws GameNotFoundException, CharacterNotFoundException {
         if(username == null)
         {
             return ResponseEntity.ok(gameRepository.findById(id));
         }
-        
+
         Game game = gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
         Character character = game.getCharacterByName(username);
-        return ResponseEntity.ok(new IndividualCharacterResponse(game, character));
+        return ResponseEntity.ok(new CurrentUserAllUsersResponse(game, character));
+    }*/
+
+    @GetMapping("/state/{id}")
+    ResponseEntity<?> characterStateByUsernameFromLobby(@PathVariable UUID id, @RequestParam String username) throws CharacterNotFoundException {
+
+        //Lobby lobby = lobbyRepository.findById(id)
+          //      .orElseThrow(() -> new LobbyNotFoundException(id.toString()));
+        if(username == null)
+        {
+            return ResponseEntity.ok(gameRepository.findByLobbyId(id));
+        }
+
+        Game game = gameRepository.findByLobbyId(id);//.orElseThrow(GameNotFoundException::new);
+        if(game == null)
+            return ResponseEntity.ok("{\"state\":\"lobby\"}");
+        Character character = game.getCharacterByName(username);
+        return ResponseEntity.ok(new CurrentUserAllUsersResponse(game, character));
     }
 }

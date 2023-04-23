@@ -55,7 +55,7 @@ public class Lobby {
 
     public void createGame() {
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
-        this.game = new Game(characters);
+        this.game = new Game(characters, id);
         this.state = LobbyState.STARTED;
     }
 
@@ -65,7 +65,7 @@ public class Lobby {
 //        if(state != LobbyState.WAITING_PLAYERS)
 //            throw new InvalidLobbyException("The Lobby is not in waiting state");
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
-        this.game = new Game(characters);
+        this.game = new Game(characters, id);
         this.game.getId();
         this.state = LobbyState.STARTED;
     }

@@ -53,7 +53,7 @@ public class GameRunner{
         }
         System.out.println("game state in run game: " + game.gameState);
         game.gameState = game.getGameState();
-        if (game.getTimeOfCurrentState().compareTo(LocalDateTime.now()) > 0)
+        if (game.getTimeOfCurrentState().compareTo(Instant.now()) > 0)
             return;
         System.out.println("game state trebuie schimbat");
 

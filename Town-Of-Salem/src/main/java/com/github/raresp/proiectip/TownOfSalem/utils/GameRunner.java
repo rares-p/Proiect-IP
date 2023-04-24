@@ -134,7 +134,10 @@ public class GameRunner{
     }
 
     private void runGameIfNightEndingTime(Game game) {
+        for (Character c : game.getCharacters())
+            c.resetStats();
         game.setGameState(GameState.Discussion);
+        gameService.updateGame(game);
     }
 
     private void runGameIfDiscussionTime(Game game) {

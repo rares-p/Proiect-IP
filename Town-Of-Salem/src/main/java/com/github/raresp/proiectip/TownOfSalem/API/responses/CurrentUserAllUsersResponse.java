@@ -36,5 +36,11 @@ public class CurrentUserAllUsersResponse {
     public Long getTimeEndState(){
         return game.timeOfCurrentState.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
+
+    public String getJudgedCharacter(){
+        if(game.selectedCharacter != null)
+            return game.selectedCharacter.getPlayerUsername();
+        return "";
+    }
 }
 

@@ -9,5 +9,9 @@ class TownOfSalemApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+	@Test
+	void test() {
+		assert true;
+	}
 
 }

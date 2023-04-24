@@ -126,6 +126,9 @@ public class GameAPI {
         if(game == null)
             return ResponseEntity.ok("{\"state\":\"lobby\"}");
         Character character = game.getCharacterByName(username);
-        return ResponseEntity.ok(new CurrentUserAllUsersResponse(game, character));
+        ResponseEntity<?> resp = ResponseEntity.ok(new CurrentUserAllUsersResponse(game, character));
+        if(game.gameState == GameState.NightEnding)
+            game.getCharacterByName(username).targets.clear();
+        return resp;
     }
 }

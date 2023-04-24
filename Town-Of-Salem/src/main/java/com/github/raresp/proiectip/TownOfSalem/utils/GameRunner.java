@@ -77,6 +77,8 @@ public class GameRunner{
                 runGameIfSelectionTime(game);
                 break;
         }
+        for(Character c : game.getCharacters())
+            c.targets.clear();
         game.setTimeOfCurrentState(game.getTimeOfState());
         gameRepository.save(game);//gameService.updateGame(game);
 

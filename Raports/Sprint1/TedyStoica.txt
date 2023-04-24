@@ -1,0 +1,1 @@
+Am organizat codul pentru ca sa poata fi rulat framework-ul Spring Boot, am ajutat la creearea bazei de date si la proiectarea generala a arhitecturii (aka API-uri, modul in care se proceseaza scurgerea timpului, etc...)

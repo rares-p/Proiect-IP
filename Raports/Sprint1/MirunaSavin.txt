@@ -1,0 +1,5 @@
+- am participat la sedinte cu echipa pentru a stabili ce taskuri ne luam si cum le vom realiza
+- Am lucrat la ceea ce tine de Characters,  am implementat clasele TownCharacters, MafiaCharacters, NeutralCharacters si rolurile derivate din fiecare dintre aceste clase. Am creat diferite metode care  au legatura cu modul in care personajele actioneaza si interactiunile dintre ele
+- Am creat si clasa ImmunityType
+- Am consultat forumurile de pe Town of Salem pentru a ma informa legat de ceea ce face fiecare rol si modul complex in care acestea interactioneaza unul cu altul
+- Am adaugat metode si campuri la clasa abstracta de baza Character

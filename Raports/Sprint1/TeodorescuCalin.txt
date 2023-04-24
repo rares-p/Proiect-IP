@@ -1,0 +1,1 @@
+Am lucrat la clasa Character, am definit tipurile de attack si defense, cat si rolul de Sheriff. Am lucrat la sistemul de votare pentru a stabili daca un jucator trebuie spanzurat sau nu.

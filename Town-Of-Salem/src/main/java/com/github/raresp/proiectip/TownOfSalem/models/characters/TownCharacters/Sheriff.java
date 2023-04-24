@@ -12,6 +12,7 @@ public class Sheriff extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+        this.actionText = "Investigate";
     }
 
     protected Sheriff() {

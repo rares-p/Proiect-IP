@@ -78,7 +78,7 @@ public class GameRunner{
                 break;
         }
         game.setTimeOfCurrentState(game.getTimeOfState());
-        gameService.updateGame(game);
+        gameRepository.save(game);//gameService.updateGame(game);
 
 
         /*while (!game.isOver()){
@@ -145,6 +145,7 @@ public class GameRunner{
         game.votingLog = votingSession.getVotes();
         game.setGameState(GameState.Night);
         System.out.println(game.votingLog);
+        gameService.updateGame(game);
     }
 
     private void runGameIfNightTime(Game game) {

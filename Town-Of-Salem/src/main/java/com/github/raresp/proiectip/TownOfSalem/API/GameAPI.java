@@ -72,7 +72,7 @@ public class GameAPI {
         lobbyRepository.save(lobby);
         return new ResponseEntity<>(lobby, HttpStatus.OK);
     }*/
-    @PostMapping(path = "/state/{id}",
+    /*@PostMapping(path = "/state/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Character> test(@PathVariable Long id, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException {
@@ -82,8 +82,20 @@ public class GameAPI {
         character.targets.clear();
         for(String username : request.targets)
             game.getCharacterByName(request.username).targets.add(game.getCharacterByName(username));
-        for(Character c : game.getCharacters())
-            System.out.println(c.targets);
+        gameRepository.save(game);
+        return new ResponseEntity<>(character, HttpStatus.OK);
+    }*/
+
+    @PostMapping(path = "/state/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Character> postGameByLobbyId(@PathVariable UUID id, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException {
+        Game game = gameRepository.findByLobbyId(id);//.orElseThrow(GameNotFoundException::new);
+        Character character = game.getCharacterByName(request.username);
+
+        character.targets.clear();
+        for(String username : request.targets)
+            game.getCharacterByName(request.username).targets.add(game.getCharacterByName(username));
         gameRepository.save(game);
         return new ResponseEntity<>(character, HttpStatus.OK);
     }

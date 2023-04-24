@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-//@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class Character implements Comparable<Character> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,9 +23,15 @@ public abstract class Character implements Comparable<Character> {
     protected boolean framed;
     public boolean healed;
     protected String playerUsername;
+    protected String actionText;
+
+    public String getActionText() {
+        return actionText;
+    }
+
     public Integer numberOfSelection = 1;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "targets")
     public List<Character> targets = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

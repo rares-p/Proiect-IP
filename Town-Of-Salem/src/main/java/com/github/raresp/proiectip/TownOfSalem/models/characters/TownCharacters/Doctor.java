@@ -16,6 +16,7 @@ public class Doctor extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+        this.actionText = "Heal";
     }
 
     protected Doctor() {

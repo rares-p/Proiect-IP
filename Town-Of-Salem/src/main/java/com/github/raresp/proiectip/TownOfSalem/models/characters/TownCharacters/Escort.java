@@ -12,6 +12,7 @@ public class Escort extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.Roleblock;
+        this.actionText = "Distract";
     }
 
     protected Escort() {

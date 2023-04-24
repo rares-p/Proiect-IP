@@ -6,6 +6,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
 
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentUserAllUsersResponse {
@@ -17,12 +18,15 @@ public class CurrentUserAllUsersResponse {
         this.character = character;
     }
 
-    public Character getCurrentUser() {
-        return character;
+    public CurrentUserResponse getCurrentUser() {
+        return new CurrentUserResponse(character);
     }
 
-    public List<Character> getUsers(){
-        return game.getCharacters();
+    public List<PublicUserResponse> getUsers(){
+        List<PublicUserResponse> publicUserResponses = new ArrayList<>();
+        for(Character c : game.getCharacters())
+            publicUserResponses.add(new PublicUserResponse(c));
+        return publicUserResponses;
     }
 
     public GameState getState(){
@@ -33,3 +37,4 @@ public class CurrentUserAllUsersResponse {
         return game.timeOfCurrentState.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 }
+

@@ -60,10 +60,10 @@ public class Lobby {
     }
 
     public void startGame() throws InvalidLobbyException {
-//        if(waitingToJoin.size() < MINIMUM_PLAYERS)
-//            throw new InvalidLobbyException("Not enough players to start the game");
-//        if(state != LobbyState.WAITING_PLAYERS)
-//            throw new InvalidLobbyException("The Lobby is not in waiting state");
+        if(waitingToJoin.size() < MINIMUM_PLAYERS)
+            throw new InvalidLobbyException("Not enough players to start the game");
+        if(state != LobbyState.WAITING_PLAYERS)
+            throw new InvalidLobbyException("The Lobby is not in waiting state");
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
         this.game = new Game(characters, id);
         this.game.getId();

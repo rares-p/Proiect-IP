@@ -5,6 +5,7 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterExcept
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSession;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Jailor;
 import com.github.raresp.proiectip.TownOfSalem.utils.GameManager;
 import jakarta.persistence.*;
 
@@ -184,6 +185,25 @@ public class Game {
         return false;
     }
 
+    public List<Character> getDeadPlayers() {
+        return characters.stream()
+                .filter(c -> !c.isAlive())
+                .toList();
+    }
+
+    public List<? extends Character> getPeers(Character character) {
+        if(this.gameState == GameState.Discussion)
+            return characters.stream()
+                    .filter(c -> !c.equals(character))
+                    .toList();
+        if(character.isJailed())
+            return characters.stream()
+                    .filter(c -> c instanceof Jailor)
+                    .toList();
+        if(character instanceof MafiaCharacter)
+            return getMafiaCharacters();
+        return new ArrayList<>();
+    }
 
 //    @Override
 //    public void run() {

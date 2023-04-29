@@ -8,8 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSessio
 import com.github.raresp.proiectip.TownOfSalem.utils.GameManager;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +27,7 @@ public class Game {
     public final int dayEndingTime = 5;
     public final int nightEndingTime = 5;
     @Temporal(TemporalType.TIMESTAMP)
-    public LocalDateTime timeOfCurrentState;
+    public Instant timeOfCurrentState;
     @ManyToMany
     public Map<Character, Character> selections = new HashMap<>();
 
@@ -61,7 +60,7 @@ public class Game {
 
     public Game(List<Character> characters, UUID lobbyID) {
         this.characters = characters;
-        this.timeOfCurrentState = LocalDateTime.now().plusSeconds(discussionTime);
+        this.timeOfCurrentState = Instant.now().plusSeconds(discussionTime);
         this.gameState = GameState.Discussion;
         this.lobbyId = lobbyID;
     }
@@ -113,7 +112,7 @@ public class Game {
             this.gameState = GameState.Discussion;
             setGameState(GameState.Discussion);
             timeOfCurrentState = getCurrentUtcTime(discussionTime);
-            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for discussion to finish
+            while(Instant.now().compareTo(timeOfCurrentState) < 0);   //wait for discussion to finish
 
             System.out.println("E selection");
             characters.get(0).setRoleBlocked(true);
@@ -121,15 +120,15 @@ public class Game {
 //            gameManager.setGameState(this, GameState.Selection);
             setGameState(GameState.Selection);
             timeOfCurrentState = getCurrentUtcTime(selectionTime);
-            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
+            while(Instant.now().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
                 //perform voting checks and instantiate voting session
                 if(selections.values().stream().filter(v -> v.equals(new Sheriff("test"))).count() > 2) {    //voting session
                     //VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
 
                     gameState = GameState.Voting;
                     timeOfCurrentState = getCurrentUtcTime(nightTime);
-                    long selectionRemainingTime = timeOfCurrentState.toInstant(ZoneOffset.UTC).toEpochMilli() - getCurrentUtcTime().toInstant(ZoneOffset.UTC).toEpochMilli();
-                    while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
+                    long selectionRemainingTime = timeOfCurrentState.toEpochMilli() - Instant.now().toEpochMilli();
+                    while(Instant.now().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
                     //Object o = votingSession.calculateOutcome();    //get voting result
                     timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
                 }
@@ -138,7 +137,7 @@ public class Game {
             gameState = GameState.Night;
             setGameState(GameState.Night);
             timeOfCurrentState = getCurrentUtcTime(nightTime);
-            while(getCurrentUtcTime().compareTo(timeOfCurrentState) < 0) {   //wait for night to finish
+            while(Instant.now().compareTo(timeOfCurrentState) < 0) {   //wait for night to finish
                 //get targets
             }
 
@@ -150,38 +149,34 @@ public class Game {
         }
     }
 
-    public LocalDateTime getCurrentUtcTime()
+    public Instant getCurrentUtcTime(int secondsDelay)
     {
-        return LocalDateTime.now();
-    }
-
-    public LocalDateTime getCurrentUtcTime(int secondsDelay)
-    {
-        return LocalDateTime.now().plusSeconds(secondsDelay);
+        return Instant.now().plusSeconds(secondsDelay);
     }
 
 
-    public LocalDateTime getTimeOfCurrentState() {
+    public Instant getTimeOfCurrentState() {
         return timeOfCurrentState;
     }
 
-    public void setTimeOfCurrentState(LocalDateTime timeOfCurrentState) {
+    public void setTimeOfCurrentState(Instant timeOfCurrentState) {
         this.timeOfCurrentState = timeOfCurrentState;
     }
+
     @Transient
-    public LocalDateTime getTimeOfState() {
+    public Instant getTimeOfState() {
         if (gameState == GameState.Discussion)
-            return LocalDateTime.now().plusSeconds(discussionTime);
+            return Instant.now().plusSeconds(discussionTime);
         if (gameState == GameState.Selection)
-            return LocalDateTime.now().plusSeconds(selectionTime);
+            return Instant.now().plusSeconds(selectionTime);
         if (gameState == GameState.Voting)
-            return LocalDateTime.now().plusSeconds(votingTime);
+            return Instant.now().plusSeconds(votingTime);
         if (gameState == GameState.Night)
-            return LocalDateTime.now().plusSeconds(nightTime);
+            return Instant.now().plusSeconds(nightTime);
         if (gameState == GameState.DayEnding)
-            return LocalDateTime.now().plusSeconds(dayEndingTime);
+            return Instant.now().plusSeconds(dayEndingTime);
         if (gameState == GameState.NightEnding)
-            return LocalDateTime.now().plusSeconds(nightEndingTime);
+            return Instant.now().plusSeconds(nightEndingTime);
         return null;
     }
 

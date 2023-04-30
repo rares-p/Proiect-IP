@@ -1,0 +1,1 @@
+Am lucrat la implementarea selectiei utilizatorului ce urmeaza sa fie votat si a votarii acestuia.

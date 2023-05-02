@@ -36,9 +36,20 @@ public class Connection {
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    public HttpResponse<String> delete(String path, String lobbyId) throws Exception {
+    public HttpResponse<String> post(String path, String jsonBody) throws Exception
+    {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(BASE_URL + path + "/" + lobbyId))
+                .uri(new URI(BASE_URL + path))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .header("Content-Type", "application/json")
+                .build();
+
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public HttpResponse<String> delete(String path) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL + path))
                 .DELETE()
                 .build();
 

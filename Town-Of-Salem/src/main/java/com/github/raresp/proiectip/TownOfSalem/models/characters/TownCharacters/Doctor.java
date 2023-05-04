@@ -16,6 +16,7 @@ public class Doctor extends TownCharacter {
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+        this.actionText = "Heal";
     }
 
     protected Doctor() {
@@ -34,6 +35,12 @@ public class Doctor extends TownCharacter {
 
     @Override
     public void act() {
+        if(this.targets.isEmpty())
+        {
+            this.AddNightResult("You decided to stay at home.");
+            return;
+        }
+
         Character target = this.targets.get(0);
         if(roleBlocked)
             this.AddNightResult("Someone occupied your night. You were role blocked!");

@@ -1,6 +1,8 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
+import com.github.raresp.proiectip.TownOfSalem.models.VoteType;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 
 import javax.management.relation.Role;
 import java.util.ArrayList;
@@ -15,23 +17,34 @@ public abstract class Character implements Comparable<Character> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    protected boolean isAlive;
-    protected boolean roleBlocked;
+    public boolean isAlive;
+    public boolean roleBlocked;
     protected boolean innocent;
     protected boolean framed;
     public boolean healed;
     protected String playerUsername;
-    @OneToMany
-    protected List<Character> targets = new ArrayList<>();
+    protected String actionText;
+
+    public String getActionText() {
+        return actionText;
+    }
+
+    public Integer numberOfSelection = 1;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "targets")
+    public List<Character> targets = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Interaction lastInteraction;
     protected DefenseTypes defense;
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "night_results")
-    private List<NightResult> nightResults;
+    //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //@JoinColumn(name = "night_results")
+    @ElementCollection(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "night_results")
+    public List<String> nightResults = new ArrayList<>();
 
     public Character(String playerUsername) {
         this.playerUsername = playerUsername;
@@ -45,12 +58,13 @@ public abstract class Character implements Comparable<Character> {
 
     public void AddNightResult(String ...messages) {
         for (String message : messages)
-            nightResults.add(new NightResult(message));
+            nightResults.add(message);
     }
     public void ResetNightResults() {
         nightResults.clear();
     }
     public abstract void resetDefense();
+
     public abstract void act (List<Character> listOfTargets);
     public abstract void act ();
 
@@ -85,9 +99,9 @@ public abstract class Character implements Comparable<Character> {
         return id;
     }
 
-    public List<NightResult> getNightResults() {
+    /*public List<NightResult> getNightResults() {
         return nightResults;
-    }
+    }*/
 
     public void setAlive(boolean alive) {
         isAlive = alive;
@@ -121,9 +135,9 @@ public abstract class Character implements Comparable<Character> {
         this.playerUsername = playerUsername;
     }
 
-    public void setNightResults(ArrayList<NightResult> nightResults) {
+    /*public void setNightResults(ArrayList<NightResult> nightResults) {
         this.nightResults = nightResults;
-    }
+    }*/
 
     public void setRoleBlocked(boolean roleBlocked) {
         this.roleBlocked = roleBlocked;
@@ -140,6 +154,7 @@ public abstract class Character implements Comparable<Character> {
         this.nightResults.clear();
     }
 
+    @Transactional
     public void AddTarget(Character c){
         this.targets.add(c);
     }
@@ -147,5 +162,13 @@ public abstract class Character implements Comparable<Character> {
     @Override
     public int compareTo(Character o) {
         return this.getRole().compareTo(o.getRole());
+    }
+
+    public Integer getNumberOfSelection() {
+        return numberOfSelection;
+    }
+
+    public void setNumberOfSelection(Integer numberOfSelection) {
+        this.numberOfSelection = numberOfSelection;
     }
 }

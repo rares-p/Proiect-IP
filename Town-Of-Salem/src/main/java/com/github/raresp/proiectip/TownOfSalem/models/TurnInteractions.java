@@ -9,11 +9,12 @@ import java.util.PriorityQueue;
 public class TurnInteractions {
     PriorityQueue<Character> charactersQueue = new PriorityQueue<>();
 
-    TurnInteractions(List<Character> characters){
+    public TurnInteractions(List<Character> characters){
         this.charactersQueue.addAll(characters);
     }
 
-    public void computeInteractionsOutcome(){
+    public void computeInteractionsOutcome() {
+        System.out.println("calculeaza outcome");
         for (Character c : charactersQueue)
             c.act();
     }

@@ -4,5 +4,7 @@ public enum GameState {
     Discussion,
     Selection,
     Voting,
-    Night
+    Night,
+    NightEnding,
+    DayEnding
 }

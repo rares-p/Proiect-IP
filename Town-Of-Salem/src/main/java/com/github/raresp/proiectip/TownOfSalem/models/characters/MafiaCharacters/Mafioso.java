@@ -16,6 +16,7 @@ public class Mafioso extends MafiaCharacter {
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.innocent = false;
+        this.actionText = "Attack";
     }
 
     protected Mafioso() {
@@ -33,6 +34,12 @@ public class Mafioso extends MafiaCharacter {
 
     @Override
     public void act() {
+        if(this.targets.isEmpty())
+        {
+            this.AddNightResult("You decided to stay at home.");
+            return;
+        }
+
         Character target = this.targets.get(0);
         if(roleBlocked)
             this.AddNightResult("Someone occupied your night. You were role blocked!");
@@ -41,11 +48,13 @@ public class Mafioso extends MafiaCharacter {
             target.AddNightResult("Someone attacked you last night but your defense was too strong!");
         }
         else {
-            this.AddNightResult("You attacked " + target.getPlayerUsername() + " !");
+            this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
             if(target.healed)
                 target.AddNightResult("You were attacked last night but someone nursed you back to health");
-            else
+            else{
                 target.AddNightResult("You were attacked last night. You died");
+                target.isAlive = false;
+            }
         }
     }
 }

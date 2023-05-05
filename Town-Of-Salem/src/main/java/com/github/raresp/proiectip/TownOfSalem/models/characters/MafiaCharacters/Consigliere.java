@@ -26,12 +26,16 @@ public class Consigliere extends MafiaCharacter {
     }
 
     @Override
-    public void act() {
+    public void act(List<Character> listOfTargets) {
 
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
+    public void act() {
+        if(roleBlocked){
+            this.AddNightResult("Someone occupied your night. You were role blocked!");
+            return;
+        }
         if(this.targets.isEmpty()) {
             this.AddNightResult("You decided to stay at home.");
             return;

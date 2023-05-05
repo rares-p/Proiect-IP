@@ -1,14 +1,18 @@
 package com.github.raresp.proiectip.TownOfSalem.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSession;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Jailor;
-import com.github.raresp.proiectip.TownOfSalem.utils.GameManager;
 import jakarta.persistence.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -203,6 +207,38 @@ public class Game {
         if(character instanceof MafiaCharacter)
             return getMafiaCharacters();
         return new ArrayList<>();
+    }
+
+    public void sendVotingResults(ArrayList<String> votes) {
+        List<String> peers = new ArrayList<>();
+        for(Character c : characters)
+            peers.add(c.getPlayerUsername());
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("peers", peers);
+
+        for (String vote : votes) {
+            params.put("content", vote);
+
+            String requestBody = null;
+            try {
+                requestBody = new ObjectMapper().writeValueAsString(params);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("/lobbies/:lobbyId/announce"))
+                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                        .header("Content-Type", "application/json")
+                        .header("Accept", "application/json")
+                        .build();
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
     }
 
 //    @Override

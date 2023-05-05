@@ -40,14 +40,15 @@ public class Consort extends MafiaCharacter {
         Character target = this.targets.get(0);
 
         if(target instanceof SerialKiller){
-            this.isAlive = false;
-            this.AddNightResult("You were murdered by the Serial Killer you visited.");
-            target.AddNightResult("Someone tried to role block you. You murdered them!");
+            //this.isAlive = false;
+            //this.AddNightResult("You were murdered by the Serial Killer you visited.");
+            //target.AddNightResult("Someone tried to role block you. You murdered them!");
+            target.AddNightResult("Someone tried to role block you, but you are immune");
         }
-        else if(target.getImmunity() == ImmunityTypes.Roleblock) {
-            this.AddNightResult("You tried to distract " + target.getPlayerUsername() + " but were unsuccessful!");
-            target.AddNightResult("Someone tried to role block you, but you are immune!");
-        }
+//        else if(target.getImmunity() == ImmunityTypes.Roleblock) {
+//            this.AddNightResult("You tried to distract " + target.getPlayerUsername() + " but were unsuccessful!");
+//            target.AddNightResult("Someone tried to role block you, but you are immune!");
+//        }
         else{
             target.setRoleBlocked(true);
             target.AddNightResult("Someone occupied your night. You were role blocked!");

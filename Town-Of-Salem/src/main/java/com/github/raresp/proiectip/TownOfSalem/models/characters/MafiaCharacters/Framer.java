@@ -26,12 +26,12 @@ public class Framer extends MafiaCharacter {
     }
 
     @Override
-    public void act() {
+    public void act(List<Character> listOfTargets) {
 
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
+    public void act() {
         if(this.targets.isEmpty()) {
             this.AddNightResult("You decided to stay at home.");
             return;

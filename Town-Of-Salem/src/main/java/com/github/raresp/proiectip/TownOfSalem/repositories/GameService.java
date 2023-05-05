@@ -1,4 +1,4 @@
-package com.github.raresp.proiectip.TownOfSalem.API;
+package com.github.raresp.proiectip.TownOfSalem.repositories;
 
 import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicGame;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.GameNotFoundException;

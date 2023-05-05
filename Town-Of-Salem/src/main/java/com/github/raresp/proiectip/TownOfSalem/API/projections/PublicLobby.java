@@ -8,6 +8,7 @@ import java.util.UUID;
 public interface PublicLobby {
     UUID getId();
     PublicGame getGame();
-    public List<String> getWaitingToJoin();
-    public LobbyState getState();
+    List<String> getWaitingToJoin();
+    LobbyState getState();
+    String getJoinCode();
 }

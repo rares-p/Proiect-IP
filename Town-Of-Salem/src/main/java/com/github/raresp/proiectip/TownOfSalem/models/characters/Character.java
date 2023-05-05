@@ -17,7 +17,7 @@ public abstract class Character implements Comparable<Character> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public boolean isAlive;
+    protected boolean isAlive;
     public boolean roleBlocked;
     protected boolean innocent;
     protected boolean framed;
@@ -39,6 +39,7 @@ public abstract class Character implements Comparable<Character> {
     protected DefenseTypes defense;
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
+    protected boolean isJailed;
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")
@@ -170,5 +171,21 @@ public abstract class Character implements Comparable<Character> {
 
     public void setNumberOfSelection(Integer numberOfSelection) {
         this.numberOfSelection = numberOfSelection;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setIsAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
+
+    public boolean isJailed() {
+        return isJailed;
+    }
+
+    public void setIsJailed(boolean isJailed) {
+        this.isJailed = isJailed;
     }
 }

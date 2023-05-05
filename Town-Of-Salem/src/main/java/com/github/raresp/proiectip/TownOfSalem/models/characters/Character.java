@@ -87,6 +87,10 @@ public abstract class Character implements Comparable<Character> {
         return attack;
     }
 
+    public ImmunityTypes getImmunity() {
+        return immunity;
+    }
+
     public String getPlayerUsername() {
         return playerUsername;
     }

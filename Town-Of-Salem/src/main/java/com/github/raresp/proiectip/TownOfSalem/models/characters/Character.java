@@ -105,6 +105,10 @@ public abstract class Character implements Comparable<Character> {
         return attack;
     }
 
+    public ImmunityTypes getImmunity() {
+        return immunity;
+    }
+
     public String getPlayerUsername() {
         return playerUsername;
     }
@@ -179,7 +183,7 @@ public abstract class Character implements Comparable<Character> {
 
     @Override
     public int compareTo(Character o) {
-        return this.getRole().compareTo(o.getRole());
+        return Integer.valueOf(RolePriority.roles.indexOf(this.getRole())).compareTo(Integer.valueOf(RolePriority.roles.indexOf(o.getRole())));
     }
 
     public Integer getNumberOfSelection() {

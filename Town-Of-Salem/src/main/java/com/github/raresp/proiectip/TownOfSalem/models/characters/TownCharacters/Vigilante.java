@@ -36,13 +36,32 @@ public class Vigilante extends TownCharacter {
 
 
     @Override
-    public void act(List<Character> listOfTargets) {
+    public void act() {
+        if(this.targets.isEmpty()) {
+            this.AddNightResult("You decided to stay at home.");
+            return;
+        }
+
         /*performs action;chooses another player to kill*/;
         bulletsLeft--;
+        Character target = targets.get(0);
+        if(target.getDefense().ordinal() >= this.attack.ordinal()) {
+            this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
+            target.AddNightResult("Someone attacked you last night but your defense was too strong!");
+        }
+        else {
+            this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
+            if(target.healed)
+                target.AddNightResult("You were attacked last night but someone nursed you back to health");
+            else{
+                target.AddNightResult("You were attacked last night. You died");
+                target.setIsAlive(false);
+            }
+        }
     }
 
     @Override
-    public void act() {
+    public void act(List<Character> listOfTargets) {
 
     }
 }

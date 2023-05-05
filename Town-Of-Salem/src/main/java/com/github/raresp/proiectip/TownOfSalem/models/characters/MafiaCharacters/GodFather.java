@@ -12,12 +12,12 @@ import java.util.List;
 public class GodFather extends MafiaCharacter {
     @OneToOne
     @JoinColumn(name = "mafioso_godfather_id", nullable = true)
-    private Mafioso mafioso;
+    public Character mafioso = null;
 
     public GodFather(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Basic;
-        this.defense = DefenseTypes.None;
+        this.defense = DefenseTypes.Basic;
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.innocent = true;
     }
@@ -38,6 +38,32 @@ public class GodFather extends MafiaCharacter {
 
     @Override
     public void act() {
-
+        if(roleBlocked) {
+            this.AddNightResult("Someone occupied your night. You were role blocked!");
+            return;
+        }
+        Character target = targets.get(0);
+        if(mafioso != null && !targets.isEmpty()) {
+            mafioso.targets.set(0, target);
+            mafioso.AddNightResult("The Godfather ordered you to kill " + target.getPlayerUsername() + "!");
+        }
+        else if (!targets.isEmpty()) {
+            if(target.getDefense().ordinal() >= this.attack.ordinal()) {
+                this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
+                target.AddNightResult("Someone attacked you last night but your defense was too strong!");
+            }
+            else {
+                this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
+                if(target.healed)
+                    target.AddNightResult("You were attacked last night but someone nursed you back to health");
+                else{
+                    target.AddNightResult("You were attacked last night. You died");
+                    target.setIsAlive(false);
+                }
+            }
+        }
+        else {
+            this.AddNightResult("You decided to stay at home.");
+        }
     }
 }

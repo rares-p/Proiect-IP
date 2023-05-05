@@ -1,6 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.SerialKiller;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -31,13 +32,14 @@ public class Escort extends TownCharacter {
 
     @Override
     public void act() {
-        if(this.targets.isEmpty())
-        {
+        if (this.targets.isEmpty()) {
             this.AddNightResult("You decided to stay at home.");
             return;
         }
 
         Character target = this.targets.get(0);
+        if (target instanceof SerialKiller)
+            return;
         target.setRoleBlocked(true);
         target.AddNightResult("Someone occupied your night. You were role blocked!");
     }

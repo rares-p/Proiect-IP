@@ -7,37 +7,18 @@ import java.util.List;
 
 @Entity
 public class SerialKiller extends NeutralCharacter {
-    /*if the SerialKiller is roleblocked, he kills the rollblocker in addition to his target;
-    Roleblockers killed by the SerialKiller have their will destroyed;
-    if he chooses to be cautios, he does not attack roleblockers too
-     */
-    private boolean isCautious = false;
     public SerialKiller(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Basic;
-        this.defense = DefenseTypes.None;//it says nothing about the defense so I guess if the mafia
-        //visits the SK, the SK dies?
-        this.innocent = true;//?
+        this.defense = DefenseTypes.Basic;
+        this.innocent = false;
         this.immunity = ImmunityTypes.Roleblock;
-    }
-
-    protected SerialKiller() {
-        super();
     }
 
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.Basic;
     }
-
-    public boolean isCautious() {
-        return isCautious;
-    }
-
-    public void setCautious(boolean cautious) {
-        isCautious = cautious;
-    }
-
 
     @Override
     public void act(List<Character> listOfTargets) {
@@ -46,6 +27,13 @@ public class SerialKiller extends NeutralCharacter {
 
     @Override
     public void act() {
+        if (this.targets.isEmpty()) {
+            this.AddNightResult("You decided to stay at home.");
+            return;
+        }
 
+        Character target = this.targets.get(0);
+        target.setAlive(false);
+        target.AddNightResult("You were attacked by a Serial Killer!");
     }
 }

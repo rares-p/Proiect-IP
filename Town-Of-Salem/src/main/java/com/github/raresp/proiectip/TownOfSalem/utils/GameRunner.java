@@ -143,6 +143,7 @@ public class GameRunner{
         VotingSession votingSession = new VotingSession(game.selectedCharacter, game.getCharacters());
         if(votingSession.calculateOutcome()) game.selectedCharacter.setIsAlive(false);
         game.votingLog = votingSession.getVotes();
+        game.nightCounter++;
         game.setGameState(GameState.Night);
         System.out.println(game.votingLog);
         gameService.updateGame(game);

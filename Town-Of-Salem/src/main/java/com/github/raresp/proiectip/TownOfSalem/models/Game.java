@@ -27,6 +27,8 @@ public class Game {
     public final int nightTime = 15;
     public final int dayEndingTime = 5;
     public final int nightEndingTime = 5;
+
+    public Character werewolfRampage;
     @Temporal(TemporalType.TIMESTAMP)
     public Instant timeOfCurrentState;
     @ManyToMany
@@ -46,6 +48,8 @@ public class Game {
     public Character selectedCharacter;
     @ElementCollection
     public List<String> votingLog = new ArrayList<>();
+
+    public int nightCounter = 0;
 
     public GameState getGameState() {
         return gameState;
@@ -102,52 +106,6 @@ public class Game {
 
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
-    }
-
-    public void StartGame()
-    {
-        System.out.println("A INCEPUT SESIUNEA DE JOC");
-        while(true)
-        {
-            System.out.println("A INCEPUT ");
-            this.gameState = GameState.Discussion;
-            setGameState(GameState.Discussion);
-            timeOfCurrentState = getCurrentUtcTime(discussionTime);
-            while(Instant.now().compareTo(timeOfCurrentState) < 0);   //wait for discussion to finish
-
-            System.out.println("E selection");
-            characters.get(0).setRoleBlocked(true);
-            gameState = GameState.Selection;
-//            gameManager.setGameState(this, GameState.Selection);
-            setGameState(GameState.Selection);
-            timeOfCurrentState = getCurrentUtcTime(selectionTime);
-            while(Instant.now().compareTo(timeOfCurrentState) < 0) {   //wait for selection to finish
-                //perform voting checks and instantiate voting session
-                if(selections.values().stream().filter(v -> v.equals(new Sheriff("test"))).count() > 2) {    //voting session
-                    //VotingSession votingSession = new VotingSession(new Sheriff("test"), characters);
-
-                    gameState = GameState.Voting;
-                    timeOfCurrentState = getCurrentUtcTime(nightTime);
-                    long selectionRemainingTime = timeOfCurrentState.toEpochMilli() - Instant.now().toEpochMilli();
-                    while(Instant.now().compareTo(timeOfCurrentState) < 0);   //wait for voting to finish
-                    //Object o = votingSession.calculateOutcome();    //get voting result
-                    timeOfCurrentState = getCurrentUtcTime(selectionTime * 1000);
-                }
-            }
-
-            gameState = GameState.Night;
-            setGameState(GameState.Night);
-            timeOfCurrentState = getCurrentUtcTime(nightTime);
-            while(Instant.now().compareTo(timeOfCurrentState) < 0) {   //wait for night to finish
-                //get targets
-            }
-
-            TurnInteractions turnInteractions = new TurnInteractions(characters);
-            turnInteractions.computeInteractionsOutcome();
-            for(Character c : characters)
-                c.resetStats();
-            //evaluate night actions
-        }
     }
 
     public Instant getCurrentUtcTime(int secondsDelay)

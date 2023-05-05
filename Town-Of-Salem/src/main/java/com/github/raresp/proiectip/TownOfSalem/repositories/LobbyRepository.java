@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface LobbyRepository extends JpaRepository<Lobby, UUID> {
     PublicLobby findPublicLobbyById(UUID id);
     List<PublicLobbyListProjection> findBy();
+    Lobby findLobbyByJoinCode(String joinCode);
+    PublicLobby findPublicLobbyByJoinCode(String joinCode);
 }

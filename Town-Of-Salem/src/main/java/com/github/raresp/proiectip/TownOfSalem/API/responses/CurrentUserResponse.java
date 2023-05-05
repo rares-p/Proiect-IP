@@ -10,7 +10,7 @@ public class CurrentUserResponse {
     public Integer nrOfSelection;
 
     public CurrentUserResponse(Character character) {
-        this.isAlive = character.isAlive;
+        this.isAlive = character.isAlive();
         this.username = character.getPlayerUsername();
         this.actionText = character.getActionText();
         this.role = character.getRole();

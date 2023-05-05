@@ -9,8 +9,10 @@ import com.github.raresp.proiectip.TownOfSalem.utils.GameUtils;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Entity
@@ -25,12 +27,15 @@ public class Lobby {
     @ElementCollection
     private List<String> waitingToJoin;
     private LobbyState state;
+    private String joinCode;
     public static int MINIMUM_PLAYERS = 3;
 
     public Lobby() {
+        Random r = new Random();
         this.waitingToJoin = new ArrayList<>();
         this.game = null;
         this.state = LobbyState.WAITING_PLAYERS;
+        this.joinCode = String.format("%06d", r.nextInt(1000000));
     }
 
     public void addPlayerInLobby(String player) throws InvalidLobbyException {
@@ -84,5 +89,13 @@ public class Lobby {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setJoinCode(String joinCode) {
+        this.joinCode = joinCode;
+    }
+
+    public String getJoinCode() {
+        return joinCode;
     }
 }

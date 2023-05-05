@@ -1,6 +1,6 @@
 package com.github.raresp.proiectip.TownOfSalem.utils;
 
-import com.github.raresp.proiectip.TownOfSalem.API.GameService;
+import com.github.raresp.proiectip.TownOfSalem.repositories.GameService;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
 import com.github.raresp.proiectip.TownOfSalem.models.GameState;
 import org.springframework.beans.factory.annotation.Autowired;

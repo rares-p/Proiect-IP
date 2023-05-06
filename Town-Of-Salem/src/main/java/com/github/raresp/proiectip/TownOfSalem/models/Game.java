@@ -35,6 +35,9 @@ public class Game {
     public Character werewolfRampage;
     @Temporal(TemporalType.TIMESTAMP)
     public Instant timeOfCurrentState;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    public Instant remainingTimeOfSelection;
     @ManyToMany
     public Map<Character, Character> selections = new HashMap<>();
 

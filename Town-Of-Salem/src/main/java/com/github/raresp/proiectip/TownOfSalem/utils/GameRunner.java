@@ -74,7 +74,12 @@ public class GameRunner{
         }
         for(Character c : game.getCharacters())
             c.targets.clear();
-        game.setTimeOfCurrentState(game.getTimeOfState());
+        if(game.getGameState() == GameState.Selection && game.remainingTimeOfSelection.compareTo(Instant.now()) > 0)
+            game.setTimeOfCurrentState(game.remainingTimeOfSelection);
+        else {
+            game.setTimeOfCurrentState(game.getTimeOfState());
+            game.remainingTimeOfSelection = game.getTimeOfCurrentState();
+        }
         gameRepository.save(game);//gameService.updateGame(game);
 
 
@@ -144,7 +149,8 @@ public class GameRunner{
         if(votingSession.calculateOutcome()) game.selectedCharacter.setIsAlive(false);
         game.votingLog = votingSession.getVotes();
         game.sendVotingResults(votingSession.getVotes());
-        game.setGameState(GameState.Night);
+        game.remainingTimeOfSelection.plusSeconds(game.votingTime);
+        game.setGameState(GameState.Selection);
         System.out.println(game.votingLog);
         gameService.updateGame(game);
     }

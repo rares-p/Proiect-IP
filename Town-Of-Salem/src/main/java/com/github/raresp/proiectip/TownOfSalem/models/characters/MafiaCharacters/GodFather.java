@@ -42,12 +42,18 @@ public class GodFather extends MafiaCharacter {
             this.AddNightResult("Someone occupied your night. You were role blocked!");
             return;
         }
+
+        if(targets.isEmpty()) {
+            this.AddNightResult("You decided to stay at home.");
+            return;
+        }
+
         Character target = targets.get(0);
-        if(mafioso != null && !targets.isEmpty()) {
+        if(mafioso != null) {
             mafioso.targets.set(0, target);
             mafioso.AddNightResult("The Godfather ordered you to kill " + target.getPlayerUsername() + "!");
         }
-        else if (!targets.isEmpty()) {
+        else {
             if(target.getDefense().ordinal() >= this.attack.ordinal()) {
                 this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
                 target.AddNightResult("Someone attacked you last night but your defense was too strong!");
@@ -61,9 +67,6 @@ public class GodFather extends MafiaCharacter {
                     target.setIsAlive(false);
                 }
             }
-        }
-        else {
-            this.AddNightResult("You decided to stay at home.");
         }
     }
 }

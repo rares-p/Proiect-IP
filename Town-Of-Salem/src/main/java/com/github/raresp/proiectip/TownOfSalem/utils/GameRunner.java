@@ -34,7 +34,7 @@ public class GameRunner{
             CronTrigger cronTrigger
                     = new CronTrigger("0/1 * * * * ?");
             Game onlyGame = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException());
-            gameRepository.deleteAll();
+            //gameRepository.deleteAll();
             gameRepository.save(onlyGame);
             scheduler.schedule(() -> runGame(gameId), cronTrigger);
     }
@@ -48,6 +48,28 @@ public class GameRunner{
         }
         System.out.println("game state in run game: " + game.gameState);
         game.gameState = game.getGameState();
+
+        if(game.getGameState() == GameState.Selection) {
+            SelectionSession selectionSession = new SelectionSession(game.getCharacters());
+            game.selectedCharacter = selectionSession.calculateOutcome();
+
+            System.out.println(game.getCharacters());
+
+            if(game.selectedCharacter != null) {
+                System.out.println(game.selectedCharacter + " has been selected");
+                game.setGameState(GameState.Voting);
+
+                for(Character c : game.getCharacters())
+                    c.targets.clear();
+                game.setTimeOfCurrentState(game.getTimeOfState());
+
+                game.remainingTimeOfSelection = game.getTimeOfCurrentState().plusSeconds(game.votingTime);
+
+                gameRepository.save(game);//gameService.updateGame(game);
+                return;
+            }
+        }
+
         if (game.getTimeOfCurrentState().compareTo(Instant.now()) > 0)
             return;
         System.out.println("game state trebuie schimbat");
@@ -74,12 +96,14 @@ public class GameRunner{
         }
         for(Character c : game.getCharacters())
             c.targets.clear();
-        if(game.getGameState() == GameState.Selection && game.remainingTimeOfSelection.compareTo(Instant.now()) > 0)
+
+        if(game.getGameState() == GameState.Selection && game.remainingTimeOfSelection != null) {
             game.setTimeOfCurrentState(game.remainingTimeOfSelection);
-        else {
-            game.setTimeOfCurrentState(game.getTimeOfState());
-            game.remainingTimeOfSelection = game.getTimeOfCurrentState();
+            game.remainingTimeOfSelection = null;
         }
+        else
+            game.setTimeOfCurrentState(game.getTimeOfState());
+
         gameRepository.save(game);//gameService.updateGame(game);
 
 
@@ -148,8 +172,8 @@ public class GameRunner{
         VotingSession votingSession = new VotingSession(game.selectedCharacter, game.getCharacters());
         if(votingSession.calculateOutcome()) game.selectedCharacter.setIsAlive(false);
         game.votingLog = votingSession.getVotes();
-        game.sendVotingResults(votingSession.getVotes());
-        game.remainingTimeOfSelection.plusSeconds(game.votingTime);
+        //game.sendVotingResults(votingSession.getVotes());
+
         game.setGameState(GameState.Selection);
         System.out.println(game.votingLog);
         gameService.updateGame(game);

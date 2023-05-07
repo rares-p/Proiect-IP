@@ -31,8 +31,6 @@ public class Game {
     public final int nightTime = 15;
     public final int dayEndingTime = 5;
     public final int nightEndingTime = 5;
-
-    public Character werewolfRampage;
     @Temporal(TemporalType.TIMESTAMP)
     public Instant timeOfCurrentState;
 

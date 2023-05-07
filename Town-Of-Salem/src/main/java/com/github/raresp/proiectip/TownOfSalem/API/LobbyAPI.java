@@ -65,7 +65,7 @@ public class LobbyAPI {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
-        lobby.addPlayerInLobby(request.username);
+        lobby.addPlayerInLobby(request.userId);
         lobbyRepository.save(lobby);
         return new ResponseEntity<>(lobby, HttpStatus.OK);
     }
@@ -77,7 +77,7 @@ public class LobbyAPI {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
-        lobby.addPlayerInLobby(request.username);
+        lobby.addPlayerInLobby(request.userId);
         lobbyRepository.save(lobby);
         return new ResponseEntity<>(lobby, HttpStatus.OK);
     }
@@ -89,7 +89,7 @@ public class LobbyAPI {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
-        lobby.removePlayerFromLobby(request.username);
+        lobby.removePlayerFromLobby(request.userId);
         lobbyRepository.save(lobby);
         return new ResponseEntity<>(lobby, HttpStatus.OK);
     }
@@ -124,8 +124,14 @@ public class LobbyAPI {
         Character character = lobby.getGame().getCharacterByName(userId);
         if(character == null)
             throw new CharacterNotFoundException();
-        for(Character c : lobby.getGame().getCharacters())
-            response.peers.add(c.getPlayerUsername());
+        Game game = lobby.getGame();
+        if(game.gameState == GameState.Night) {
+            for(Character c : game.getPeers(character))
+                response.peers.add(c.getPlayerUsername());
+        }
+        else
+            for(Character c : lobby.getGame().getCharacters())
+                response.peers.add(c.getPlayerUsername());
         return response;
     }
 
@@ -138,19 +144,19 @@ public class LobbyAPI {
     }
 
     @GetMapping("/state/{joinCode}")
-    ResponseEntity<?> characterStateByUsernameFromLobby(@PathVariable String joinCode, @RequestParam String username) throws CharacterNotFoundException, LobbyNotFoundException {
+    ResponseEntity<?> characterStateByUsernameFromLobby(@PathVariable String joinCode, @RequestParam String userId) throws CharacterNotFoundException, LobbyNotFoundException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
-        if(username == null) {
+        if(userId == null) {
             return ResponseEntity.ok(lobby.getGame());
         }
         if(lobby.getState() == LobbyState.WAITING_PLAYERS)
-            return ResponseEntity.ok("{\"state\":\"lobby\"}");
-        Character character = lobby.getGame().getCharacterByName(username);
+            return ResponseEntity.ok("{\"state\":\"Lobby\"}");
+        Character character = lobby.getGame().getCharacterByName(userId);
         ResponseEntity<?> resp = ResponseEntity.ok(new CurrentUserAllUsersResponse(lobby.getGame(), character));
         if(lobby.getGame().gameState == GameState.NightEnding)
-            lobby.getGame().getCharacterByName(username).targets.clear();
+            lobby.getGame().getCharacterByName(userId).targets.clear();
         gameRepository.save(lobby.getGame());
         return resp;
     }

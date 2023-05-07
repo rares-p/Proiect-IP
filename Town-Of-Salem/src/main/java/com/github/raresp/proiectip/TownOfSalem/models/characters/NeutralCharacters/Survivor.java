@@ -28,15 +28,15 @@ public class Survivor extends NeutralCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
+    public void act() {
         /*by acting, the Survivor simply puts on a bulletproof vest and protects himself*/
         isAlert = true;//idk if we need isAlert if we already changed the defense type;
         bulletVestsCount--;
-        this.defense = DefenseTypes.Powerful;
+        this.defense = DefenseTypes.Basic;
     }
 
     @Override
-    public void act() {
+    public void act(List<Character> listOfTargets) {
 
     }
 }

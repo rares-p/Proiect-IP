@@ -15,6 +15,7 @@ public class Vigilante extends TownCharacter {
         this.attack = AttackTypes.Basic;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+        this.actionText = "Shoot";
     }
 
     protected Vigilante() {
@@ -51,11 +52,10 @@ public class Vigilante extends TownCharacter {
         }
         else {
             this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
-            if(target.healed)
-                target.AddNightResult("You were attacked last night but someone nursed you back to health");
-            else{
-                target.AddNightResult("You were attacked last night. You died");
+            if(!target.healed) {
                 target.setIsAlive(false);
+                if(target instanceof TownCharacter)
+                    canAct = false;
             }
         }
     }
@@ -63,5 +63,13 @@ public class Vigilante extends TownCharacter {
     @Override
     public void act(List<Character> listOfTargets) {
 
+    }
+
+    @Override
+    public void checkIfCanAct() {
+        if(!canAct)
+            return;
+        if(bulletsLeft == 0)
+            canAct = false;
     }
 }

@@ -23,6 +23,8 @@ public abstract class Character implements Comparable<Character> {
     protected String playerUsername;
     protected String actionText;
 
+    public Boolean canAct = true;
+
     public String getActionText() {
         return actionText;
     }
@@ -208,5 +210,9 @@ public abstract class Character implements Comparable<Character> {
 
     public void setIsJailed(boolean isJailed) {
         this.isJailed = isJailed;
+    }
+
+    public void checkIfCanAct() {
+
     }
 }

@@ -22,7 +22,7 @@ public class Veteran extends TownCharacter {
 
     @Override
     public void resetDefense() {
-        this.defense = DefenseTypes.Basic;
+        this.defense = DefenseTypes.None;
         this.onAlert = false;
     }
 
@@ -43,5 +43,13 @@ public class Veteran extends TownCharacter {
         this.defense = DefenseTypes.Basic;
         this.AddNightResult("You decided to go on alert.");
         this.AddNightResult("You have " + alerts + " vests left.");
+    }
+
+    @Override
+    public void checkIfCanAct() {
+        if(!canAct)
+            return;
+        if(alerts == 0)
+            canAct = false;
     }
 }

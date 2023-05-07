@@ -8,6 +8,7 @@ public class CurrentUserResponse {
     public String actionText;
     public String role;
     public Integer nrOfSelection;
+    public Boolean canAct;
 
     public CurrentUserResponse(Character character) {
         this.isAlive = character.isAlive();
@@ -15,5 +16,6 @@ public class CurrentUserResponse {
         this.actionText = character.getActionText();
         this.role = character.getRole();
         this.nrOfSelection = character.getNumberOfSelection();
+        this.canAct = character.canAct;
     }
 }

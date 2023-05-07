@@ -113,9 +113,7 @@ public class LobbyAPI {
         return lobby;
     }
 
-    @GetMapping(path="/lobbies/{joinCode}/peers",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/lobbies/{joinCode}/peers")
     PeersResponse getPeers(@PathVariable String joinCode, @RequestParam String userId) throws LobbyNotFoundException, CharacterNotFoundException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)

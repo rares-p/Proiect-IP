@@ -169,11 +169,11 @@ public class LobbyAPI {
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
         Game game = lobby.getGame();
-        Character character = game.getCharacterByName(request.username);
+        Character character = game.getCharacterByName(request.userId);
 
         character.targets.clear();
         for(String username : request.targets)
-            game.getCharacterByName(request.username).targets.add(game.getCharacterByName(username));
+            game.getCharacterByName(request.userId).targets.add(game.getCharacterByName(username));
         gameRepository.save(game);
         return new ResponseEntity<>(character, HttpStatus.OK);
     }

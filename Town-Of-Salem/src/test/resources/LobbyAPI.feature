@@ -27,7 +27,7 @@ Feature: Lobby endpoints
       }
       """
     And the response status code should be 200
-    And the response should be a JSON having the following keys: "id", "game", "waitingToJoin", "state", "minimumPlayers" with the game and state having the values null and "WAITING_PLAYERS" respectively;
+    And the response should be a JSON having the follwing keys: "id", "game", "waitingToJoin", "state", "minimumPlayers" with the game and state having the values null and "WAITING_PLAYERS" respectively;
     Then I send a POST request to "/lobbies/{id}/add_user" with the following body:
         """
         {

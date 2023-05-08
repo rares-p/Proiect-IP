@@ -9,4 +9,5 @@ public interface PublicLobbyListProjection {
     UUID getId();
     public List<String> getWaitingToJoin();
     public LobbyState getState();
+    String getJoinCode();
 }

@@ -7,7 +7,7 @@ public class PublicUserResponse {
     public boolean isAlive;
 
     public PublicUserResponse(Character character) {
-        this.isAlive = character.isAlive;
+        this.isAlive = character.isAlive();
         this.username = character.getPlayerUsername();
     }
 }

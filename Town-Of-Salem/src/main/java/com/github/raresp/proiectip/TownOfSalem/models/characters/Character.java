@@ -1,14 +1,12 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
-import com.github.raresp.proiectip.TownOfSalem.models.VoteType;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Arsonist;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Veteran;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
@@ -17,13 +15,15 @@ public abstract class Character implements Comparable<Character> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public boolean isAlive;
+    protected boolean isAlive;
     public boolean roleBlocked;
     protected boolean innocent;
     protected boolean framed;
     public boolean healed;
     protected String playerUsername;
     protected String actionText;
+
+    public Boolean canAct = true;
 
     public String getActionText() {
         return actionText;
@@ -39,6 +39,7 @@ public abstract class Character implements Comparable<Character> {
     protected DefenseTypes defense;
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
+    protected boolean isJailed;
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")
@@ -66,7 +67,26 @@ public abstract class Character implements Comparable<Character> {
     public abstract void resetDefense();
 
     public abstract void act (List<Character> listOfTargets);
-    public abstract void act ();
+    public void act () {
+        if(this.targets.isEmpty())
+        {
+            return;
+        }
+
+        Character target = this.targets.get(0);
+        if (target instanceof Arsonist) {
+            ((Arsonist)target).dousedPlayers.add(this);
+        }
+        else if (target instanceof Veteran) {
+            if (((Veteran)target).onAlert) {
+                this.setAlive(false);
+                target.AddNightResult("You shot someone who visited you last night!");
+                this.AddNightResult("You were shot by the Veteran you visited!");
+            }
+        }
+
+
+    }
 
     public boolean IsInnocent() {
         return innocent;
@@ -85,6 +105,10 @@ public abstract class Character implements Comparable<Character> {
 
     public AttackTypes getAttack() {
         return attack;
+    }
+
+    public ImmunityTypes getImmunity() {
+        return immunity;
     }
 
     public String getPlayerUsername() {
@@ -161,7 +185,7 @@ public abstract class Character implements Comparable<Character> {
 
     @Override
     public int compareTo(Character o) {
-        return this.getRole().compareTo(o.getRole());
+        return Integer.valueOf(RolePriority.roles.indexOf(this.getRole())).compareTo(Integer.valueOf(RolePriority.roles.indexOf(o.getRole())));
     }
 
     public Integer getNumberOfSelection() {
@@ -170,5 +194,25 @@ public abstract class Character implements Comparable<Character> {
 
     public void setNumberOfSelection(Integer numberOfSelection) {
         this.numberOfSelection = numberOfSelection;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setIsAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
+
+    public boolean isJailed() {
+        return isJailed;
+    }
+
+    public void setIsJailed(boolean isJailed) {
+        this.isJailed = isJailed;
+    }
+
+    public void checkIfCanAct() {
+
     }
 }

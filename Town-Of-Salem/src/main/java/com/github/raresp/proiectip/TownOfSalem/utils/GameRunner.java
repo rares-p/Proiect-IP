@@ -1,6 +1,6 @@
 package com.github.raresp.proiectip.TownOfSalem.utils;
 
-import com.github.raresp.proiectip.TownOfSalem.API.GameService;
+import com.github.raresp.proiectip.TownOfSalem.repositories.GameService;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.GameNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
 import com.github.raresp.proiectip.TownOfSalem.models.GameState;
@@ -8,9 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.TurnInteractions;
 import com.github.raresp.proiectip.TownOfSalem.models.VotingSession;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSession;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Sheriff;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -18,9 +16,6 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -39,7 +34,7 @@ public class GameRunner{
             CronTrigger cronTrigger
                     = new CronTrigger("0/1 * * * * ?");
             Game onlyGame = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException());
-            gameRepository.deleteAll();
+            //gameRepository.deleteAll();
             gameRepository.save(onlyGame);
             scheduler.schedule(() -> runGame(gameId), cronTrigger);
     }
@@ -53,7 +48,29 @@ public class GameRunner{
         }
         System.out.println("game state in run game: " + game.gameState);
         game.gameState = game.getGameState();
-        if (game.getTimeOfCurrentState().compareTo(LocalDateTime.now()) > 0)
+
+        if(game.getGameState() == GameState.Selection) {
+            SelectionSession selectionSession = new SelectionSession(game.getCharacters());
+            game.selectedCharacter = selectionSession.calculateOutcome();
+
+            System.out.println(game.getCharacters());
+
+            if(game.selectedCharacter != null) {
+                System.out.println(game.selectedCharacter + " has been selected");
+                game.setGameState(GameState.Voting);
+
+                for(Character c : game.getCharacters())
+                    c.targets.clear();
+                game.setTimeOfCurrentState(game.getTimeOfState());
+
+                game.remainingTimeOfSelection = game.getTimeOfCurrentState().plusSeconds(game.votingTime);
+
+                gameRepository.save(game);//gameService.updateGame(game);
+                return;
+            }
+        }
+
+        if (game.getTimeOfCurrentState().compareTo(Instant.now()) > 0)
             return;
         System.out.println("game state trebuie schimbat");
 
@@ -79,7 +96,14 @@ public class GameRunner{
         }
         for(Character c : game.getCharacters())
             c.targets.clear();
-        game.setTimeOfCurrentState(game.getTimeOfState());
+
+        if(game.getGameState() == GameState.Selection && game.remainingTimeOfSelection != null) {
+            game.setTimeOfCurrentState(game.remainingTimeOfSelection);
+            game.remainingTimeOfSelection = null;
+        }
+        else
+            game.setTimeOfCurrentState(game.getTimeOfState());
+
         gameRepository.save(game);//gameService.updateGame(game);
 
 
@@ -146,9 +170,11 @@ public class GameRunner{
 
     private void runGameIfVotingTime(Game game) {
         VotingSession votingSession = new VotingSession(game.selectedCharacter, game.getCharacters());
-        if(votingSession.calculateOutcome()) game.selectedCharacter.isAlive = false;
+        if(votingSession.calculateOutcome()) game.selectedCharacter.setIsAlive(false);
         game.votingLog = votingSession.getVotes();
-        game.setGameState(GameState.Night);
+        //game.sendVotingResults(votingSession.getVotes());
+
+        game.setGameState(GameState.Selection);
         System.out.println(game.votingLog);
         gameService.updateGame(game);
     }

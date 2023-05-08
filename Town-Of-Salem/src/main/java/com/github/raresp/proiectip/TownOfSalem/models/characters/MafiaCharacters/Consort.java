@@ -1,4 +1,5 @@
-package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
+package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
+
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.SerialKiller;
@@ -7,17 +8,17 @@ import jakarta.persistence.Entity;
 import java.util.List;
 
 @Entity
-public class Escort extends TownCharacter {
-    public Escort(String playerUsername) {
+public class Consort extends MafiaCharacter {
+    public Consort(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.Roleblock;
+        this.innocent = false;
         this.actionText = "Distract";
     }
 
-    protected Escort() {
-        super();
+    public Consort() {
     }
 
     @Override
@@ -26,18 +27,18 @@ public class Escort extends TownCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
+    public void act() {
 
     }
 
     @Override
-    public void act() {
-        if (this.targets.isEmpty()) {
+    public void act(List<Character> listOfTargets) {
+        if(this.targets.isEmpty()) {
             this.AddNightResult("You decided to stay at home.");
             return;
         }
-
         Character target = this.targets.get(0);
+
         if(target instanceof SerialKiller){
             //this.isAlive = false;
             //this.AddNightResult("You were murdered by the Serial Killer you visited.");
@@ -53,5 +54,6 @@ public class Escort extends TownCharacter {
             target.AddNightResult("Someone occupied your night. You were role blocked!");
             this.AddNightResult("You kept " + target.getPlayerUsername() + " occupied last night. They did not use their ability!");
         }
+        //devine mafiot
     }
 }

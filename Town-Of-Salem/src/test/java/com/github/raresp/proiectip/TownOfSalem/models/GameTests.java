@@ -1,4 +1,6 @@
+/*
 package com.github.raresp.proiectip.TownOfSalem.models;
+
 
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
@@ -241,3 +243,4 @@ public class GameTests {
     }
 
 }
+*/

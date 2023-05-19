@@ -1,14 +1,11 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 
-import com.github.raresp.proiectip.TownOfSalem.models.characters.AttackTypes;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.DefenseTypes;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.ImmunityTypes;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacter;
 
 import java.util.List;
 
-public class Veteran extends TownCharacter {
+public class Veteran extends TownCharacter implements PassiveActing {
     private int alerts = 3;
     public boolean onAlert = false;
 
@@ -32,7 +29,13 @@ public class Veteran extends TownCharacter {
     }
 
     @Override
-    public void act() {
+    public Interaction createInteraction() {
+        return null;
+    }
+
+
+    @Override
+    public void act() { ///o sa verific la inceput, dupa ce isi activeaza abilitatea cine il beleste
         if (this.targets.isEmpty()) {
             this.AddNightResult("You decided not to go on alert.");
             return;
@@ -51,5 +54,13 @@ public class Veteran extends TownCharacter {
             return;
         if(alerts == 0)
             canAct = false;
+    }
+
+    @Override
+    public void passiveAction(List<Character> characters) {
+        Character target = targets.get(0);
+        target.setAlive(false);
+        this.AddNightResult("You were murdered by the Veteran you visited.");
+        target.AddNightResult("Someone tried to role block you. You murdered them!");
     }
 }

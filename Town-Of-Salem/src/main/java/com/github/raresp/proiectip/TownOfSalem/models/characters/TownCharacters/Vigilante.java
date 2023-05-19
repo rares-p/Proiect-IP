@@ -35,6 +35,10 @@ public class Vigilante extends TownCharacter {
         this.bulletsLeft = bulletsLeft;
     }
 
+    @Override
+    public Interaction createInteraction() {
+        return null;
+    }
 
     @Override
     public void act() {
@@ -64,6 +68,7 @@ public class Vigilante extends TownCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
 
     @Override
     public void checkIfCanAct() {

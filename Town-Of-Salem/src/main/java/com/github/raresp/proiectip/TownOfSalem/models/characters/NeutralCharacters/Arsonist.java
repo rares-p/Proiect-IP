@@ -1,13 +1,14 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 public class Arsonist extends NeutralCharacter {
 
-    public List<Character> dousedPlayers = new ArrayList<>();
+    public static List<Character> dousedPlayers = new ArrayList<>();
 
     public Arsonist(String playerUsername) {
         super(playerUsername);
@@ -27,16 +28,20 @@ public class Arsonist extends NeutralCharacter {
     }
 
     @Override
+    public Interaction createInteraction() {
+        if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new AttackInteraction(this, targets, 5);
+        else return new AttackInteraction(this, targets, 3);
+    }
+
+    @Override
     public void act() {
-        if(this.targets.isEmpty())
-        {
-            this.AddNightResult("You decided to stay at home.");
+        if (this.targets.isEmpty()) {
+            this.AddNightResult("You cleaned the doused gas from yourself");
+            dousedPlayers.remove(this);
             return;
         }
         Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else if (target.getPlayerUsername().equals(this.playerUsername)) {
+        if (target.getPlayerUsername().equals(this.playerUsername)) {
             for (Character dousedPlayer : dousedPlayers){
                 dousedPlayer.setAlive(false);
                 dousedPlayer.AddNightResult("You were set on fire by an Arsonist!");

@@ -27,6 +27,10 @@ public class Jailor extends TownCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+    @Override
+    public Interaction createInteraction() {
+        return null;
+    }
 
     @Override
     public void act() {

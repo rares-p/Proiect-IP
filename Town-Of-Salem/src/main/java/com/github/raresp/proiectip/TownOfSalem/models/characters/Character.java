@@ -41,6 +41,8 @@ public abstract class Character implements Comparable<Character> {
     protected ImmunityTypes immunity;
     protected boolean isJailed;
 
+    private int priority;
+
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")
     @ElementCollection(fetch = FetchType.EAGER)
@@ -67,6 +69,9 @@ public abstract class Character implements Comparable<Character> {
     public abstract void resetDefense();
 
     public abstract void act (List<Character> listOfTargets);
+    public abstract Interaction createInteraction();
+
+    //public void addInteraction();
     public void act () {
         if(this.targets.isEmpty())
         {
@@ -86,6 +91,10 @@ public abstract class Character implements Comparable<Character> {
         }
 
 
+    }
+
+    public boolean isFramed() {
+        return framed;
     }
 
     public boolean IsInnocent() {

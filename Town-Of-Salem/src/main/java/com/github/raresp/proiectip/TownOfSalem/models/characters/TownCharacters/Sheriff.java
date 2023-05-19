@@ -1,6 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.InvestigateInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -30,6 +31,11 @@ public class Sheriff extends TownCharacter {
     }
 
     @Override
+    public Interaction createInteraction() {
+        return new InvestigateInteraction(this, targets, 4);
+    }
+
+    @Override
     public void act() {
         if(this.targets.isEmpty())
         {
@@ -38,12 +44,9 @@ public class Sheriff extends TownCharacter {
         }
 
         Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else {
-            this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
-            this.AddNightResult("Your target seems " + ((target.IsInnocent())?"Innocent!":"Suspicious!"));
-        }
+        this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
+        this.AddNightResult("Your target seems " + ((target.IsInnocent() || target.isFramed())?"Innocent!":"Suspicious!"));
+        target.setFramed(false);
     }
 
 

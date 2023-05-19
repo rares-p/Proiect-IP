@@ -1,6 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
 import jakarta.persistence.Entity;
 import org.springframework.data.repository.cdi.Eager;
 
@@ -25,7 +26,7 @@ public class Doctor extends TownCharacter {
 
     @Override
     public void resetDefense() {
-        this.defense = DefenseTypes.Powerful;
+        this.defense = DefenseTypes.None;
     }
 
     @Override
@@ -34,20 +35,27 @@ public class Doctor extends TownCharacter {
     }
 
     @Override
+    public Interaction createInteraction() {
+        return new BasicInteraction(this, targets, 3);
+    }
+
+
+    @Override
     public void act() {
-        if(this.targets.isEmpty())
-        {
+        if(this.targets.isEmpty()) {
             this.AddNightResult("You decided to stay at home.");
             return;
         }
 
         Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else {
-            target.healed = true;
-            this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
+        target.setDefense(DefenseTypes.Powerful);
+
+        if (target.getPlayerUsername().equals(this.playerUsername)){
+            hasHealedHimself = true;
+            this.AddNightResult("You decided to heal yourself tonight!");
         }
+        else
+            this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
     }
 
 }

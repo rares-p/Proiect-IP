@@ -44,10 +44,6 @@ public class GodFather extends MafiaCharacter {
 
     @Override
     public void act() {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
         Character target = targets.get(0);
         this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
         target.AddNightResult("You were attacked last night. You died");

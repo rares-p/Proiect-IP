@@ -42,11 +42,6 @@ public class Vigilante extends TownCharacter {
 
     @Override
     public void act() {
-        if(this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
-
         /*performs action;chooses another player to kill*/;
         bulletsLeft--;
         Character target = targets.get(0);

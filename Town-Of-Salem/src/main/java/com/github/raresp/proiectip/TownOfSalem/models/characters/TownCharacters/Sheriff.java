@@ -1,7 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.InvestigateInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -32,17 +32,11 @@ public class Sheriff extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
-        return new InvestigateInteraction(this, targets, 4);
+        return new VisitingInteraction(this, targets, 4);
     }
 
     @Override
     public void act() {
-        if(this.targets.isEmpty())
-        {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
-
         Character target = this.targets.get(0);
         this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
         this.AddNightResult("Your target seems " + ((target.IsInnocent() || target.isFramed())?"Innocent!":"Suspicious!"));

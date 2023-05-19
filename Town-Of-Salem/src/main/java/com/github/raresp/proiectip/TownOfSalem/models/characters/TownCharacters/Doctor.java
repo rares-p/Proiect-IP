@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 import jakarta.persistence.Entity;
 import org.springframework.data.repository.cdi.Eager;
 
@@ -36,26 +37,24 @@ public class Doctor extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
-        return new BasicInteraction(this, targets, 3);
+        return new VisitingInteraction(this, targets, 3);
     }
 
 
     @Override
     public void act() {
-        if(this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
-
         Character target = this.targets.get(0);
         target.setDefense(DefenseTypes.Powerful);
 
-        if (target.getPlayerUsername().equals(this.playerUsername)){
+        if (target.getPlayerUsername().equals(this.playerUsername) && !hasHealedHimself){
             hasHealedHimself = true;
             this.AddNightResult("You decided to heal yourself tonight!");
         }
-        else
+        else {
             this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
+            this.healed = true;
+        }
+
     }
 
 }

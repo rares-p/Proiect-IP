@@ -40,8 +40,8 @@ public abstract class Character implements Comparable<Character> {
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
     protected boolean isJailed;
-
     private int priority;
+    public ArrayList<Character> visitors = new ArrayList<>();
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")
@@ -106,6 +106,7 @@ public abstract class Character implements Comparable<Character> {
         roleBlocked = false;
         lastInteraction = null;
         healed = false;
+        visitors.clear();
     }
 
     public DefenseTypes getDefense() {

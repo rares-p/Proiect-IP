@@ -38,11 +38,6 @@ public class Escort extends TownCharacter {
 
     @Override
     public void act() {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
-
         Character target = this.targets.get(0);
         target.setRoleBlocked(true);
         target.AddNightResult("Someone occupied your night. You were role blocked!");

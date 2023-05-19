@@ -35,11 +35,6 @@ public class Arsonist extends NeutralCharacter {
 
     @Override
     public void act() {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You cleaned the doused gas from yourself");
-            dousedPlayers.remove(this);
-            return;
-        }
         Character target = this.targets.get(0);
         if (target.getPlayerUsername().equals(this.playerUsername)) {
             for (Character dousedPlayer : dousedPlayers){

@@ -30,10 +30,6 @@ public class SerialKiller extends NeutralCharacter implements PassiveActing {
 
     @Override
     public void act() {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
         Character target = this.targets.get(0);
         target.setAlive(false);
         target.AddNightResult("You were attacked by a Serial Killer!");

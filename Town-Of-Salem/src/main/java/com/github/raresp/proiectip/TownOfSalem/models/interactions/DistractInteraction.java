@@ -16,7 +16,12 @@ public class DistractInteraction extends Interaction {
 
     @Override
     public boolean isValid() {
+        if (this.targets.isEmpty()) {
+            actioner.AddNightResult("You decided to stay at home.");
+            return false;
+        }
         Character target = targets.get(0);
+        target.visitors.add(actioner);
         if(target instanceof SerialKiller) {
             getTurnInteractions().addInteraction(new PassiveInteraction(target, new ArrayList<>(Arrays.asList(actioner)), 5)); //nush exact care-i prioritatea, dupa heal
             return false;

@@ -38,10 +38,6 @@ public class Consort extends MafiaCharacter {
 
     @Override
     public void act(List<Character> listOfTargets) {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
         Character target = this.targets.get(0);
 
         target.setRoleBlocked(true);

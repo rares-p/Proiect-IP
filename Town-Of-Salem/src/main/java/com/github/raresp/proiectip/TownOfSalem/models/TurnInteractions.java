@@ -5,13 +5,11 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.GodFather;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.Mafioso;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.PassiveActing;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Doctor;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.PassiveInteraction;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TurnInteractions {
@@ -19,20 +17,7 @@ public class TurnInteractions {
     List<Interaction> validInteractions = new ArrayList<>();
 
     public TurnInteractions(List<Character> characters){
-//        this.charactersQueue.addAll(characters);
-//        Mafioso mafioso = null;
-//        GodFather godfather = null;
-//        for(Character c : characters)
-//            if(c instanceof Mafioso)
-//                mafioso = (Mafioso)c;
-//            else if(c instanceof GodFather)
-//                godfather = (GodFather) c;
-//
-//        if(godfather != null)
-//            godfather.mafioso = mafioso;
-
         interactions = characters.stream().map(Character::createInteraction).collect(Collectors.toCollection(PriorityQueue::new));
-
     }
 
     public void addInteraction(Interaction interaction){
@@ -53,13 +38,12 @@ public class TurnInteractions {
                     .collect(Collectors.toList());
 
             for(Interaction interaction : validInteractions)
-                if(interaction.actioner.targets.isEmpty())
-                    interaction.actioner.AddNightResult("You decided to stay at home.");
-                else if(interaction instanceof PassiveInteraction && interaction.actioner instanceof PassiveActing actioner)
+                if(interaction instanceof PassiveInteraction && interaction.actioner instanceof PassiveActing actioner)
                     actioner.passiveAction(interaction.targets);
                 else
                     interaction.actioner.act();
         }
+        computeDoctorMessage();
     }
 
     private void computeMafiosoInteraction(){
@@ -87,6 +71,20 @@ public class TurnInteractions {
                 mafioso.AddNightResult("The Godfather ordered you to kill " + godfatherInteraction.targets.get(0).getPlayerUsername() + "!");
                 godFather.AddNightResult("The mafioso attacked the target you selected.");
             }
+    }
+
+    private void computeDoctorMessage(){
+        List<Character> healedCharacters = interactions.stream().map(i -> i.actioner)
+                .filter(c-> c.healed).toList();
+        for(Character character : healedCharacters){
+            if(interactions.stream().anyMatch(i -> i instanceof AttackInteraction || i instanceof PassiveInteraction)){
+                List<Interaction> healingInteractions = interactions.stream()
+                        .filter(i -> i.targets.get(0).getPlayerUsername().equals(character.getPlayerUsername()))
+                        .toList();
+                for(Interaction interaction : healingInteractions)
+                    interaction.actioner.AddNightResult( "Your target was attacked last Night!");
+            }
+        }
     }
 
 }

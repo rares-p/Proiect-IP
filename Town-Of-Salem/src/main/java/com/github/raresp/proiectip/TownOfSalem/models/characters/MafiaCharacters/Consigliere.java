@@ -2,9 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Doctor;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.DistractInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.InvestigateInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 
 import java.util.List;
 
@@ -34,15 +32,11 @@ public class Consigliere extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
-        return new InvestigateInteraction(this, targets, 3);
+        return new VisitingInteraction(this, targets, 3);
     }
 
     @Override
     public void act() {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
         Character target = this.targets.get(0);
         switch(target.getClass().getSimpleName()){
             case "Doctor": this.AddNightResult("Your target is a professional surgeon. They must be a Doctor.");

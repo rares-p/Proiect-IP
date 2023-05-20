@@ -1,6 +1,7 @@
-package com.github.raresp.proiectip.TownOfSalem.models.characters;
+package com.github.raresp.proiectip.TownOfSalem.models.interactions;
 
 import com.github.raresp.proiectip.TownOfSalem.models.TurnInteractions;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public abstract class Interaction implements Comparable<Interaction>{
     
     public abstract boolean isValid();
 
+    public Character getActioner(){ return actioner;}
+    public List<Character> getTargets(){ return targets;}
 
     public int getPriority() {
         return priority;

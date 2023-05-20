@@ -2,7 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
-import jakarta.persistence.Entity;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,8 @@ public class Arsonist extends NeutralCharacter {
     public Interaction createInteraction() {
         if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new AttackInteraction(this, targets, 5);
         else return new AttackInteraction(this, targets, 3);
+        //cum facem diff intre dousing si setting on fire?
+
     }
 
     @Override

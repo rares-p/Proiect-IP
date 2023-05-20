@@ -1,6 +1,8 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class SerialKiller extends NeutralCharacter implements PassiveActing {
 
     @Override
     public Interaction createInteraction() {
-        return null;
+        return new AttackInteraction(this, targets, 5);
     }
 
     @Override
@@ -41,6 +43,5 @@ public class SerialKiller extends NeutralCharacter implements PassiveActing {
         target.setAlive(false);
         this.AddNightResult("You were murdered by the Serial Killer you visited.");
         target.AddNightResult("Someone tried to role block you. You murdered them!");
-
     }
 }

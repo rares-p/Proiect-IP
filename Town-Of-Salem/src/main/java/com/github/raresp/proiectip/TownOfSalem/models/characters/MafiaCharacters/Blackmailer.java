@@ -2,24 +2,24 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.DistractInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import jakarta.persistence.Entity;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 
 import java.util.List;
 
-@Entity
-public class Consort extends MafiaCharacter {
-    public Consort(String playerUsername) {
+public class Blackmailer extends MafiaCharacter {
+
+    public Blackmailer(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
-        this.immunity = ImmunityTypes.Roleblock;
+        this.immunity = ImmunityTypes.None;
         this.innocent = false;
-        this.actionText = "Distract";
+        this.actionText = "Blackmail";
     }
 
-    public Consort() {
+    public Blackmailer() {
+
     }
 
     @Override
@@ -29,24 +29,12 @@ public class Consort extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
-        return new DistractInteraction(this, targets, 2);
-    }
-    @Override
-    public void act() {
-
+        return new VisitingInteraction(this, targets, 4);
     }
 
     @Override
     public void act(List<Character> listOfTargets) {
         Character target = this.targets.get(0);
-
-        target.setRoleBlocked(true);
-        target.AddNightResult("Someone occupied your night. You were role blocked!");
-        this.AddNightResult("You kept " + target.getPlayerUsername() + " occupied last night. They did not use their ability!");
-
-        //devine mafiot
+        target.canSpeak = false;
     }
-
-
-
 }

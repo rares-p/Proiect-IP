@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Arsonist;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Veteran;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
@@ -24,6 +25,7 @@ public abstract class Character implements Comparable<Character> {
     protected String actionText;
 
     public Boolean canAct = true;
+    public Boolean canSpeak = true;
 
     public String getActionText() {
         return actionText;
@@ -40,7 +42,8 @@ public abstract class Character implements Comparable<Character> {
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
     protected boolean isJailed;
-    private int priority;
+
+    @OneToMany//asta sau ElementCollection?
     public ArrayList<Character> visitors = new ArrayList<>();
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

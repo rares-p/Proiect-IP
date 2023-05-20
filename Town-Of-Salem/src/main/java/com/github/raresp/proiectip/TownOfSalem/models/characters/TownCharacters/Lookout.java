@@ -1,26 +1,20 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
+
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.DistractInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import jakarta.persistence.Entity;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 
 import java.util.List;
-
-@Entity
-public class Escort extends TownCharacter {
-    public Escort(String playerUsername) {
+///vede toti userii care au vizitat targetul lor in seara precedenta
+public class Lookout extends TownCharacter {
+    public Lookout(String playerUsername){
         super(playerUsername);
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.Roleblock;
-        this.actionText = "Distract";
+        this.actionText = "Lookout";
     }
-
-    protected Escort() {
-        super();
-    }
-
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
@@ -33,14 +27,6 @@ public class Escort extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
-        return new DistractInteraction(this, targets, 2);
-    }
-
-    @Override
-    public void act() {
-        Character target = this.targets.get(0);
-        target.setRoleBlocked(true);
-        target.AddNightResult("Someone occupied your night. You were role blocked!");
-        this.AddNightResult("You kept " + target.getPlayerUsername() + " occupied last night. They did not use their ability!");
+        return new VisitingInteraction(this, targets, 4);
     }
 }

@@ -3,6 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
 import java.util.List;
 

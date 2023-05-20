@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 
 import java.util.List;

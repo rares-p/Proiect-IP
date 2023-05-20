@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
 
 import java.util.List;
 
@@ -30,17 +31,12 @@ public class Veteran extends TownCharacter implements PassiveActing {
 
     @Override
     public Interaction createInteraction() {
-        return null;
+        return new BasicInteraction(this, targets, 1);
     }
 
 
     @Override
-    public void act() { ///o sa verific la inceput, dupa ce isi activeaza abilitatea cine il beleste
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided not to go on alert.");
-            return;
-        }
-
+    public void act() {
         alerts--;
         onAlert = true;
         this.defense = DefenseTypes.Basic;

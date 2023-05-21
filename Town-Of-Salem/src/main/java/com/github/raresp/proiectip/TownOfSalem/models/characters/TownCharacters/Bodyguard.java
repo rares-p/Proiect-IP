@@ -50,7 +50,6 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
             this.AddNightResult("You died while protecting your target.");
             this.setAlive(false);
         }
-        else this.healed = false;
     }
 }
 

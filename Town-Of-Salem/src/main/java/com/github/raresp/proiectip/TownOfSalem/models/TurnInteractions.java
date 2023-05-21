@@ -117,18 +117,19 @@ public class TurnInteractions {
 
         for (var bodyguardInteraction : bodyguardInteractions) {
             //caut targeturile
-            var targets = bodyguardInteraction.targets;
             //pt fiecare target, vad daca are vizitatori care l-au atacat
-            for (var target : targets) {
-                var attackers = interactions.stream()
-                        .filter(interaction -> interaction instanceof AttackInteraction && interaction.targets.get(0) == target)
-                        .map(Interaction::getActioner)
-                        .toList();
-                //omor primul atacator din lista (doar daca nu a fost healed),
-                //deci fac un attack interaction care sa fie verificat dupa ce a dat medicul heal
-                interactions.add(new PassiveAttackInteraction(bodyguardInteraction.actioner,
-                        List.of(attackers.get(0)), 3));
-            }
+            Character target = bodyguardInteraction.targets.get(0);
+
+            var attackers = interactions.stream()
+                    .filter(interaction -> interaction instanceof AttackInteraction && interaction.targets.get(0) == target)
+                    .map(Interaction::getActioner)
+                    .toList();
+            //omor primul atacator din lista (doar daca nu a fost healed),
+            //deci fac un attack interaction care sa fie verificat dupa ce a dat medicul heal
+            interactions.add(new PassiveAttackInteraction(bodyguardInteraction.actioner,
+                    List.of(attackers.get(0)), 3));
+            interactions.remove(bodyguardInteraction);
+
         }
 
     }

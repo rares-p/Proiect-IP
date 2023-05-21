@@ -20,9 +20,10 @@ public class PassiveAttackInteraction extends Interaction {
             if(target.healed) target.AddNightResult("You were attacked by a " + actioner.getClass().getSimpleName() + " but someone nursed you back to health");
             else target.AddNightResult("You were attacked by a " + actioner.getClass().getSimpleName() + " but your defense was too strong");
 
-            if(actioner instanceof Bodyguard)
+            if(actioner instanceof Bodyguard) {
                 getTurnInteractions().getInteractions().add(new AttackInteraction(target, List.of(actioner), 3));
-
+                actioner.targets = List.of(actioner);
+            }
             return false;
         }
 

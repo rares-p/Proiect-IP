@@ -1,14 +1,17 @@
-package com.github.raresp.proiectip.TownOfSalem.models.interactions;
+package com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Arsonist;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Werewolf;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
 import java.util.List;
 
-public class AttackInteraction extends Interaction {
+public abstract class AttackInteraction extends Interaction {
     public AttackInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+        this.actioner = actioner;
+        this.targets = targets;
+        this.priority = priority;
     }
 
     @Override

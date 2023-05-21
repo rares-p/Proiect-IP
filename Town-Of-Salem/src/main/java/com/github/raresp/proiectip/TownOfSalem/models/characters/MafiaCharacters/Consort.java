@@ -2,7 +2,8 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.DistractInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.ConsortInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.DistractInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 
@@ -21,7 +22,6 @@ public class Consort extends MafiaCharacter {
 
     public Consort() {
     }
-
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
@@ -31,27 +31,6 @@ public class Consort extends MafiaCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new DistractInteraction(this, targets, 2);
+        return new ConsortInteraction(this, targets, 2);
     }
-    @Override
-    public void act() {
-
-    }
-
-    @Override
-    public void act(List<Character> listOfTargets) {
-        if(targets.isEmpty())
-            return;
-
-        Character target = this.targets.get(0);
-
-        target.setRoleBlocked(true);
-        target.AddNightResult("Someone occupied your night. You were role blocked!");
-        this.AddNightResult("You kept " + target.getPlayerUsername() + " occupied last night. They did not use their ability!");
-
-        //devine mafiot
-    }
-
-
-
 }

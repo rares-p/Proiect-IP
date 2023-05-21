@@ -2,9 +2,10 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BodyguardProtectSelfInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.BodyguardSetTargetInteraction;
 
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
         if(targets.isEmpty())
             return null;
         if (targets.get(0) == this)
-            return new BasicInteraction(this, targets, 3);
-        return new VisitingInteraction(this, targets, 3);
+            return new BodyguardProtectSelfInteraction(this, 3);
+        return new BodyguardAttackInteraction(this, targets, 4); //prioritatea 4 ca sa fie dupa heal-uri
     }
 
     @Override
@@ -55,6 +56,10 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
             this.AddNightResult("You died while protecting your target.");
             this.setAlive(false);
         }
+    }
+
+    public void setHasProtectedHimself(boolean hasProtectedHimself) {
+        this.hasProtectedHimself = hasProtectedHimself;
     }
 }
 

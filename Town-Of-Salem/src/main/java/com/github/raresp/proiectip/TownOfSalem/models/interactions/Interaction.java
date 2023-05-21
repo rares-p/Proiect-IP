@@ -19,30 +19,23 @@ public abstract class Interaction implements Comparable<Interaction>{
     public List<Character> targets;
     @Transient
     private TurnInteractions turnInteractions;
-    private int priority;
+    protected int priority;
     public TurnInteractions getTurnInteractions() {
         return turnInteractions;
     }
     protected Interaction() {
     }
-
-    public Interaction(Character actioner, List<Character> targets, int priority) {
-        this.actioner = actioner;
-        this.targets = targets;
-        this.priority = priority;
-    }
-
-    @Override
-    public int compareTo(Interaction other) {
-        return Integer.compare(this.priority, other.priority);
-    }
-    
     public abstract boolean isValid();
+    public abstract void act();
 
     public Character getActioner(){ return actioner;}
     public List<Character> getTargets(){ return targets;}
 
     public int getPriority() {
         return priority;
+    }
+    @Override
+    public int compareTo(Interaction other) {
+        return Integer.compare(this.priority, other.priority);
     }
 }

@@ -1,8 +1,9 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.SerialKillerTargetInteraction;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SerialKiller extends NeutralCharacter implements PassiveActing {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new AttackInteraction(this, targets, 5);
+        return new SerialKillerTargetInteraction(this, targets, 5);
     }
 
     @Override

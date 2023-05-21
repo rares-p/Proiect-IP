@@ -2,8 +2,8 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
 import java.util.List;
@@ -40,9 +40,10 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
     @Override
     public Interaction createInteraction() {
         //tb facute ceva verificari cu full moo nights, idk cum
-       if(targets.isEmpty())//inseamna ca stau acasa
-           return new BasicInteraction(this, targets, 5);
-       return new AttackInteraction(this, targets, 5);
+//       if(targets.isEmpty())//inseamna ca stau acasa
+//           return new BasicInteraction(this, targets, 5);
+//       return new AttackInteraction(this, targets, 5);
+        return null;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.DistractInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.DistractInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 

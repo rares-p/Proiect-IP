@@ -1,7 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 
@@ -30,7 +30,7 @@ public class Survivor extends NeutralCharacter {
     }
     @Override
     public Interaction createInteraction() {
-        return new BasicInteraction(this, targets, 3);
+        return null;
     }
     @Override
     public void act() {

@@ -3,7 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.ConsigliereInteraction;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class Consigliere extends MafiaCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new VisitingInteraction(this, targets, 3);
+        return new ConsigliereInteraction(this, targets, 3);
     }
 
     @Override

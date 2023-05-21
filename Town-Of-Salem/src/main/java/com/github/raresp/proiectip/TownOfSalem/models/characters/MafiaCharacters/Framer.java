@@ -3,7 +3,8 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.FramerInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -28,25 +29,11 @@ public class Framer extends MafiaCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
-
-    @Override
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new VisitingInteraction(this, targets, 3);
+        return new FramerInteraction(this, targets, 3);
     }
 
-    @Override
-    public void act() {
-        if(targets.isEmpty())
-            return;
 
-        Character target = this.targets.get(0);
-        this.AddNightResult("You framed " + target.getPlayerUsername() + "!");
-        target.setFramed(true);  //dispare framed de pe target cand e investigat !!
-        //devine mafiot cand moare mafia killing
-    }
 }

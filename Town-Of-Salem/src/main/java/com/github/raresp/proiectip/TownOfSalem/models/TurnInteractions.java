@@ -6,10 +6,13 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.PassiveActing;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.PassiveAttackInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.MafiosoInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.BodyguardSetTargetInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,15 @@ public class TurnInteractions {
     List<Interaction> validInteractions = new ArrayList<>();
 
     public TurnInteractions(List<Character> characters) {
-        interactions = characters.stream().map(Character::createInteraction).filter(Objects::nonNull).collect(Collectors.toCollection(PriorityQueue::new));
+        interactions = characters.stream()
+                .filter(Character::isAlive)
+                .map(Character::createInteraction)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(PriorityQueue::new));
+
+        characters.stream()
+                .filter(character -> character.targets.isEmpty())
+                .forEach(character -> character.AddNightResult("You decided to stay at home"));
     }
 
     public void addInteraction(Interaction interaction) {
@@ -38,7 +49,6 @@ public class TurnInteractions {
     public void computeInteractionsOutcome() {
         for (int p = 1; p <= 7; p++) {
             switch (p) {
-                case 3 -> computeBodyguardInteraction();
                 case 4 -> computeLookoutMessage();
                 case 5 -> {
                     computeMafiosoInteraction();
@@ -88,7 +98,7 @@ public class TurnInteractions {
         else if (godfatherInteraction.targets.isEmpty())  ///godfather nu a selectat pe nimeni
             interactions.add(mafiosoInteraction);
         else {
-            interactions.add(new AttackInteraction(mafioso, godfatherInteraction.targets, 5));
+            interactions.add(new MafiosoInteraction(mafioso, godfatherInteraction.targets, 5));
             mafioso.AddNightResult("The Godfather ordered you to kill " + godfatherInteraction.targets.get(0).getPlayerUsername() + "!");
             godFather.AddNightResult("The mafioso attacked the target you selected.");
         }
@@ -112,28 +122,27 @@ public class TurnInteractions {
         }
     }
 
-    private void computeBodyguardInteraction() {
-        var bodyguardInteractions = interactions.stream()
-                .filter(i -> i.actioner instanceof Bodyguard && i instanceof VisitingInteraction).toList();
-
-        for (var bodyguardInteraction : bodyguardInteractions) {
-            //caut targeturile
-            //pt fiecare target, vad daca are vizitatori care l-au atacat
-            Character target = bodyguardInteraction.targets.get(0);
-
-            var attackers = interactions.stream()
-                    .filter(interaction -> interaction instanceof AttackInteraction && interaction.targets.get(0) == target)
-                    .map(Interaction::getActioner)
-                    .toList();
-            //omor primul atacator din lista (doar daca nu a fost healed),
-            //deci fac un attack interaction care sa fie verificat dupa ce a dat medicul heal
-            interactions.add(new PassiveAttackInteraction(bodyguardInteraction.actioner,
-                    List.of(attackers.get(0)), 3));
-            interactions.remove(bodyguardInteraction);
-
-        }
-
-    }
+//    private void computeBodyguardInteraction() {
+//        var bodyguardInteractions = interactions.stream()
+//                .filter(i -> i.actioner instanceof Bodyguard && i instanceof BodyguardSetTargetInteraction).toList();
+//
+//        for (var bodyguardInteraction : bodyguardInteractions) {
+//            //caut targeturile
+//            //pt fiecare target, vad daca are vizitatori care l-au atacat
+//            Character target = bodyguardInteraction.targets.get(0);
+//
+//            var attackers = interactions.stream()
+//                    .filter(interaction -> interaction instanceof AttackInteraction && interaction.targets.get(0) == target)
+//                    .map(Interaction::getActioner)
+//                    .toList();
+//            //omor primul atacator din lista (doar daca nu a fost healed),
+//            //deci fac un attack interaction care sa fie verificat dupa ce a dat medicul heal
+//
+//            interactions.add(new BodyguardAttackInteraction(bodyguardInteraction.actioner,
+//                    List.of(attackers.get(0)), 3));
+//        }
+//
+//    }
 
     private void computeSpyMessage() {
         //vad daca exista vreun spy si care e targetul lui

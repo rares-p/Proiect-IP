@@ -22,8 +22,7 @@ public class TurnInteractions {
     List<Interaction> validInteractions = new ArrayList<>();
 
     public TurnInteractions(List<Character> characters) {
-        interactions = characters.stream().map(Character::createInteraction).collect(Collectors.toCollection(PriorityQueue::new));
-        interactions.removeIf(Objects::isNull);
+        interactions = characters.stream().map(Character::createInteraction).filter(Objects::nonNull).collect(Collectors.toCollection(PriorityQueue::new));
     }
 
     public void addInteraction(Interaction interaction) {

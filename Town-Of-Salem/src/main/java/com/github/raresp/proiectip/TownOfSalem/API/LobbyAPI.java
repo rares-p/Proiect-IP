@@ -4,10 +4,7 @@ import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicLobby;
 import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicLobbyListProjection;
 import com.github.raresp.proiectip.TownOfSalem.API.requests.AddCharacterTargetRequest;
 import com.github.raresp.proiectip.TownOfSalem.API.requests.AddUserToLobbyRequest;
-import com.github.raresp.proiectip.TownOfSalem.API.responses.AllLobbiesResponse;
-import com.github.raresp.proiectip.TownOfSalem.API.responses.CurrentUserAllUsersResponse;
-import com.github.raresp.proiectip.TownOfSalem.API.responses.LobbyStateResponse;
-import com.github.raresp.proiectip.TownOfSalem.API.responses.PeersResponse;
+import com.github.raresp.proiectip.TownOfSalem.API.responses.*;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.*;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
 import com.github.raresp.proiectip.TownOfSalem.models.GameState;
@@ -166,7 +163,7 @@ public class LobbyAPI {
     @PostMapping(path = "/state/{joinCode}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Character> postGameByLobbyId(@PathVariable String joinCode, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException, LobbyNotFoundException {
+    ResponseEntity<AddTargetResponse> postGameByLobbyId(@PathVariable String joinCode, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException, LobbyNotFoundException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
@@ -177,7 +174,7 @@ public class LobbyAPI {
         for(String username : request.targets)
             game.getCharacterByName(request.userId).targets.add(game.getCharacterByName(username));
         gameRepository.save(game);
-        return new ResponseEntity<>(character, HttpStatus.OK);
+        return new ResponseEntity<>(new AddTargetResponse(character), HttpStatus.OK);
     }
 
     @PostMapping("/reset/{joinCode}")

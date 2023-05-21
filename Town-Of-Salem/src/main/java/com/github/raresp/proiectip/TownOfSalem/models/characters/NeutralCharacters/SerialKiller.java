@@ -41,7 +41,7 @@ public class SerialKiller extends NeutralCharacter implements PassiveActing {
     public void passiveAction(List<Character> targets) {
         Character target = targets.get(0);
         target.setAlive(false);
-        this.AddNightResult("You were murdered by the Serial Killer you visited.");
-        target.AddNightResult("Someone tried to role block you. You murdered them!");
+        target.AddNightResult("You were murdered by the Serial Killer you visited.");
+        this.AddNightResult("Someone tried to role block you. You murdered them!");
     }
 }

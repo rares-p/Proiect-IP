@@ -13,7 +13,7 @@ public class Veteran extends TownCharacter implements PassiveActing {
 
     public Veteran(String playerUsername) {
         super(playerUsername);
-        this.attack = AttackTypes.Unstoppable;
+        this.attack = AttackTypes.Powerful;
         this.defense = DefenseTypes.None;
         this.innocent = true;
         this.immunity = ImmunityTypes.DetectionImmunity;
@@ -23,6 +23,11 @@ public class Veteran extends TownCharacter implements PassiveActing {
     public void resetDefense() {
         this.defense = DefenseTypes.None;
         this.onAlert = false;
+    }
+    @Override
+    public void resetStats(){
+        super.resetStats();
+        onAlert = false;
     }
 
     @Override
@@ -57,7 +62,7 @@ public class Veteran extends TownCharacter implements PassiveActing {
     public void passiveAction(List<Character> characters) {
         Character target = targets.get(0);
         target.setAlive(false);
-        this.AddNightResult("You were murdered by the Veteran you visited.");
-        target.AddNightResult("Someone tried to role block you. You murdered them!");
+        target.AddNightResult("You were murdered by the Veteran you visited.");
+        this.AddNightResult(target.getPlayerUsername() + " visited you last night. You murdered them!");
     }
 }

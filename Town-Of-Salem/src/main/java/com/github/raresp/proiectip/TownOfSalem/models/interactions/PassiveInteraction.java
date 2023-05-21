@@ -15,7 +15,8 @@ public class PassiveInteraction extends Interaction { //pt veteran si serial kil
         Character target = targets.get(0);
         if(target.getDefense().ordinal() >= actioner.getAttack().ordinal()) {
             actioner.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
-            target.AddNightResult("You were attacked by a " + actioner.getClass().getSimpleName() + " but someone nursed you back to health");
+            if(target.healed) target.AddNightResult("You were attacked by a " + actioner.getClass().getSimpleName() + " but someone nursed you back to health");
+            else target.AddNightResult("You were attacked by a " + actioner.getClass().getSimpleName() + " but your defense was too strong");
             return false;
         }
         return true;

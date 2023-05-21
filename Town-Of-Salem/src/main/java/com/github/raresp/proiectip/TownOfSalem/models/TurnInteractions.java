@@ -2,18 +2,10 @@ package com.github.raresp.proiectip.TownOfSalem.models;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.Blackmailer;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.Framer;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.GodFather;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.Mafioso;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Arsonist;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.SerialKiller;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Werewolf;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.*;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.PassiveActing;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Bodyguard;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Doctor;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Lookout;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Spy;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.PassiveInteraction;
@@ -43,17 +35,17 @@ public class TurnInteractions {
         return interactions;
     }
     public void computeInteractionsOutcome() {
-        for (int p = 1; p <= 6; p++) {
-            if (p == 6)
-                computeSpyMessage();
-            if (p == 5) {
-                computeMafiosoInteraction();
-                computeWerewolfInteraction();
+        for (int p = 1; p <= 7; p++) {
+            switch (p) {
+                case 3 -> computeBodyguardInteraction();
+                case 4 -> computeLookoutMessage();
+                case 5 -> {
+                    computeMafiosoInteraction();
+                    computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
+                }
+                case 6 -> computeSpyMessage();
+                case 7 -> computeVeteranInteraction();
             }
-            if (p == 4)
-                computeLookoutMessage();
-            if (p == 3)
-                computeBodyguardInteraction();
             int priority = p;
 
             validInteractions = interactions.stream()
@@ -245,5 +237,13 @@ public class TurnInteractions {
         //adaug in lista de targets
         werewolf.targets.addAll(target.visitors);
     }
-
+    private void computeVeteranInteraction(){
+        Interaction veteranInteraction = interactions.stream().filter(i -> i.actioner instanceof Veteran).filter(i-> i.actioner.isAlive()).findFirst().orElse(null);
+        if (veteranInteraction == null) return;
+        interactions.remove(veteranInteraction);
+        Veteran veteran = (Veteran) veteranInteraction.actioner;
+        if(veteran.onAlert) interactions.addAll(
+                veteran.visitors.stream().map(visitor -> new PassiveInteraction(veteran, List.of(visitor), 7)).toList()
+        );
+    }
 }

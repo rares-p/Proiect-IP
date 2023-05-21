@@ -105,52 +105,6 @@ public class GameRunner{
             game.setTimeOfCurrentState(game.getTimeOfState());
 
         gameRepository.save(game);//gameService.updateGame(game);
-
-
-        /*while (!game.isOver()){
-            System.out.println("A INCEPUT SESIUNEA DE JOC");
-            while(true)
-            {
-                System.out.println("A INCEPUT ");
-                game.gameState = GameState.Discussion;
-                game.setGameState(GameState.Discussion);
-                game.timeOfCurrentState = game.getCurrentUtcTime(game.discussionTime);
-                while(game.getCurrentUtcTime().compareTo(game.timeOfCurrentState) < 0);   //wait for discussion to finish
-
-                System.out.println("E selection");
-                game.getCharacters().get(0).setRoleBlocked(true);
-                game.gameState = GameState.Selection;
-//            gameManager.setGameState(this, GameState.Selection);
-                game.setGameState(GameState.Selection);
-                game.timeOfCurrentState = game.getCurrentUtcTime(game.selectionTime);
-                while(game.getCurrentUtcTime().compareTo(game.timeOfCurrentState) < 0) {   //wait for selection to finish
-                    //perform voting checks and instantiate voting session
-                    if(game.selections.values().stream().filter(v -> v.equals(new Sheriff("test"))).count() > 2) {    //voting session
-                        VotingSession votingSession = new VotingSession(new Sheriff("test"), game.getCharacters());
-
-                        game.gameState = GameState.Voting;
-                        game.timeOfCurrentState = game.getCurrentUtcTime(game.nightTime);
-                        long selectionRemainingTime = game.timeOfCurrentState.toInstant(ZoneOffset.UTC).toEpochMilli() - game.getCurrentUtcTime().toInstant(ZoneOffset.UTC).toEpochMilli();
-                        while(game.getCurrentUtcTime().compareTo(game.timeOfCurrentState) < 0);   //wait for voting to finish
-                        Object o = votingSession.calculateOutcome();    //get voting result
-                        game.timeOfCurrentState = game.getCurrentUtcTime(game.selectionTime * 1000);
-                    }
-                }
-
-                game.gameState = GameState.Night;
-                game.setGameState(GameState.Night);
-                game.timeOfCurrentState = game.getCurrentUtcTime(game.nightTime);
-                while(game.getCurrentUtcTime().compareTo(game.timeOfCurrentState) < 0) {   //wait for night to finish
-                    //get targets
-                }
-
-                TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters());
-                turnInteractions.computeInteractionsOutcome();
-                for(Character c : game.getCharacters())
-                    c.resetStats();
-                //evaluate night actions
-            }
-        }*/
     }
 
     private void runGameIfDayEndingTime(Game game) {

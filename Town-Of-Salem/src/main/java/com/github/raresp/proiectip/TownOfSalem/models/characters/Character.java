@@ -43,7 +43,7 @@ public abstract class Character implements Comparable<Character> {
     protected ImmunityTypes immunity;
     protected boolean isJailed;
 
-    @OneToMany//asta sau ElementCollection?
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)//asta sau ElementCollection?
     public List<Character> visitors = new ArrayList<>();
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

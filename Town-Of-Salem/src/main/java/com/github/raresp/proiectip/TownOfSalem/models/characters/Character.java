@@ -44,7 +44,7 @@ public abstract class Character implements Comparable<Character> {
     protected boolean isJailed;
 
     @OneToMany//asta sau ElementCollection?
-    public ArrayList<Character> visitors = new ArrayList<>();
+    public List<Character> visitors = new ArrayList<>();
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")

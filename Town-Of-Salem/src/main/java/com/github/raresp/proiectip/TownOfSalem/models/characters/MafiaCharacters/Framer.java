@@ -34,11 +34,16 @@ public class Framer extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new VisitingInteraction(this, targets, 3);
     }
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
+
         Character target = this.targets.get(0);
         this.AddNightResult("You framed " + target.getPlayerUsername() + "!");
         target.setFramed(true);  //dispare framed de pe target cand e investigat !!

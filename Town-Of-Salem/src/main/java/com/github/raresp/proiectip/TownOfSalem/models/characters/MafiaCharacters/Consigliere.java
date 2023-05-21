@@ -33,11 +33,16 @@ public class Consigliere extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new VisitingInteraction(this, targets, 3);
     }
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
+
         Character target = this.targets.get(0);
         switch(target.getClass().getSimpleName()){
             case "Doctor": this.AddNightResult("Your target is a professional surgeon. They must be a Doctor.");

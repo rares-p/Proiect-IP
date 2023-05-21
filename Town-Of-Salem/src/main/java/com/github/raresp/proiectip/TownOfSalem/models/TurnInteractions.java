@@ -13,6 +13,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInter
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ public class TurnInteractions {
 
     public TurnInteractions(List<Character> characters) {
         interactions = characters.stream().map(Character::createInteraction).collect(Collectors.toCollection(PriorityQueue::new));
+        interactions.removeIf(Objects::isNull);
     }
 
     public void addInteraction(Interaction interaction) {

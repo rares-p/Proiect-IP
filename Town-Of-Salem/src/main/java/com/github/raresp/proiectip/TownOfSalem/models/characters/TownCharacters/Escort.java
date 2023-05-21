@@ -33,11 +33,15 @@ public class Escort extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new DistractInteraction(this, targets, 2);
     }
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
         Character target = this.targets.get(0);
         target.setRoleBlocked(true);
         target.AddNightResult("Someone occupied your night. You were role blocked!");

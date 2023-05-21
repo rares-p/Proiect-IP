@@ -33,11 +33,15 @@ public class Sheriff extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new VisitingInteraction(this, targets, 4);
     }
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
         Character target = this.targets.get(0);
         this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
         this.AddNightResult("Your target seems " + ((target.IsInnocent() || target.isFramed())?"Innocent!":"Suspicious!"));

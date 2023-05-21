@@ -35,6 +35,8 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         if (targets.get(0) == this)
             return new BasicInteraction(this, targets, 3);
         return new VisitingInteraction(this, targets, 3);
@@ -42,6 +44,9 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
 
     @Override
     public void passiveAction(List<Character> characters) {
+        if(targets.isEmpty())
+            return;
+
         Character target = targets.get(0);
         target.setIsAlive(false);
         target.AddNightResult("You were killed by a Bodyguard.");

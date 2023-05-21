@@ -42,6 +42,8 @@ public class Vigilante extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new AttackInteraction(this, targets,5);
     }//din nou, nu tb si aici o interactiune? am adaugat eu
 
@@ -50,6 +52,8 @@ public class Vigilante extends TownCharacter {
         /*performs action;chooses another player to kill*/
         if(canAct){
             bulletsLeft--;
+            if(targets.isEmpty())
+                return;
             Character target = targets.get(0);
             if (target.getDefense().ordinal() >= this.attack.ordinal()) {
                 this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");

@@ -36,11 +36,16 @@ public class Mafioso extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new AttackInteraction(this, targets, 5);
     }
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
+
         Character target = this.targets.get(0);
         this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
         target.AddNightResult("You were attacked last night. You died");

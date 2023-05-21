@@ -27,6 +27,8 @@ public class Lookout extends TownCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new VisitingInteraction(this, targets, 4);
     }
 }

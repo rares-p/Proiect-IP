@@ -29,6 +29,8 @@ public class Consort extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new DistractInteraction(this, targets, 2);
     }
     @Override
@@ -38,6 +40,9 @@ public class Consort extends MafiaCharacter {
 
     @Override
     public void act(List<Character> listOfTargets) {
+        if(targets.isEmpty())
+            return;
+
         Character target = this.targets.get(0);
 
         target.setRoleBlocked(true);

@@ -29,11 +29,16 @@ public class Blackmailer extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new VisitingInteraction(this, targets, 4);
     }
 
     @Override
     public void act(List<Character> listOfTargets) {
+        if(targets.isEmpty())
+            return;
+
         Character target = this.targets.get(0);
         target.canSpeak = false;
     }

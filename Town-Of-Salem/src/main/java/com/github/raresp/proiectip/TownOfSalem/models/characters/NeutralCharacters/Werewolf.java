@@ -40,7 +40,7 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
     @Override
     public Interaction createInteraction() {
         //tb facute ceva verificari cu full moo nights, idk cum
-       if(targets.size() == 0)//inseamna ca stau acasa
+       if(targets.isEmpty())//inseamna ca stau acasa
            return new BasicInteraction(this, targets, 5);
        return new AttackInteraction(this, targets, 5);
     }

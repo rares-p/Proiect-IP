@@ -29,6 +29,9 @@ public class Arsonist extends NeutralCharacter {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+
         if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new AttackInteraction(this, targets, 5);
         else return new AttackInteraction(this, targets, 3);
         //cum facem diff intre dousing si setting on fire?
@@ -37,6 +40,8 @@ public class Arsonist extends NeutralCharacter {
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
         Character target = this.targets.get(0);
         if (target.getPlayerUsername().equals(this.playerUsername)) {
             for (Character dousedPlayer : dousedPlayers){

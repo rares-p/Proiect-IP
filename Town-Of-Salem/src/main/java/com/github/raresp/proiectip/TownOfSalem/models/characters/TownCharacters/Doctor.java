@@ -42,6 +42,8 @@ public class Doctor extends TownCharacter {
 
     @Override
     public void act() {
+        if(targets.isEmpty())
+            return;
         Character target = this.targets.get(0);
         target.setDefense(DefenseTypes.Powerful);
 

@@ -37,6 +37,8 @@ public class Veteran extends TownCharacter implements PassiveActing {
 
     @Override
     public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
         return new BasicInteraction(this, targets, 1);
     }
 
@@ -47,7 +49,7 @@ public class Veteran extends TownCharacter implements PassiveActing {
         onAlert = true;
         this.defense = DefenseTypes.Basic;
         this.AddNightResult("You decided to go on alert.");
-        this.AddNightResult("You have " + alerts + " vests left.");
+        this.AddNightResult("You have " + alerts + " alerts left.");
     }
 
     @Override

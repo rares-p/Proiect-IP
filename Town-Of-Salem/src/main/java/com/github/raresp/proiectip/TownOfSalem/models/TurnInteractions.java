@@ -104,6 +104,10 @@ public class TurnInteractions {
     private void computeDoctorMessage() {
         List<Character> healedCharacters = interactions.stream().map(i -> i.actioner)
                 .filter(c -> c.healed).toList();
+
+        if(healedCharacters.isEmpty())
+            return;
+
         for (Character character : healedCharacters) {
             if (interactions.stream().anyMatch(i -> i instanceof AttackInteraction || i instanceof PassiveInteraction)) {
                 List<Interaction> healingInteractions = interactions.stream()
@@ -144,6 +148,10 @@ public class TurnInteractions {
         for (var spyInteraction : spyInteractions) {
             //get spy
             var spy = spyInteraction.actioner;
+
+            if(spyInteraction.targets.isEmpty())
+                continue;
+
             //get target
             var target = spyInteraction.targets.get(0);
             //see if they were roleblocked
@@ -194,6 +202,10 @@ public class TurnInteractions {
         //iau pe rand
         for (var lookoutInteraction : lookoutInteractions) {
             var lookout = lookoutInteraction.actioner;
+
+            if(lookoutInteraction.targets.isEmpty())
+                continue;
+
             //iau targetul
             var target = lookoutInteraction.targets.get(0);
             //vad daca mai mult de 3 oameni viziteaza
@@ -214,8 +226,12 @@ public class TurnInteractions {
 
     private void computeWerewolfInteraction() {
         //iau interactiunea
-        var werewolfInteraction = interactions.stream()
-                .filter(i -> i.actioner instanceof Werewolf).toList().get(0);
+        var werewolfInteractionList = interactions.stream()
+                .filter(i -> i.actioner instanceof Werewolf).toList();
+
+        if(werewolfInteractionList.isEmpty())
+            return;
+        var werewolfInteraction = werewolfInteractionList.get(0);
 
         //iau targetul
         var target = werewolfInteraction.targets.get(0);
@@ -228,8 +244,6 @@ public class TurnInteractions {
 
         //adaug in lista de targets
         werewolf.targets.addAll(target.visitors);
-
-
     }
 
 }

@@ -8,7 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.PassiveActing;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.PassiveInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.PassiveAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class TurnInteractions {
                     .collect(Collectors.toList());
 
             for (Interaction interaction : validInteractions)
-                if (interaction instanceof PassiveInteraction && interaction.actioner instanceof PassiveActing actioner)
+                if (interaction instanceof PassiveAttackInteraction && interaction.actioner instanceof PassiveActing actioner)
                     actioner.passiveAction(interaction.targets);
                 else {//nu e passive action
                     if (interaction.actioner instanceof Werewolf)//pt ca tb un argument la act, nu pot apela fara parametri
@@ -101,7 +101,7 @@ public class TurnInteractions {
             return;
 
         for (Character character : healedCharacters) {
-            if (interactions.stream().anyMatch(i -> i instanceof AttackInteraction || i instanceof PassiveInteraction)) {
+            if (interactions.stream().anyMatch(i -> i instanceof AttackInteraction || i instanceof PassiveAttackInteraction)) {
                 List<Interaction> healingInteractions = interactions.stream()
                         .filter(i -> i.targets.get(0).getPlayerUsername().equals(character.getPlayerUsername()))
                         .toList();
@@ -126,9 +126,8 @@ public class TurnInteractions {
                         .toList();
                 //omor primul atacator din lista (doar daca nu a fost healed),
                 //deci fac un attack interaction care sa fie verificat dupa ce a dat medicul heal
-                interactions.add(new AttackInteraction(bodyguardInteraction.actioner, new ArrayList<>() {{
-                    add(attackers.get(0));
-                }}, 5));
+                interactions.add(new PassiveAttackInteraction(bodyguardInteraction.actioner,
+                        List.of(attackers.get(0)), 3));
             }
         }
 
@@ -243,7 +242,7 @@ public class TurnInteractions {
         interactions.remove(veteranInteraction);
         Veteran veteran = (Veteran) veteranInteraction.actioner;
         if(veteran.onAlert) interactions.addAll(
-                veteran.visitors.stream().map(visitor -> new PassiveInteraction(veteran, List.of(visitor), 7)).toList()
+                veteran.visitors.stream().map(visitor -> new PassiveAttackInteraction(veteran, List.of(visitor), 7)).toList()
         );
     }
 }

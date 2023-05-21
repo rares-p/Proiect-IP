@@ -23,7 +23,7 @@ public class DistractInteraction extends Interaction {
         Character target = targets.get(0);
         target.visitors.add(actioner);
         if(target instanceof SerialKiller) {
-            getTurnInteractions().addInteraction(new PassiveInteraction(target, new ArrayList<>(Arrays.asList(actioner)), 5)); //nush exact care-i prioritatea, dupa heal
+            getTurnInteractions().addInteraction(new PassiveAttackInteraction(target, new ArrayList<>(Arrays.asList(actioner)), 5)); //nush exact care-i prioritatea, dupa heal
             return false;
         }
         if(target instanceof Werewolf){

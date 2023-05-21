@@ -26,22 +26,31 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
 
     @Override
     public void act(List<Character> listOfTargets) {
-
+        Character target = targets.get(0);
+        if (target == this) {
+            this.defense = DefenseTypes.Basic;
+            hasProtectedHimself = true;
+        }
     }
 
     @Override
     public Interaction createInteraction() {
-        if (targets.get(0) == this) {
-            this.defense = DefenseTypes.Basic;
+        if (targets.get(0) == this)
             return new BasicInteraction(this, targets, 3);
-        }
         return new VisitingInteraction(this, targets, 3);
     }
 
     @Override
     public void passiveAction(List<Character> characters) {
         Character target = targets.get(0);
-        target.AddNightResult("You were attacked, but your bulletproof vest saved you!.");
+        target.setIsAlive(false);
+        target.AddNightResult("You were killed by a Bodyguard.");
+        this.AddNightResult("You killed " + target.getPlayerUsername() + " while protecting your target.");
+        if(!this.healed) {
+            this.AddNightResult("You died while protecting your target.");
+            this.setAlive(false);
+        }
+        else this.healed = false;
     }
 }
 

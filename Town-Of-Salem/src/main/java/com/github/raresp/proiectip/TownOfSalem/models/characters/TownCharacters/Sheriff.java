@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.SheriffInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 import jakarta.persistence.Entity;
 
@@ -27,15 +28,10 @@ public class Sheriff extends TownCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
-
-    @Override
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new VisitingInteraction(this, targets, 4);
+        return new SheriffInteraction(this, targets);
     }
 
     @Override
@@ -44,7 +40,7 @@ public class Sheriff extends TownCharacter {
             return;
         Character target = this.targets.get(0);
         this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
-        this.AddNightResult("Your target seems " + ((target.IsInnocent() || target.isFramed())?"Innocent!":"Suspicious!"));
+        this.AddNightResult("Your target seems " + ((target.IsInnocent() && !target.isFramed())?"Innocent!":"Suspicious!"));
         target.setFramed(false);
     }
 

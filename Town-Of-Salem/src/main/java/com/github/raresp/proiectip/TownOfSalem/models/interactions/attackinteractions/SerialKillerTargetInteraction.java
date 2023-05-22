@@ -5,8 +5,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import java.util.List;
 
 public class SerialKillerTargetInteraction extends AttackInteraction{
-    public SerialKillerTargetInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+    public SerialKillerTargetInteraction(Character actioner, List<Character> targets) {
+        super(actioner, targets, 5);
     }
 
     @Override

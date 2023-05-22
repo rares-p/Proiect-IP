@@ -15,6 +15,7 @@ public class Executioner extends NeutralCharacter {
         this.defense = DefenseTypes.Basic;
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.actionText = "Execute";
+        //ar trebui cand facem personajul sa ii generam targetul zic.
     }
     //setez la inceputul jocului, idk unde in gamelogic
     public void setTarget(Character target){

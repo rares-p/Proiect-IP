@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ArsonistDouseInteraction extends VisitingInteraction {
     Arsonist arsonist = (Arsonist) actioner;
-    public ArsonistDouseInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+    public ArsonistDouseInteraction(Character actioner, List<Character> targets) {
+        super(actioner, targets, 3);
     }
 
     @Override

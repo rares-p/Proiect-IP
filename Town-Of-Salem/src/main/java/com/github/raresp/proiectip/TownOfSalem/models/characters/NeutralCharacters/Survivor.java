@@ -3,15 +3,14 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.SurvivorInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
 
 @Entity
 public class Survivor extends NeutralCharacter {
-    private int bulletVestsCount = 4;
-
-    private boolean isAlert = false;
+    public int bulletVestsCount = 4;
     public Survivor(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.None;
@@ -30,20 +29,6 @@ public class Survivor extends NeutralCharacter {
     }
     @Override
     public Interaction createInteraction() {
-        return null;
+        return new SurvivorInteraction(this);
     }
-    @Override
-    public void act() {
-        /*by acting, the Survivor simply puts on a bulletproof vest and protects himself*/
-        isAlert = true;//idk if we need isAlert if we already changed the defense type;
-        bulletVestsCount--;
-        this.defense = DefenseTypes.Basic;
-    }
-
-    @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
-
-
 }

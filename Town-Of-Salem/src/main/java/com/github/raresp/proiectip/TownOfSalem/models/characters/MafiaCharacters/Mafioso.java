@@ -33,7 +33,7 @@ public class Mafioso extends MafiaCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new MafiosoInteraction(this, targets, 5);
+        return new MafiosoInteraction(this, targets);
     }
 
 

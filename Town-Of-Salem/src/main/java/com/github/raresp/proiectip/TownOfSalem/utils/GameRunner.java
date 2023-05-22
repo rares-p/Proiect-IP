@@ -119,6 +119,7 @@ public class GameRunner{
     }
 
     private void runGameIfDiscussionTime(Game game) {
+        game.nightCounter++;
         game.setGameState(GameState.Selection);
     }
 
@@ -135,7 +136,7 @@ public class GameRunner{
 
     private void runGameIfNightTime(Game game) {
         game.selectedCharacter = null;
-        TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters());
+        TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
         turnInteractions.computeInteractionsOutcome();
         game.setGameState(GameState.NightEnding);
         gameService.updateGame(game);

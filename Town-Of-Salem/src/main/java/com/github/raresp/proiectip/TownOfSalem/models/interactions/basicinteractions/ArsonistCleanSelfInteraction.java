@@ -6,8 +6,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteract
 import java.util.List;
 
 public class ArsonistCleanSelfInteraction extends BasicInteraction {
-    public ArsonistCleanSelfInteraction(Character actioner, int priority) {
-        super(actioner, priority);
+    public ArsonistCleanSelfInteraction(Character actioner) {
+        super(actioner, 4);
     }
 
     @Override

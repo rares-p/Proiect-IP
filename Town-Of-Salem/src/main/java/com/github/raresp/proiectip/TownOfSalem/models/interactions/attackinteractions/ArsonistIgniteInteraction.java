@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ArsonistIgniteInteraction extends AttackInteraction{
     Arsonist arsonist = (Arsonist) actioner;
-    public ArsonistIgniteInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+    public ArsonistIgniteInteraction(Character actioner, List<Character> targets) {
+        super(actioner, targets, 5);
     }
 
     @Override

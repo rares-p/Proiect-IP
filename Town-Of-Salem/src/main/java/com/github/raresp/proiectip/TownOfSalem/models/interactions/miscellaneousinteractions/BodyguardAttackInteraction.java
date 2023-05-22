@@ -4,20 +4,21 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Bodyguard;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.BodyguardSetTargetInteraction;
 
 import java.util.List;
 
 public class BodyguardAttackInteraction extends Interaction {
     Bodyguard bodyguard = (Bodyguard) actioner;
-    public BodyguardAttackInteraction(Character actioner, List<Character> targets, int priority) {
+    public BodyguardAttackInteraction(Character actioner, List<Character> targets) {
         this.actioner = actioner;
         this.targets = targets;
-        this.priority = priority;
+        this.priority = 4;
     }
     @Override
     public boolean isValid() {
         if(targets.isEmpty())
+            return false;
+        if(bodyguard.roleBlocked)
             return false;
         Character target = targets.get(0);
         target.visitors.add(bodyguard);
@@ -25,7 +26,6 @@ public class BodyguardAttackInteraction extends Interaction {
     }
     @Override
     public void act() {
-
         List<Character> attackers = findAttackers();
         if(attackers == null) return;
 
@@ -34,7 +34,7 @@ public class BodyguardAttackInteraction extends Interaction {
         if(attackers.size() > 1){
             bodyguard.setAlive(false);
             bodyguard.AddNightResult("You died while protecting your target.");
-        } // daca
+        }
     }
 
     private void attack(Character attacker){

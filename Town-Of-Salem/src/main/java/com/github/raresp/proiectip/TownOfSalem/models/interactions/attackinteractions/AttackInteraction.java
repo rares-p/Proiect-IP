@@ -17,11 +17,6 @@ public abstract class AttackInteraction extends Interaction {
     @Override
     public boolean isValid() {
         if (this.targets.isEmpty()) {
-            if (actioner instanceof Arsonist arsonist) {
-                arsonist.AddNightResult("You cleaned the doused gas from yourself");
-                Arsonist.dousedPlayers.remove(arsonist);
-                return false;
-            }
             actioner.AddNightResult("You decided to stay at home.");
             return false;
         }

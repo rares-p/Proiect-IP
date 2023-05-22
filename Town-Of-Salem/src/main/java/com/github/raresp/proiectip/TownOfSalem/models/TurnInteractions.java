@@ -9,22 +9,23 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.MafiosoInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.BodyguardSetTargetInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.VeteranPassiveAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 public class TurnInteractions {
-    PriorityQueue<Interaction> interactions;
-    List<Interaction> validInteractions = new ArrayList<>();
+    private PriorityQueue<Interaction> interactions;
 
-    public TurnInteractions(List<Character> characters) {
+    public TurnInteractions(List<Character> characters, boolean isFullMoon) {
+        characters.stream().filter(character -> character instanceof Werewolf)
+                .map(character -> (Werewolf) character)
+                .forEach(werewolf -> werewolf.setFullMoon(isFullMoon));
+
         interactions = characters.stream()
                 .filter(Character::isAlive)
                 .map(Character::createInteraction)
@@ -52,28 +53,22 @@ public class TurnInteractions {
                 case 4 -> computeLookoutMessage();
                 case 5 -> {
                     computeMafiosoInteraction();
-                    computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
+              //      computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
                 }
                 case 6 -> computeSpyMessage();
                 case 7 -> computeVeteranInteraction();
             }
             int priority = p;
 
-            validInteractions = interactions.stream()
+            List<Interaction> validInteractions = interactions.stream()
                     .filter(i -> i.getPriority() == priority)
                     .filter(i -> i.actioner.isAlive())
                     .filter(Interaction::isValid)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (Interaction interaction : validInteractions)
-                if (interaction instanceof PassiveAttackInteraction && interaction.actioner instanceof PassiveActing actioner)
-                    actioner.passiveAction(interaction.targets);
-                else {//nu e passive action
-                    if (interaction.actioner instanceof Werewolf)//pt ca tb un argument la act, nu pot apela fara parametri
-                        interaction.actioner.act(interaction.targets);
-                    else
-                        interaction.actioner.act();
-                }
+                if(interaction.actioner.isAlive())
+                    interaction.act();
         }
         computeDoctorMessage();
     }
@@ -98,7 +93,7 @@ public class TurnInteractions {
         else if (godfatherInteraction.targets.isEmpty())  ///godfather nu a selectat pe nimeni
             interactions.add(mafiosoInteraction);
         else {
-            interactions.add(new MafiosoInteraction(mafioso, godfatherInteraction.targets, 5));
+            interactions.add(new MafiosoInteraction(mafioso, godfatherInteraction.targets));
             mafioso.AddNightResult("The Godfather ordered you to kill " + godfatherInteraction.targets.get(0).getPlayerUsername() + "!");
             godFather.AddNightResult("The mafioso attacked the target you selected.");
         }
@@ -121,6 +116,8 @@ public class TurnInteractions {
             }
         }
     }
+
+///am comentat asta fiindca am pus in clasa BodyguardAttackInteraction
 
 //    private void computeBodyguardInteraction() {
 //        var bodyguardInteractions = interactions.stream()
@@ -225,35 +222,36 @@ public class TurnInteractions {
             }
         }
     }
-
-    private void computeWerewolfInteraction() {
-        //iau interactiunea
-        var werewolfInteractionList = interactions.stream()
-                .filter(i -> i.actioner instanceof Werewolf).toList();
-
-        if(werewolfInteractionList.isEmpty())
-            return;
-        var werewolfInteraction = werewolfInteractionList.get(0);
-
-        //iau targetul
-        var target = werewolfInteraction.targets.get(0);
-        //iau werewolful
-        var werewolf = werewolfInteraction.actioner;
-
-        //vad cine a mai vizitat si adaug attack interaction: mai bine le adaug separat
-        //  interactions.add(new AttackInteraction(werewolf, target.visitors, 5));
-        target.visitors.forEach(visitor -> interactions.add(new AttackInteraction(werewolf, List.of(visitor), 5)));
-
-        //adaug in lista de targets
-        werewolf.targets.addAll(target.visitors);
-    }
     private void computeVeteranInteraction(){
         Interaction veteranInteraction = interactions.stream().filter(i -> i.actioner instanceof Veteran).filter(i-> i.actioner.isAlive()).findFirst().orElse(null);
         if (veteranInteraction == null) return;
         interactions.remove(veteranInteraction);
         Veteran veteran = (Veteran) veteranInteraction.actioner;
         if(veteran.onAlert) interactions.addAll(
-                veteran.visitors.stream().map(visitor -> new PassiveAttackInteraction(veteran, List.of(visitor), 7)).toList()
+                veteran.visitors.stream().map(visitor -> new VeteranPassiveAttackInteraction(veteran, List.of(visitor))).toList()
         );
     }
+    //o sa pun la loc dar vreau sa remodelez cumva si vr sa vad cum
+
+//    private void computeWerewolfInteraction() {
+//        //iau interactiunea
+//        var werewolfInteractionList = interactions.stream()
+//                .filter(i -> i.actioner instanceof Werewolf).toList();
+//
+//        if(werewolfInteractionList.isEmpty())
+//            return;
+//        var werewolfInteraction = werewolfInteractionList.get(0);
+//
+//        //iau targetul
+//        var target = werewolfInteraction.targets.get(0);
+//        //iau werewolful
+//        var werewolf = werewolfInteraction.actioner;
+//
+//        //vad cine a mai vizitat si adaug attack interaction: mai bine le adaug separat
+//        //  interactions.add(new AttackInteraction(werewolf, target.visitors, 5));
+//        target.visitors.forEach(visitor -> interactions.add(new AttackInteraction(werewolf, List.of(visitor), 5)));
+//
+//        //adaug in lista de targets
+//        werewolf.targets.addAll(target.visitors);
+//    }
 }

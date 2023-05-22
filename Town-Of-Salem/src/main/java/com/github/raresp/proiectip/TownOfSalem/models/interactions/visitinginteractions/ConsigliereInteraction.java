@@ -35,7 +35,8 @@ public class ConsigliereInteraction extends VisitingInteraction{
                     actioner.AddNightResult("Your target is the leader of the Mafia. They must be the Godfather.");
             case "Mafioso" ->
                     actioner.AddNightResult("Your target does the Godfather's dirty work. They must be a Mafioso.");
-            case "Framer" -> actioner.AddNightResult("Your target has a desire to deceive. They must be a Framer!");
+            case "Framer" ->
+                    actioner.AddNightResult("Your target has a desire to deceive. They must be a Framer!");
             case "Arsonist" ->
                     actioner.AddNightResult("Your target likes to watch things burn. They must be an Arsonist.");
             case "SerialKiller" ->

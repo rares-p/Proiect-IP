@@ -2,6 +2,8 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.DoctorHealSelfInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.DoctorHealTargetInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 import jakarta.persistence.Entity;
 
@@ -10,7 +12,7 @@ import java.util.List;
 @Entity
 public class Doctor extends TownCharacter {
     //will be set true when he heals himself
-    private boolean hasHealedHimself = false;
+    public boolean hasHealedHimself = false;
 
     public Doctor(String playerUsername) {
         super(playerUsername);
@@ -30,13 +32,13 @@ public class Doctor extends TownCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-        /* when acting, he gives temporary powerful defense*/
-    }
-
-    @Override
     public Interaction createInteraction() {
-        return new VisitingInteraction(this, targets, 3);
+        if(targets.isEmpty())
+            return null;
+        if (targets.get(0).getPlayerUsername().equals(this.playerUsername) && !hasHealedHimself)
+            return new DoctorHealSelfInteraction(this);
+        else
+            return new DoctorHealTargetInteraction(this, targets);
     }
 
 
@@ -57,5 +59,4 @@ public class Doctor extends TownCharacter {
         }
 
     }
-
 }

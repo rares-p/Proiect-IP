@@ -3,6 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.LookoutInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 
 import java.util.List;
@@ -21,14 +22,9 @@ public class Lookout extends TownCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
-
-    @Override
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new VisitingInteraction(this, targets, 4);
+        return new LookoutInteraction(this, targets);
     }
 }

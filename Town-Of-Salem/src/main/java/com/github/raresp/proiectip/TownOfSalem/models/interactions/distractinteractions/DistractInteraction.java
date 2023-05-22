@@ -15,7 +15,9 @@ import java.util.List;
 
 public abstract class DistractInteraction extends Interaction {
     public DistractInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+        this.actioner = actioner;
+        this.targets = targets;
+        this.priority = priority;
     }
 
     @Override
@@ -30,13 +32,13 @@ public abstract class DistractInteraction extends Interaction {
             getTurnInteractions().addInteraction(new SerialKillerPassiveAttackInteraction(target, Arrays.asList(actioner), 5)); //nush exact care-i prioritatea, dupa heal
             return false;
         }
-        if(target instanceof Werewolf){
-           //scot si toate interactiunile in care werewolf ataca pe altii
-            getTurnInteractions().getInteractions().removeIf(i -> i.actioner instanceof Werewolf);
-            //werewolf sta acasa si ataca roleblockerul
-            getTurnInteractions().addInteraction(new AttackInteraction(target, new ArrayList<>(List.of(actioner)), 5)); //nush exact care-i prioritatea, dupa heal
-
-        }
+//        if(target instanceof Werewolf){
+//           //scot si toate interactiunile in care werewolf ataca pe altii
+//            getTurnInteractions().getInteractions().removeIf(i -> i.actioner instanceof Werewolf);
+//            //werewolf sta acasa si ataca roleblockerul
+//            getTurnInteractions().addInteraction(new AttackInteraction(target, new ArrayList<>(List.of(actioner)), 5)); //nush exact care-i prioritatea, dupa heal
+//
+//        }
 
         if(target.getImmunity() == ImmunityTypes.Roleblock) {
             actioner.AddNightResult("You tried to distract " + target.getPlayerUsername() + " but were unsuccessful!");

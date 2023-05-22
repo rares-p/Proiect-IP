@@ -34,16 +34,10 @@ public class GodFather extends MafiaCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
-
-    @Override
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new GodfatherInteraction(this, targets, 5);
+        return new GodfatherInteraction(this, targets);
     }
-
 
 }

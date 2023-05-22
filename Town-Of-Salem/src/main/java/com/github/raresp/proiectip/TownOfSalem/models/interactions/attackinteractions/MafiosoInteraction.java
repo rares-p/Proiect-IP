@@ -5,8 +5,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import java.util.List;
 
 public class MafiosoInteraction extends AttackInteraction{
-    public MafiosoInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+    public MafiosoInteraction(Character actioner, List<Character> targets) {
+        super(actioner, targets, 5);
     }
 
     @Override

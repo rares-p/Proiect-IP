@@ -200,6 +200,12 @@ public class Game {
         }
     }
 
+    public boolean isFullMoonNight(){
+        if(nightCounter == 1 || nightCounter == 3)
+            return false;
+        return true;
+    }
+
 //    @Override
 //    public void run() {
 //        StartGame();

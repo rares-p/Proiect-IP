@@ -4,12 +4,14 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 
 import java.util.List;
 
 @Entity
 public class Executioner extends NeutralCharacter {
     //primeste un target
+    @OneToOne
     private Character target;
     public Executioner(String playerUsername) {
         super(playerUsername);

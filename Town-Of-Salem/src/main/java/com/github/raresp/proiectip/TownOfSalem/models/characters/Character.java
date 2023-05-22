@@ -105,6 +105,7 @@ public abstract class Character implements Comparable<Character> {
     }
 
     public void ResetEffects() {
+        resetDefense();
         framed = false;
         roleBlocked = false;
         lastInteraction = null;
@@ -186,6 +187,7 @@ public abstract class Character implements Comparable<Character> {
 
     public void resetStats()
     {
+        resetDefense();
         this.roleBlocked = false;
         this.healed = false;
         this.nightResults.clear();

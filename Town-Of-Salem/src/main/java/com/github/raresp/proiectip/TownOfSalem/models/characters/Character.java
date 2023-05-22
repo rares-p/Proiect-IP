@@ -186,6 +186,7 @@ public abstract class Character implements Comparable<Character> {
 
     public void resetStats()
     {
+        resetDefense();
         this.roleBlocked = false;
         this.healed = false;
         this.nightResults.clear();

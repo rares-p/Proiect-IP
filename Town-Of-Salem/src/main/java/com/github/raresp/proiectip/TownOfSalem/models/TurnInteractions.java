@@ -4,11 +4,12 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.PassiveActing;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.MafiosoInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.WerewolfRampageInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.WerewolfSetTargetInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.VeteranPassiveAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
@@ -231,27 +232,33 @@ public class TurnInteractions {
                 veteran.visitors.stream().map(visitor -> new VeteranPassiveAttackInteraction(veteran, List.of(visitor))).toList()
         );
     }
-    //o sa pun la loc dar vreau sa remodelez cumva si vr sa vad cum
 
-//    private void computeWerewolfInteraction() {
-//        //iau interactiunea
-//        var werewolfInteractionList = interactions.stream()
-//                .filter(i -> i.actioner instanceof Werewolf).toList();
-//
-//        if(werewolfInteractionList.isEmpty())
-//            return;
-//        var werewolfInteraction = werewolfInteractionList.get(0);
-//
-//        //iau targetul
-//        var target = werewolfInteraction.targets.get(0);
-//        //iau werewolful
-//        var werewolf = werewolfInteraction.actioner;
-//
-//        //vad cine a mai vizitat si adaug attack interaction: mai bine le adaug separat
-//        //  interactions.add(new AttackInteraction(werewolf, target.visitors, 5));
-//        target.visitors.forEach(visitor -> interactions.add(new AttackInteraction(werewolf, List.of(visitor), 5)));
-//
-//        //adaug in lista de targets
-//        werewolf.targets.addAll(target.visitors);
-//    }
+    private void computeWerewolfInteraction() { ///facem cate o interactiune WerewolfRampageInteraction pt fiecare visitator in fct de caz
+        //iau interactiunea
+        var werewolfInteractionList = interactions.stream()
+                .filter(i -> i instanceof WerewolfSetTargetInteraction).toList();
+
+        if(werewolfInteractionList.isEmpty())
+            return;
+
+        var werewolfInteraction = werewolfInteractionList.get(0);
+        interactions.remove(werewolfInteraction);
+        var werewolf = werewolfInteraction.actioner;
+
+
+        if(werewolfInteraction.targets.isEmpty()){ //acasa
+            werewolf.AddNightResult("You decided to rampage at home this night.");
+            werewolf.visitors.stream()
+                    .map(visitor -> new WerewolfRampageInteraction(werewolf, List.of(visitor)))
+                    .forEach(interaction -> interactions.add(interaction));
+            return;
+        }
+
+        //nu acasa
+        var target = werewolfInteraction.targets.get(0);
+
+        //vad cine a mai vizitat si adaug attack interaction: mai bine le adaug separat
+        target.visitors.forEach(visitor -> interactions.add(new WerewolfRampageInteraction(werewolf, List.of(visitor))));
+
+    }
 }

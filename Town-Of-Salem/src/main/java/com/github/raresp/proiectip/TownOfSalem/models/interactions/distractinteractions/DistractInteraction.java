@@ -5,6 +5,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.ImmunityTypes;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.SerialKiller;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Werewolf;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.WerewolfRampageInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.WerewolfSetTargetInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.SerialKillerPassiveAttackInteraction;
@@ -29,16 +31,15 @@ public abstract class DistractInteraction extends Interaction {
         Character target = targets.get(0);
         target.visitors.add(actioner);
         if(target instanceof SerialKiller) {
-            getTurnInteractions().addInteraction(new SerialKillerPassiveAttackInteraction(target, Arrays.asList(actioner), 5)); //nush exact care-i prioritatea, dupa heal
+            getTurnInteractions().addInteraction(new SerialKillerPassiveAttackInteraction(target, Arrays.asList(actioner))); //nush exact care-i prioritatea, dupa heal
             return false;
         }
-//        if(target instanceof Werewolf){
-//           //scot si toate interactiunile in care werewolf ataca pe altii
-//            getTurnInteractions().getInteractions().removeIf(i -> i.actioner instanceof Werewolf);
-//            //werewolf sta acasa si ataca roleblockerul
-//            getTurnInteractions().addInteraction(new AttackInteraction(target, new ArrayList<>(List.of(actioner)), 5)); //nush exact care-i prioritatea, dupa heal
-//
-//        }
+        if(target instanceof Werewolf werewolf && werewolf.isFullMoon()){
+            //scot si toate interactiunile in care werewolf ataca pe altii
+            getTurnInteractions().getInteractions().removeIf(i -> i.actioner instanceof Werewolf);
+            //werewolf sta acasa si ataca roleblockerul
+            getTurnInteractions().addInteraction(new WerewolfSetTargetInteraction(target, new ArrayList<>())); //lista goala => o sa stea acasa
+        }
 
         if(target.getImmunity() == ImmunityTypes.Roleblock) {
             actioner.AddNightResult("You tried to distract " + target.getPlayerUsername() + " but were unsuccessful!");

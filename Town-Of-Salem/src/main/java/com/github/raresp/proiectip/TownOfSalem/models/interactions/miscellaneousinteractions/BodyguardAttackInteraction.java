@@ -26,12 +26,14 @@ public class BodyguardAttackInteraction extends Interaction {
     }
     @Override
     public void act() {
-        List<Character> attackers = findAttackers();
-        if(attackers == null) return;
+        var attackInteractions = findAttackInteractions();
+        if(attackInteractions == null) return;
+        var firstInteraction = attackInteractions.get(0);
 
-        attack(attackers.get(0));
+        attack(firstInteraction.actioner); //pe wiki zice ca protejeaza doar de un atac
+        getTurnInteractions().getInteractions().remove(firstInteraction); //scoatem interactiunea atacatorului din lista de interactiuni
 
-        if(attackers.size() > 1){
+        if(attackInteractions.size() > 1){
             bodyguard.setAlive(false);
             bodyguard.AddNightResult("You died while protecting your target.");
         }
@@ -55,12 +57,11 @@ public class BodyguardAttackInteraction extends Interaction {
         }
     }
 
-    private List<Character> findAttackers(){
+    private List<Interaction> findAttackInteractions(){
         Character target = targets.get(0);
 
         return getTurnInteractions().getInteractions().stream()
-                .filter(interaction -> interaction instanceof AttackInteraction && interaction.targets.get(0) == target)
-                .map(Interaction::getActioner)
+                .filter(interaction -> interaction instanceof AttackInteraction && interaction.targets.get(0).equals(target))
                 .toList();
     }
 }

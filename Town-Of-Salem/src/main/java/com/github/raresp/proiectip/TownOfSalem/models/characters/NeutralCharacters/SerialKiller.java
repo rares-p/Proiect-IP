@@ -4,9 +4,11 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.SerialKillerTargetInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class SerialKiller extends NeutralCharacter {
     public SerialKiller(String playerUsername) {
         super(playerUsername);
@@ -15,7 +17,9 @@ public class SerialKiller extends NeutralCharacter {
         this.innocent = false;
         this.immunity = ImmunityTypes.Roleblock;
     }
-
+    protected SerialKiller() {
+        super();
+    }
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.Basic;

@@ -5,9 +5,11 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.VeteranSetAlertInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Veteran extends TownCharacter {
     public int alerts = 3;
     public boolean onAlert = false;
@@ -18,6 +20,9 @@ public class Veteran extends TownCharacter {
         this.defense = DefenseTypes.None;
         this.innocent = true;
         this.immunity = ImmunityTypes.DetectionImmunity;
+    }
+    protected Veteran() {
+        super();
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.ArsonistDouseInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.ArsonistIgniteInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.ArsonistCleanSelfInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+@Entity
 public class Arsonist extends NeutralCharacter {
 
     public static List<Character> dousedPlayers = new ArrayList<>();
@@ -19,7 +21,9 @@ public class Arsonist extends NeutralCharacter {
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.actionText = "Douse";
     }
-
+    protected Arsonist() {
+        super();
+    }
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.Basic;

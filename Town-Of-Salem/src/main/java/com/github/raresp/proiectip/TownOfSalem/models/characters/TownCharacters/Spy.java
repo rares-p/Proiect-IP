@@ -5,9 +5,11 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.SpyInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Spy extends TownCharacter {
     public Spy (String playerUsername){
         super(playerUsername);
@@ -15,6 +17,10 @@ public class Spy extends TownCharacter {
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.actionText = "Spy";
+    }
+
+    protected Spy() {
+        super();
     }
     @Override
     public void resetDefense() {

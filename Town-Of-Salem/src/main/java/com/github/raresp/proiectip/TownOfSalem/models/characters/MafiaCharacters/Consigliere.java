@@ -4,9 +4,11 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.ConsigliereInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Consigliere extends MafiaCharacter {
 
     public Consigliere(String playerUsername) {
@@ -18,7 +20,8 @@ public class Consigliere extends MafiaCharacter {
         this.actionText = "Investigate";
     }
 
-    public Consigliere() {
+    protected Consigliere() {
+        super();
     }
 
     @Override

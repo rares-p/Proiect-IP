@@ -3,9 +3,11 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Executioner extends NeutralCharacter {
     //primeste un target
     private Character target;
@@ -16,6 +18,9 @@ public class Executioner extends NeutralCharacter {
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.actionText = "Execute";
         //ar trebui cand facem personajul sa ii generam targetul zic.
+    }
+    protected Executioner() {
+        super();
     }
     //setez la inceputul jocului, idk unde in gamelogic
     public void setTarget(Character target){

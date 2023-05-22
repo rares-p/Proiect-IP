@@ -5,9 +5,10 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BodyguardProtectSelfInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
-
+@Entity
 public class Bodyguard extends TownCharacter{
     private boolean hasProtectedHimself = false;
 
@@ -17,6 +18,10 @@ public class Bodyguard extends TownCharacter{
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.actionText = "Heal";
+    }
+
+    protected Bodyguard() {
+        super();
     }
 
     @Override

@@ -5,9 +5,10 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.BlackmailerInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
-
+@Entity
 public class Blackmailer extends MafiaCharacter {
 
     public Blackmailer(String playerUsername) {
@@ -19,9 +20,8 @@ public class Blackmailer extends MafiaCharacter {
         this.actionText = "Blackmail";
     }
 
-    public Blackmailer() {
 
-    }
+    protected Blackmailer() { super();}
 
     @Override
     public void resetDefense() {

@@ -3,9 +3,11 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Werewolf extends NeutralCharacter implements PassiveActing {
     //teoretic daca esti jailed si nu esti executat, omori jailerul dar tbh e complicat
     private boolean isFullMoon;
@@ -15,6 +17,10 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
         this.defense = DefenseTypes.Basic;
         this.immunity = ImmunityTypes.None;
         this.actionText = "Rampage";
+    }
+
+    protected Werewolf() {
+        super();
     }
     @Override
     public void resetDefense() {

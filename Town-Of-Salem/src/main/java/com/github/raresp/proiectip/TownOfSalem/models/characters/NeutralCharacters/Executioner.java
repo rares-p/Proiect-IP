@@ -3,9 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 @Entity
 public class Executioner extends NeutralCharacter {
     //primeste un target
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne
     private Character target;
     public Executioner(String playerUsername) {
         super(playerUsername);

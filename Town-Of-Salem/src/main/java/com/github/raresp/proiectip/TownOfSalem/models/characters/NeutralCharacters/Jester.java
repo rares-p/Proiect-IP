@@ -1,24 +1,22 @@
-package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
+package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
+
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import jakarta.persistence.Entity;
 
 import java.util.List;
 
-@Entity
-public class Jailor extends TownCharacter {
-    public Jailor(String playerUsername) {
+public class Jester extends NeutralCharacter {
+    //putem face ca jesterul sa omoare pe cnv dupa ce e spanzurat, dar momentan
+    //lasam doar sa vrea sa fie spanzurat
+    //tb sa punem la win conditions
+    public Jester(String playerUsername) {
         super(playerUsername);
-        this.attack = AttackTypes.Unstoppable ;//it says that it can forcefully execute the prisoner
+        this.attack = AttackTypes.None;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
+        this.actionText = "Jest";//irelevant
     }
-
-    protected Jailor() {
-        super();
-    }
-
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
@@ -28,13 +26,9 @@ public class Jailor extends TownCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
     @Override
     public Interaction createInteraction() {
         return null;
-    }
-
-    @Override
-    public void act() {
-
     }
 }

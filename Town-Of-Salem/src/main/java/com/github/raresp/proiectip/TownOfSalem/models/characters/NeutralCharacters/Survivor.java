@@ -1,6 +1,8 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -26,7 +28,10 @@ public class Survivor extends NeutralCharacter {
     public void resetDefense() {
         this.defense = DefenseTypes.None;
     }
-
+    @Override
+    public Interaction createInteraction() {
+        return new BasicInteraction(this, targets, 3);
+    }
     @Override
     public void act() {
         /*by acting, the Survivor simply puts on a bulletproof vest and protects himself*/
@@ -39,4 +44,6 @@ public class Survivor extends NeutralCharacter {
     public void act(List<Character> listOfTargets) {
 
     }
+
+
 }

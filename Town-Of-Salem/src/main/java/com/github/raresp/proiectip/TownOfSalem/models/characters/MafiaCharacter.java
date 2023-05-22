@@ -18,6 +18,8 @@ public abstract class MafiaCharacter extends Character {
     protected MafiaCharacter() {
         super();
     }
+    public void becomeMafioso(){
 
+    }
     public abstract void act(List<Character> listOfTargets);
 }

@@ -2,7 +2,8 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Doctor;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
 
 import java.util.List;
 
@@ -31,15 +32,17 @@ public class Consigliere extends MafiaCharacter {
     }
 
     @Override
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        return new VisitingInteraction(this, targets, 3);
+    }
+
+    @Override
     public void act() {
-        if(roleBlocked){
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
+        if(targets.isEmpty())
             return;
-        }
-        if(this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
+
         Character target = this.targets.get(0);
         switch(target.getClass().getSimpleName()){
             case "Doctor": this.AddNightResult("Your target is a professional surgeon. They must be a Doctor.");
@@ -60,7 +63,20 @@ public class Consigliere extends MafiaCharacter {
                 break;
             case "Mafioso": this.AddNightResult("Your target does the Godfather's dirty work. They must be a Mafioso.");
                 break;
+            case "Framer": this.AddNightResult("Your target has a desire to deceive. They must be a Framer!");
+                break;
+            case "Arsonist": this.AddNightResult("Your target likes to watch things burn. They must be an Arsonist.");
+                break;
+            case "SerialKiller": this.AddNightResult("Your target wants to kill everyone. They must be a Serial Killer.");
+                break;
+            case "Survivor": this.AddNightResult("Your target simply wants to live. They must be a Survivor.");
+                break;
+            case "Jailor": this.AddNightResult("Your target detains people at night. They must be a Jailor.");
+                break;
+            case "Veteran": this.AddNightResult("Your target is a paranoid war hero. They must be a Veteran.");
+                break;
         }
+        target.setFramed(false);
         //devine mafiot
     }
 }

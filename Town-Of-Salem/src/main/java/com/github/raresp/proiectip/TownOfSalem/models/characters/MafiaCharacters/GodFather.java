@@ -1,9 +1,10 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 
 import java.util.List;
@@ -37,33 +38,21 @@ public class GodFather extends MafiaCharacter {
     }
 
     @Override
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        return new AttackInteraction(this, targets, 5);
+    }
+
+    @Override
     public void act() {
-        if(roleBlocked) {
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
+        if(targets.isEmpty())
             return;
-        }
+
         Character target = targets.get(0);
-        if(mafioso != null && !targets.isEmpty()) {
-            mafioso.targets.set(0, target);
-            mafioso.AddNightResult("The Godfather ordered you to kill " + target.getPlayerUsername() + "!");
-        }
-        else if (!targets.isEmpty()) {
-            if(target.getDefense().ordinal() >= this.attack.ordinal()) {
-                this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
-                target.AddNightResult("Someone attacked you last night but your defense was too strong!");
-            }
-            else {
-                this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
-                if(target.healed)
-                    target.AddNightResult("You were attacked last night but someone nursed you back to health");
-                else{
-                    target.AddNightResult("You were attacked last night. You died");
-                    target.setIsAlive(false);
-                }
-            }
-        }
-        else {
-            this.AddNightResult("You decided to stay at home.");
-        }
+        this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
+        target.AddNightResult("You were attacked last night. You died");
+        target.setIsAlive(false);
+
     }
 }

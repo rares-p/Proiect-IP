@@ -5,7 +5,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import java.util.List;
 
 public class CurrentUserResponse {
-    public String username;
+    public String userId;
     public boolean isAlive;
     public String actionText;
     public String role;
@@ -15,7 +15,7 @@ public class CurrentUserResponse {
 
     public CurrentUserResponse(Character character) {
         this.isAlive = character.isAlive();
-        this.username = character.getPlayerUsername();
+        this.userId = character.getPlayerUsername();
         this.actionText = character.getActionText();
         this.role = character.getRole();
         this.nrOfSelection = character.getNumberOfSelection();

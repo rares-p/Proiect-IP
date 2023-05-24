@@ -1,23 +1,28 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 
-import com.github.raresp.proiectip.TownOfSalem.models.characters.AttackTypes;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.DefenseTypes;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.ImmunityTypes;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacter;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.VeteranSetAlertInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Veteran extends TownCharacter {
-    private int alerts = 3;
+    public int alerts = 3;
     public boolean onAlert = false;
 
     public Veteran(String playerUsername) {
         super(playerUsername);
-        this.attack = AttackTypes.Unstoppable;
+        this.attack = AttackTypes.Powerful;
         this.defense = DefenseTypes.None;
         this.innocent = true;
         this.immunity = ImmunityTypes.DetectionImmunity;
+    }
+    protected Veteran() {
+        super();
     }
 
     @Override
@@ -25,24 +30,17 @@ public class Veteran extends TownCharacter {
         this.defense = DefenseTypes.None;
         this.onAlert = false;
     }
-
     @Override
-    public void act(List<Character> listOfTargets) {
-
+    public void resetStats(){
+        super.resetStats();
+        onAlert = false;
     }
 
     @Override
-    public void act() {
-        if (this.targets.isEmpty()) {
-            this.AddNightResult("You decided not to go on alert.");
-            return;
-        }
-
-        alerts--;
-        onAlert = true;
-        this.defense = DefenseTypes.Basic;
-        this.AddNightResult("You decided to go on alert.");
-        this.AddNightResult("You have " + alerts + " vests left.");
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        return new VeteranSetAlertInteraction(this);
     }
 
     @Override

@@ -3,11 +3,11 @@ package com.github.raresp.proiectip.TownOfSalem.API.responses;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 
 public class PublicUserResponse {
-    public String username;
+    public String userId;
     public boolean isAlive;
 
     public PublicUserResponse(Character character) {
         this.isAlive = character.isAlive();
-        this.username = character.getPlayerUsername();
+        this.userId = character.getPlayerUsername();
     }
 }

@@ -1,13 +1,18 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.ArsonistDouseInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.ArsonistIgniteInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.ArsonistCleanSelfInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+@Entity
 public class Arsonist extends NeutralCharacter {
 
-    public List<Character> dousedPlayers = new ArrayList<>();
+    public static List<Character> dousedPlayers = new ArrayList<>();
 
     public Arsonist(String playerUsername) {
         super(playerUsername);
@@ -16,36 +21,20 @@ public class Arsonist extends NeutralCharacter {
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.actionText = "Douse";
     }
-
+    protected Arsonist() {
+        super();
+    }
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.Basic;
     }
 
-    public void act(List<Character> listOfTargets) {
-
-    }
-
     @Override
-    public void act() {
-        if(this.targets.isEmpty())
-        {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
-        Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else if (target.getPlayerUsername().equals(this.playerUsername)) {
-            for (Character dousedPlayer : dousedPlayers){
-                dousedPlayer.setAlive(false);
-                dousedPlayer.AddNightResult("You were set on fire by an Arsonist!");
-            }
-        }
-        else {
-            this.AddNightResult("You decided to douse " + target.getPlayerUsername() + " !");
-            dousedPlayers.add(target);
-        }
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return new ArsonistCleanSelfInteraction(this);
+        if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new ArsonistIgniteInteraction(this, targets);
+        else return new ArsonistDouseInteraction(this, targets);
 
     }
 }

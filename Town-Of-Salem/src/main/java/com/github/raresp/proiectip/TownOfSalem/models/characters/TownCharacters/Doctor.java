@@ -1,15 +1,18 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.DoctorHealSelfInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.DoctorHealTargetInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 import jakarta.persistence.Entity;
-import org.springframework.data.repository.cdi.Eager;
 
 import java.util.List;
 
 @Entity
 public class Doctor extends TownCharacter {
     //will be set true when he heals himself
-    private boolean hasHealedHimself = false;
+    public boolean hasHealedHimself = false;
 
     public Doctor(String playerUsername) {
         super(playerUsername);
@@ -25,29 +28,35 @@ public class Doctor extends TownCharacter {
 
     @Override
     public void resetDefense() {
-        this.defense = DefenseTypes.Powerful;
+        this.defense = DefenseTypes.None;
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-        /* when acting, he gives temporary powerful defense*/
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        if (targets.get(0).getPlayerUsername().equals(this.playerUsername) && !hasHealedHimself)
+            return new DoctorHealSelfInteraction(this);
+        else
+            return new DoctorHealTargetInteraction(this, targets);
     }
+
 
     @Override
     public void act() {
-        if(this.targets.isEmpty())
-        {
-            this.AddNightResult("You decided to stay at home.");
+        if(targets.isEmpty())
             return;
-        }
-
         Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else {
-            target.healed = true;
-            this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
-        }
-    }
+        target.setDefense(DefenseTypes.Powerful);
 
+        if (target.getPlayerUsername().equals(this.playerUsername) && !hasHealedHimself){
+            hasHealedHimself = true;
+            this.AddNightResult("You decided to heal yourself tonight!");
+        }
+        else {
+            this.AddNightResult("You decided to heal " + target.getPlayerUsername() + " tonight!");
+            this.healed = true;
+        }
+
+    }
 }

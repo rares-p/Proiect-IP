@@ -19,7 +19,7 @@ public class VotingSession {
         this.players = characters;
         for(Character c : players)
             if(c.targets.size()>0)
-                if(c.targets.get(0).equals(judgedCharacter))
+                //if(c.targets.get(0).equals(judgedCharacter))
                     playerVotes.put(c, VoteType.Guilty);
                 else playerVotes.put(c, VoteType.Innocent);
     }

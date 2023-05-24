@@ -21,5 +21,4 @@ public abstract class MafiaCharacter extends Character {
     public void becomeMafioso(){
 
     }
-    public abstract void act(List<Character> listOfTargets);
 }

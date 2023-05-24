@@ -2,14 +2,16 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.WerewolfSetTargetInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Werewolf extends NeutralCharacter implements PassiveActing {
     //teoretic daca esti jailed si nu esti executat, omori jailerul dar tbh e complicat
+    private boolean isFullMoon;
     public Werewolf(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Powerful;
@@ -17,9 +19,13 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
         this.immunity = ImmunityTypes.None;
         this.actionText = "Rampage";
     }
+
+    protected Werewolf() {
+        super();
+    }
     @Override
     public void resetDefense() {
-
+        this.defense = DefenseTypes.Basic;
     }
     @Override
     public void act(){
@@ -32,17 +38,15 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
             }
         }
     }
-    @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
 
     @Override
     public Interaction createInteraction() {
-        //tb facute ceva verificari cu full moo nights, idk cum
-       if(targets.isEmpty())//inseamna ca stau acasa
-           return new BasicInteraction(this, targets, 5);
-       return new AttackInteraction(this, targets, 5);
+        if(!isFullMoon)
+            return null;
+        return new WerewolfSetTargetInteraction(this, targets);
+//        if(targets.isEmpty())
+//            return new WerewolfRampageHomeInteraction(this);
+//        return new WerewolfRampageTargetInteraction(this, targets);
     }
 
     @Override
@@ -55,5 +59,11 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
         }
     }
 
+    public void setFullMoon(boolean fullMoon) {
+        isFullMoon = fullMoon;
+    }
 
+    public boolean isFullMoon() {
+        return isFullMoon;
+    }
 }

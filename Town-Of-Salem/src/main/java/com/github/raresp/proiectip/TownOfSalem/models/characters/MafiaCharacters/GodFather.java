@@ -1,8 +1,9 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.GodfatherInteraction;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -33,26 +34,10 @@ public class GodFather extends MafiaCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-
-    }
-
-    @Override
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new AttackInteraction(this, targets, 5);
+        return new GodfatherInteraction(this, targets);
     }
 
-    @Override
-    public void act() {
-        if(targets.isEmpty())
-            return;
-
-        Character target = targets.get(0);
-        this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
-        target.AddNightResult("You were attacked last night. You died");
-        target.setIsAlive(false);
-
-    }
 }

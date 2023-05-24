@@ -3,9 +3,11 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharact
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
 public class Jester extends NeutralCharacter {
     //putem face ca jesterul sa omoare pe cnv dupa ce e spanzurat, dar momentan
     //lasam doar sa vrea sa fie spanzurat
@@ -16,6 +18,9 @@ public class Jester extends NeutralCharacter {
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.actionText = "Jest";//irelevant
+    }
+    protected Jester() {
+        super();
     }
     @Override
     public void resetDefense() {

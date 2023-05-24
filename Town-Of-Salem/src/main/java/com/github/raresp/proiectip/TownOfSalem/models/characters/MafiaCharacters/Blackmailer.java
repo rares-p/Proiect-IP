@@ -3,10 +3,12 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.BlackmailerInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
-
+@Entity
 public class Blackmailer extends MafiaCharacter {
 
     public Blackmailer(String playerUsername) {
@@ -18,9 +20,8 @@ public class Blackmailer extends MafiaCharacter {
         this.actionText = "Blackmail";
     }
 
-    public Blackmailer() {
 
-    }
+    protected Blackmailer() { super();}
 
     @Override
     public void resetDefense() {
@@ -31,15 +32,7 @@ public class Blackmailer extends MafiaCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new VisitingInteraction(this, targets, 4);
+        return new BlackmailerInteraction(this, targets, 4);
     }
 
-    @Override
-    public void act(List<Character> listOfTargets) {
-        if(targets.isEmpty())
-            return;
-
-        Character target = this.targets.get(0);
-        target.canSpeak = false;
-    }
 }

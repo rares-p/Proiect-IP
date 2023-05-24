@@ -71,7 +71,7 @@ public abstract class Character implements Comparable<Character> {
     }
     public abstract void resetDefense();
 
-    public abstract void act (List<Character> listOfTargets);
+    public void act (List<Character> listOfTargets){};
     public abstract Interaction createInteraction();
 
     //public void addInteraction();

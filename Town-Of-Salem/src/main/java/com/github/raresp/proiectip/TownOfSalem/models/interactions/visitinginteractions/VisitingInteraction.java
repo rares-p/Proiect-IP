@@ -1,14 +1,17 @@
-package com.github.raresp.proiectip.TownOfSalem.models.interactions;
+package com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
 import java.util.List;
 
-public class VisitingInteraction extends Interaction {
+public abstract class VisitingInteraction extends Interaction {
     //asta e pt cand un personaj targeteaza pe altcnv si merge la el acasa
     //ex doctor, sheriff, etc.
     public VisitingInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+        this.actioner = actioner;
+        this.targets = targets;
+        this.priority = priority;
     }
 
     @Override

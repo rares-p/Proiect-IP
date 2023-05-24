@@ -2,13 +2,14 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.BasicInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.VisitingInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BodyguardProtectSelfInteraction;
+import jakarta.persistence.Entity;
 
 import java.util.List;
-
-public class Bodyguard extends TownCharacter implements PassiveActing {
+@Entity
+public class Bodyguard extends TownCharacter{
     private boolean hasProtectedHimself = false;
 
     public Bodyguard(String playerUsername) {
@@ -19,18 +20,13 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
         this.actionText = "Heal";
     }
 
-    @Override
-    public void resetDefense() {
-        this.defense = DefenseTypes.None;
+    protected Bodyguard() {
+        super();
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-        Character target = targets.get(0);
-        if (target == this) {
-            this.defense = DefenseTypes.Basic;
-            hasProtectedHimself = true;
-        }
+    public void resetDefense() {
+        this.defense = DefenseTypes.None;
     }
 
     @Override
@@ -38,23 +34,12 @@ public class Bodyguard extends TownCharacter implements PassiveActing {
         if(targets.isEmpty())
             return null;
         if (targets.get(0) == this)
-            return new BasicInteraction(this, targets, 3);
-        return new VisitingInteraction(this, targets, 3);
+            return new BodyguardProtectSelfInteraction(this);
+        return new BodyguardAttackInteraction(this, targets); //prioritatea 4 ca sa fie dupa heal-uri
     }
 
-    @Override
-    public void passiveAction(List<Character> characters) {
-        if(targets.isEmpty())
-            return;
-
-        Character target = targets.get(0);
-        target.setIsAlive(false);
-        target.AddNightResult("You were killed by a Bodyguard.");
-        this.AddNightResult("You killed " + target.getPlayerUsername() + " while protecting your target.");
-        if(!this.healed) {
-            this.AddNightResult("You died while protecting your target.");
-            this.setAlive(false);
-        }
+    public void setHasProtectedHimself(boolean hasProtectedHimself) {
+        this.hasProtectedHimself = hasProtectedHimself;
     }
 }
 

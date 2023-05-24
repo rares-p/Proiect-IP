@@ -1,7 +1,6 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.AttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.*;
 
@@ -31,26 +30,11 @@ public class Mafioso extends MafiaCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-    }
-
-    @Override
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new AttackInteraction(this, targets, 5);
+        return new MafiosoInteraction(this, targets);
     }
 
-    @Override
-    public void act() {
-        if(targets.isEmpty())
-            return;
 
-        Character target = this.targets.get(0);
-        this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
-        target.AddNightResult("You were attacked last night. You died");
-        target.setIsAlive(false);
-
-        //e promovat la godfather daca moare
-    }
 }

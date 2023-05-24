@@ -41,11 +41,11 @@ public class LobbyAPI {
     }
 
     @GetMapping("/lobbies/{joinCode}")
-    PublicLobby lobbyByID(@PathVariable String joinCode) throws LobbyNotFoundException {
-        PublicLobby publicLobby = lobbyRepository.findPublicLobbyByJoinCode(joinCode);
-        if (publicLobby == null)
+    LobbyStateResponse lobbyByID(@PathVariable String joinCode) throws LobbyNotFoundException {
+        LobbyStateResponse lobbyResponse = new LobbyStateResponse(lobbyRepository.findLobbyByJoinCode(joinCode));
+        if (lobbyResponse == null)
             throw new LobbyNotFoundException(joinCode);
-        return publicLobby;
+        return lobbyResponse;
     }
 
     @PostMapping(path = "/lobbies",
@@ -60,25 +60,25 @@ public class LobbyAPI {
     @PostMapping(path = "/lobbies/{joinCode}/add_user",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Lobby> addUserToLobby(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
+    ResponseEntity<?> addUserToLobby(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
         lobby.addPlayerInLobby(request.userId);
         lobbyRepository.save(lobby);
-        return new ResponseEntity<>(lobby, HttpStatus.OK);
+        return new ResponseEntity<>(new LobbyStateResponse(lobby), HttpStatus.OK);
     }
 
     @PostMapping(path = "/lobbies/{joinCode}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Lobby> addUserToLobbySprint1(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
+    ResponseEntity<?> addUserToLobbySprint1(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
         lobby.addPlayerInLobby(request.userId);
         lobbyRepository.save(lobby);
-        return new ResponseEntity<>(lobby, HttpStatus.OK);
+        return new ResponseEntity<>(new LobbyStateResponse(lobby), HttpStatus.OK);
     }
 
     @PostMapping(path = "/lobbies/{joinCode}/remove_user",

@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.API.responses;
 
 import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicLobbyListProjection;
 import com.github.raresp.proiectip.TownOfSalem.models.Lobby;
+import com.github.raresp.proiectip.TownOfSalem.models.LobbyState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,8 @@ public class AllLobbiesResponse {
     public AllLobbiesResponse(List<PublicLobbyListProjection> lobbies) {
         this.lobbies = new ArrayList<>();
         for(PublicLobbyListProjection lobby : lobbies) {
-            this.lobbies.add(new LobbyResponse(lobby));
+            if(lobby.getState() == LobbyState.WAITING_PLAYERS)
+                this.lobbies.add(new LobbyResponse(lobby));
         }
     }
     public class LobbyResponse {

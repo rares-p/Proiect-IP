@@ -11,7 +11,10 @@ public class LobbyStateResponse {
     public String joinCode;
 
     public LobbyStateResponse(Lobby lobby) {
-        this.state = "Lobby";
+        if(lobby.getGame() == null)
+            this.state = "Lobby";
+        else
+            this.state = lobby.getGame().getGameState().toString();
         this.users = new ArrayList<>(lobby.getWaitingToJoin());
         this.joinCode = lobby.getJoinCode();
     }

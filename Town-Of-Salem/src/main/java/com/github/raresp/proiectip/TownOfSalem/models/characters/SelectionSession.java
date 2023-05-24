@@ -20,6 +20,6 @@ public class SelectionSession {
         return selections.values().stream().filter(this::hasEnoughVotes).findAny().orElse(null);
     }
     private boolean hasEnoughVotes(Character character) {
-        return selections.values().stream().filter(c -> c.equals(character)).count() >= characters.size()/2;
+        return selections.values().stream().filter(c -> c.equals(character)).count() >= characters.size()/2 + characters.size()%2;
     }
 }

@@ -191,6 +191,7 @@ public abstract class Character implements Comparable<Character> {
         this.roleBlocked = false;
         this.healed = false;
         this.nightResults.clear();
+        this.resetDefense();
     }
 
     @Transactional

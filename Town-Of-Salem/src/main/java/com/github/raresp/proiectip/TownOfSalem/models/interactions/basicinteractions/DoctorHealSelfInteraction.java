@@ -12,6 +12,11 @@ public class DoctorHealSelfInteraction extends BasicInteraction{
 
     @Override
     public void act() {
+        if(doctor.hasHealedHimself){
+            doctor.AddNightResult("You have no self-heals left.");
+            return;
+        }
+
         doctor.setDefense(DefenseTypes.Powerful);
         doctor.healed = true;
         doctor.hasHealedHimself = true;

@@ -31,6 +31,6 @@ public class Consort extends MafiaCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        return new ConsortInteraction(this, targets, 2);
+        return new ConsortInteraction(this, targets);
     }
 }

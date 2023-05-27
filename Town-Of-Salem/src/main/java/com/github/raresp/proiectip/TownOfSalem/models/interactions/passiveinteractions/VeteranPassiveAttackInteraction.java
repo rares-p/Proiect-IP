@@ -14,6 +14,6 @@ public class VeteranPassiveAttackInteraction extends PassiveAttackInteraction{
         Character target = targets.get(0);
         target.setAlive(false);
         target.AddNightResult("You were murdered by the Veteran you visited.");
-        actioner.AddNightResult(target.getPlayerUsername() + " visited you last night. You murdered them!");
+        actioner.AddNightResult("Someone visited you last night. You shot them!");
     }
 }

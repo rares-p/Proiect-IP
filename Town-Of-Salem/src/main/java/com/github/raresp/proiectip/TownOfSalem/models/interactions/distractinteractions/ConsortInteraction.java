@@ -1,13 +1,14 @@
 package com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions;
 
+import com.github.raresp.proiectip.TownOfSalem.models.TurnInteractions;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.DistractInteraction;
 
 import java.util.List;
 
 public class ConsortInteraction extends DistractInteraction {
-    public ConsortInteraction(Character actioner, List<Character> targets, int priority) {
-        super(actioner, targets, priority);
+    public ConsortInteraction(Character actioner, List<Character> targets) {
+        super(actioner, targets, 2);
     }
 
     @Override

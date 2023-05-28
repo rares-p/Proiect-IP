@@ -21,6 +21,7 @@ public class VigilanteKillInteraction extends AttackInteraction{
 
         target.setIsAlive(false);
         vigilante.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
+        target.AddNightResult("You were attacked last night. You died!");
 
         if (target instanceof TownCharacter) {
             vigilante.canAct = false; //?

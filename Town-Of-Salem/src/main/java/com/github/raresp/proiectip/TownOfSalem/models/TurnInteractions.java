@@ -8,15 +8,17 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.MafiosoInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.WerewolfRampageInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.DistractInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.SerialKillerPassiveAttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.WerewolfRampageInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.WerewolfSetTargetInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.VeteranPassiveAttackInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.DoctorHealTargetInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TurnInteractions {
@@ -32,6 +34,10 @@ public class TurnInteractions {
                 .map(Character::createInteraction)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(PriorityQueue::new));
+
+        interactions.stream()
+                .filter(i -> i instanceof BodyguardAttackInteraction)
+                .forEach(i -> ((BodyguardAttackInteraction) i) .setTurnInteractions(this));
 
         characters.stream()
                 .filter(character -> character.targets.isEmpty())
@@ -51,13 +57,17 @@ public class TurnInteractions {
     public void computeInteractionsOutcome() {
         for (int p = 1; p <= 7; p++) {
             switch (p) {
-                case 4 -> computeLookoutMessage();
+                case 2 -> computeDistractInteraction();
+                case 4 -> computeBodyguardInteraction();
                 case 5 -> {
                     computeMafiosoInteraction();
-              //      computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
                 }
                 case 6 -> computeSpyMessage();
-                case 7 -> computeVeteranInteraction();
+                case 7 -> {
+                    computeVeteranInteraction();
+                    computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
+                    computeLookoutMessage();
+                }
             }
             int priority = p;
 
@@ -73,7 +83,29 @@ public class TurnInteractions {
         }
         computeDoctorMessage();
     }
+    private void computeBodyguardInteraction(){
 
+    }
+    private void computeDistractInteraction(){
+        var distractInteractions = interactions.stream().filter(i -> i instanceof DistractInteraction).toList();
+        for(Interaction distractInteraction : distractInteractions){
+            if(distractInteraction.targets.isEmpty())
+                continue;
+            Character target = distractInteraction.targets.get(0);
+
+            if(target instanceof SerialKiller serialKiller) {
+                interactions.remove(distractInteraction);
+                interactions.add(new SerialKillerPassiveAttackInteraction(serialKiller, Arrays.asList(distractInteraction.actioner))); //nush exact care-i prioritatea, dupa heal
+            }
+            if(target instanceof Werewolf werewolf && werewolf.isFullMoon()){
+                //interactions.remove(distractInteraction);
+                //scot si toate interactiunile in care werewolf ataca pe altii
+                interactions.removeIf(i -> i.actioner instanceof Werewolf);
+                //werewolf sta acasa si ataca roleblockerul
+                interactions.add(new WerewolfSetTargetInteraction(target, new ArrayList<>()));
+            }
+        }
+    }
     private void computeMafiosoInteraction() {
         Interaction mafiosoInteraction = interactions.stream().filter(i -> i.actioner instanceof Mafioso).filter(i -> i.actioner.isAlive()).findFirst().orElse(null);
         Interaction godfatherInteraction = interactions.stream().filter(i -> i.actioner instanceof GodFather).filter(i -> i.actioner.isAlive()).findFirst().orElse(null);
@@ -101,15 +133,17 @@ public class TurnInteractions {
     }
 
     private void computeDoctorMessage() {
-        List<Character> healedCharacters = interactions.stream().map(i -> i.actioner)
-                .filter(c -> c.healed).toList();
+        List<Character> healedCharacters = interactions.stream().filter(i -> i instanceof DoctorHealTargetInteraction)
+                .map(i -> i.targets.get(0)).toList();
 
         if(healedCharacters.isEmpty())
             return;
 
         for (Character character : healedCharacters) {
-            if (interactions.stream().anyMatch(i -> i instanceof AttackInteraction || i instanceof PassiveAttackInteraction)) {
+            if (interactions.stream().anyMatch(i -> (i instanceof AttackInteraction || i instanceof PassiveAttackInteraction) && !i.actioner.roleBlocked )) {
                 List<Interaction> healingInteractions = interactions.stream()
+                        .filter(i -> i instanceof DoctorHealTargetInteraction)
+                        .filter(i -> !i.actioner.roleBlocked)
                         .filter(i -> i.targets.get(0).getPlayerUsername().equals(character.getPlayerUsername()))
                         .toList();
                 for (Interaction interaction : healingInteractions)
@@ -209,7 +243,7 @@ public class TurnInteractions {
             //iau targetul
             var target = lookoutInteraction.targets.get(0);
             //vad daca mai mult de 3 oameni viziteaza
-            var visitors = target.visitors;
+            var visitors = target.visitors.stream().filter(c -> c!=lookout).toList();
 
             if (visitors.size() == 0) {
                 lookout.AddNightResult("Your target was not visited by anyone.");
@@ -248,6 +282,7 @@ public class TurnInteractions {
 
         if(werewolfInteraction.targets.isEmpty()){ //acasa
             werewolf.AddNightResult("You decided to rampage at home this night.");
+
             werewolf.visitors.stream()
                     .map(visitor -> new WerewolfRampageInteraction(werewolf, List.of(visitor)))
                     .forEach(interaction -> interactions.add(interaction));

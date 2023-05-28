@@ -1,13 +1,14 @@
-package com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions;
+package com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
 
 import java.util.List;
 
-public class WerewolfRampageInteraction extends AttackInteraction {
+public class WerewolfRampageInteraction extends PassiveAttackInteraction {
     public WerewolfRampageInteraction(Character actioner, List<Character> targets) {
-        super(actioner, targets, 5);
+        super(actioner, targets, 7);
     }
 
     @Override

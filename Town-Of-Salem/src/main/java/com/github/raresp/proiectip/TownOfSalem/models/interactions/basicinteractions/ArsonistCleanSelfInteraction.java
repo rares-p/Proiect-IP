@@ -1,6 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Arsonist;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
 
 import java.util.List;
@@ -12,6 +13,6 @@ public class ArsonistCleanSelfInteraction extends BasicInteraction {
 
     @Override
     public void act() {
-
+        Arsonist.dousedPlayers.remove(actioner);
     }
 }

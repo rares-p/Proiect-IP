@@ -35,7 +35,7 @@ public class Doctor extends TownCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return null;
-        if (targets.get(0).getPlayerUsername().equals(this.playerUsername) && !hasHealedHimself)
+        if (targets.get(0).getPlayerUsername().equals(this.playerUsername))
             return new DoctorHealSelfInteraction(this);
         else
             return new DoctorHealTargetInteraction(this, targets);

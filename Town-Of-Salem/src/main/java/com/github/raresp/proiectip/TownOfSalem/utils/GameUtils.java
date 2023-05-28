@@ -100,13 +100,13 @@ public class GameUtils {
         for(int i = 0; i < playerNames.size(); i ++) {
             switch (i) {
                 case 0:
-                    characters.add(new Sheriff(playerNames.get(i)));
+                    characters.add(new Doctor(playerNames.get(i)));
                     break;
                 case 1:
                     characters.add(new Mafioso(playerNames.get(i)));
                     break;
                 case 2:
-                    characters.add(new Mafioso(playerNames.get(i)));
+                    characters.add(new Escort(playerNames.get(i)));
                     break;
                 case 3:
                     characters.add(new Escort(playerNames.get(i)));

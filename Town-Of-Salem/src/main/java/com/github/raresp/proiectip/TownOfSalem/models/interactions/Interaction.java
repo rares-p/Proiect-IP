@@ -17,12 +17,8 @@ public abstract class Interaction implements Comparable<Interaction>{
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "interaction_target")
     public List<Character> targets;
-    @Transient
-    private TurnInteractions turnInteractions;
     protected int priority;
-    public TurnInteractions getTurnInteractions() {
-        return turnInteractions;
-    }
+
     protected Interaction() {
     }
     public abstract boolean isValid();

@@ -1,14 +1,12 @@
 package com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions;
 
+import com.github.raresp.proiectip.TownOfSalem.models.TurnInteractions;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.ImmunityTypes;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.SerialKiller;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Werewolf;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.WerewolfRampageInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.WerewolfSetTargetInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.PassiveAttackInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.SerialKillerPassiveAttackInteraction;
 
 import java.util.ArrayList;
@@ -30,15 +28,20 @@ public abstract class DistractInteraction extends Interaction {
         }
         Character target = targets.get(0);
         target.visitors.add(actioner);
-        if(target instanceof SerialKiller) {
-            getTurnInteractions().addInteraction(new SerialKillerPassiveAttackInteraction(target, Arrays.asList(actioner))); //nush exact care-i prioritatea, dupa heal
+//        if(target instanceof SerialKiller) {
+//            turnInteractions.addInteraction(new SerialKillerPassiveAttackInteraction(target, Arrays.asList(actioner))); //nush exact care-i prioritatea, dupa heal
+//            return false;
+//        }
+//        if(target instanceof Werewolf werewolf && werewolf.isFullMoon()){
+//            //scot si toate interactiunile in care werewolf ataca pe altii
+//            turnInteractions.getInteractions().removeIf(i -> i.actioner instanceof Werewolf);
+//            //werewolf sta acasa si ataca roleblockerul
+//            turnInteractions.addInteraction(new WerewolfSetTargetInteraction(target, new ArrayList<>())); //lista goala => o sa stea acasa
+//        }
+
+        if(target instanceof Werewolf werewolf && werewolf.isFullMoon()) {
+            werewolf.AddNightResult("Someone tried to roleblock you.");
             return false;
-        }
-        if(target instanceof Werewolf werewolf && werewolf.isFullMoon()){
-            //scot si toate interactiunile in care werewolf ataca pe altii
-            getTurnInteractions().getInteractions().removeIf(i -> i.actioner instanceof Werewolf);
-            //werewolf sta acasa si ataca roleblockerul
-            getTurnInteractions().addInteraction(new WerewolfSetTargetInteraction(target, new ArrayList<>())); //lista goala => o sa stea acasa
         }
 
         if(target.getImmunity() == ImmunityTypes.Roleblock) {

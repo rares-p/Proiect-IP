@@ -15,12 +15,9 @@ public class ArsonistIgniteInteraction extends AttackInteraction{
     public void act() {
         if(targets.isEmpty())
             return;
-        Character target = this.targets.get(0);
-        if (target.getPlayerUsername().equals(arsonist.getPlayerUsername())) {
-            for (Character dousedPlayer : Arsonist.dousedPlayers){
-                dousedPlayer.setAlive(false);
-                dousedPlayer.AddNightResult("You were set on fire by an Arsonist!");
-            }
+        for (Character dousedPlayer : Arsonist.dousedPlayers){
+            dousedPlayer.setAlive(false);
+            dousedPlayer.AddNightResult("You were set on fire by an Arsonist!");
         }
     }
 }

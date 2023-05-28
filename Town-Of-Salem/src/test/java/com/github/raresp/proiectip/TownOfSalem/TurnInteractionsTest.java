@@ -27,7 +27,6 @@ public class TurnInteractionsTest {
     Vigilante vigilante = new Vigilante("vigilante");
     Werewolf werewolf = new Werewolf("werewolf");
     List<Character> characters ;//  = List.of(arsonist, bodyguard, doctor, escort, godFather, lookout, mafioso, serialKiller, veteran, vigilante, werewolf) ;
-
     @Test
     void GfMafVetTest() {
 
@@ -169,5 +168,19 @@ public class TurnInteractionsTest {
 
     }
 
+    @Test
+    void EscLkTest() {
+        escort.targets.add(mafioso);
+        lookout.targets.add(doctor);
+        mafioso.targets.add(doctor);
+        characters = List.of(doctor, escort, lookout, mafioso);
+
+        TurnInteractions turnInteractions = new TurnInteractions(characters, true);
+        turnInteractions.computeInteractionsOutcome();
+
+        for (Character character : characters)
+            System.out.println(character.getPlayerUsername() + ": " + character.nightResults);
+
+    }
 
 }

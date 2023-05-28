@@ -31,4 +31,9 @@ public class Survivor extends NeutralCharacter {
     public Interaction createInteraction() {
         return new SurvivorInteraction(this);
     }
+
+    @Override
+    public String nightBeginningMessage() {
+        return "You have " + bulletVestsCount + " vests left";
+    }
 }

@@ -96,6 +96,10 @@ public abstract class Character implements Comparable<Character> {
 
     }
 
+    public String nightBeginningMessage() {
+        return "";
+    }
+
     public boolean isFramed() {
         return framed;
     }

@@ -206,6 +206,36 @@ public class Game {
         return true;
     }
 
+    public void computeNightBeginningAnnouncements() {
+        for(Character c : characters) {
+            List<String> peers = new ArrayList<>(){{
+                add(c.getPlayerUsername());
+            }};
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("peers", peers);
+            params.put("content", c.nightBeginningMessage());
+
+            String requestBody = null;
+            try {
+                requestBody = new ObjectMapper().writeValueAsString(params);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("/lobbies/:lobbyId/announce"))
+                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                        .header("Content-Type", "application/json")
+                        .header("Accept", "application/json")
+                        .build();
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 //    @Override
 //    public void run() {
 //        StartGame();

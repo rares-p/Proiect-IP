@@ -58,10 +58,8 @@ public class TurnInteractions {
     public void computeInteractionsOutcome() {
         for (int p = 1; p <= 7; p++) {
             switch (p) {
-                case 2 -> {
-                    computeDistractInteraction();
-                    computeVisitorLists();
-                }
+                case 2 -> computeDistractInteraction();
+                case 3 -> computeVisitorLists();
                 case 4 ->{
                     computeMafiosoInteraction();
                     computeVeteranInteraction();
@@ -91,6 +89,7 @@ public class TurnInteractions {
         interactions.stream()
                 .filter(i -> !(i instanceof BasicInteraction))
                 .filter(i -> !i.targets.isEmpty())
+                .filter(i -> !i.actioner.roleBlocked)
                 .forEach(i -> i.targets.get(0).visitors.add(i.actioner));
     }
     private void computeDistractInteraction(){

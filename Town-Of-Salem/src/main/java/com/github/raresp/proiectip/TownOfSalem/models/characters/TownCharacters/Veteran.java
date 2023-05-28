@@ -51,4 +51,8 @@ public class Veteran extends TownCharacter {
         if(alerts == 0)
             canAct = false;
     }
+    @Override
+    public String nightBeginningMessage() {
+        return "You have " + alerts + " alerts left";
+    }
 }

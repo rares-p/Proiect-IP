@@ -59,4 +59,10 @@ public class Doctor extends TownCharacter {
         }
 
     }
+
+
+    @Override
+    public String nightBeginningMessage() {
+        return "You have " + (hasHealedHimself? 0 : 1) + " self heals left";
+    }
 }

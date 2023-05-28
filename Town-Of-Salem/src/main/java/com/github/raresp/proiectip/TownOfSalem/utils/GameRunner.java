@@ -1,5 +1,8 @@
 package com.github.raresp.proiectip.TownOfSalem.utils;
 
+import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Executioner;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Jester;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameService;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.GameNotFoundException;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
@@ -16,6 +19,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -112,8 +116,18 @@ public class GameRunner{
     }
 
     private void runGameIfNightEndingTime(Game game) {
-        for (Character c : game.getCharacters())
+        for (Character c : game.getCharacters()) {
             c.resetStats();
+            if(Objects.equals(c.getRole(), "Executioner") && !((Executioner) (c)).target.isAlive()) {
+                try {
+                    String username = c.getPlayerUsername();
+                    game.getCharacters().remove(game.getCharacterByName(username));
+                    game.getCharacters().add(new Jester(username));
+                } catch (CharacterNotFoundException e) {
+
+                }
+            }
+        }
         game.setGameState(GameState.Discussion);
         gameService.updateGame(game);
     }
@@ -136,6 +150,7 @@ public class GameRunner{
 
     private void runGameIfNightTime(Game game) {
         game.selectedCharacter = null;
+        //game.computeNightBeginningAnnouncements();
         TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
         turnInteractions.computeInteractionsOutcome();
         game.setGameState(GameState.NightEnding);

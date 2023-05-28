@@ -17,7 +17,7 @@ public class Bodyguard extends TownCharacter{
         this.attack = AttackTypes.Powerful;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
-        this.actionText = "Heal";
+        this.actionText = "Guard";
     }
 
     protected Bodyguard() {
@@ -40,6 +40,12 @@ public class Bodyguard extends TownCharacter{
 
     public void setHasProtectedHimself(boolean hasProtectedHimself) {
         this.hasProtectedHimself = hasProtectedHimself;
+    }
+
+
+    @Override
+    public String nightBeginningMessage() {
+        return "You have " + (hasProtectedHimself? 0 : 1) + " vests left";
     }
 }
 

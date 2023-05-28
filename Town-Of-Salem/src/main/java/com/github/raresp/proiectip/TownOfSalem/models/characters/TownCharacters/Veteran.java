@@ -20,6 +20,7 @@ public class Veteran extends TownCharacter {
         this.defense = DefenseTypes.None;
         this.innocent = true;
         this.immunity = ImmunityTypes.DetectionImmunity;
+        this.actionText = "Alert";
     }
     protected Veteran() {
         super();
@@ -49,5 +50,9 @@ public class Veteran extends TownCharacter {
             return;
         if(alerts == 0)
             canAct = false;
+    }
+    @Override
+    public String nightBeginningMessage() {
+        return "You have " + alerts + " alerts left";
     }
 }

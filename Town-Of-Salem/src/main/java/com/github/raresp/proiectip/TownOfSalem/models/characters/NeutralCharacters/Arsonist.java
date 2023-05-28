@@ -33,7 +33,7 @@ public class Arsonist extends NeutralCharacter {
     public Interaction createInteraction() {
         if(targets.isEmpty())
             return new ArsonistCleanSelfInteraction(this);
-        if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new ArsonistIgniteInteraction(this, targets);
+        if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new ArsonistIgniteInteraction(this, dousedPlayers);
         else return new ArsonistDouseInteraction(this, targets);
 
     }

@@ -40,6 +40,19 @@ public class LobbyAPI {
         return new AllLobbiesResponse(lobbyRepository.findBy());
     }
 
+    @GetMapping("/reset")
+    HttpStatus resetAllLobbies() {
+        List<Lobby> allLobbies = lobbyRepository.findAll();
+        for(Lobby lobby : allLobbies) {
+            String joinCode = lobby.getJoinCode();
+            lobbyRepository.delete(lobby);
+            Lobby newLobby = new Lobby();
+            newLobby.setJoinCode(joinCode);
+            lobbyRepository.save(newLobby);
+        }
+        return HttpStatus.OK;
+    }
+
     @GetMapping("/lobbies/{joinCode}")
     LobbyStateResponse lobbyByID(@PathVariable String joinCode) throws LobbyNotFoundException {
         LobbyStateResponse lobbyResponse = new LobbyStateResponse(lobbyRepository.findLobbyByJoinCode(joinCode));

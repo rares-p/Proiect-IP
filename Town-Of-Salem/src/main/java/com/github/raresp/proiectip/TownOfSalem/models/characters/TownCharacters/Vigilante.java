@@ -51,4 +51,12 @@ public class Vigilante extends TownCharacter {
     public void setWillCommitSuicide(boolean willCommitSuicide) {
         this.willCommitSuicide = willCommitSuicide;
     }
+
+    @Override
+    public String nightBeginningMessage() {
+        if(willCommitSuicide) {
+            return "You decided to put the gun away and suicide because of the guilt";
+        }
+        return "You have " + bulletsLeft + " bullets left";
+    }
 }

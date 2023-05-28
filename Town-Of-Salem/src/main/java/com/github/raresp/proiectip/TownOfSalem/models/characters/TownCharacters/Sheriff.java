@@ -1,6 +1,9 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.SheriffInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginteractions.VisitingInteraction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -25,25 +28,20 @@ public class Sheriff extends TownCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
-
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        return new SheriffInteraction(this, targets);
     }
 
     @Override
     public void act() {
-        if(this.targets.isEmpty())
-        {
-            this.AddNightResult("You decided to stay at home.");
+        if(targets.isEmpty())
             return;
-        }
-
         Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else {
-            this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
-            this.AddNightResult("Your target seems " + ((target.IsInnocent())?"Innocent!":"Suspicious!"));
-        }
+        this.AddNightResult("You decided to investigate " + target.getPlayerUsername() + " !");
+        this.AddNightResult("Your target seems " + ((target.IsInnocent() && !target.isFramed())?"Innocent!":"Suspicious!"));
+        target.setFramed(false);
     }
 
 

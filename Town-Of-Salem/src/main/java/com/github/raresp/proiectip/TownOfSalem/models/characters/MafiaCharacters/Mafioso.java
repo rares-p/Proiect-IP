@@ -1,6 +1,7 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.*;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -29,32 +30,11 @@ public class Mafioso extends MafiaCharacter {
     }
 
     @Override
-    public void act(List<Character> listOfTargets) {
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        return new MafiosoInteraction(this, targets);
     }
 
-    @Override
-    public void act() {
-        if(this.targets.isEmpty())
-        {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
 
-        Character target = this.targets.get(0);
-        if(roleBlocked)
-            this.AddNightResult("Someone occupied your night. You were role blocked!");
-        else if(target.getDefense().ordinal() >= this.attack.ordinal()) {
-            this.AddNightResult("You tried to attack " + target.getPlayerUsername() + " but his defense was too strong!");
-            target.AddNightResult("Someone attacked you last night but your defense was too strong!");
-        }
-        else {
-            this.AddNightResult("You attacked " + target.getPlayerUsername() + "!");
-            if(target.healed)
-                target.AddNightResult("You were attacked last night but someone nursed you back to health");
-            else{
-                target.AddNightResult("You were attacked last night. You died");
-                target.setIsAlive(false);
-            }
-        }
-    }
 }

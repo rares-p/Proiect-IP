@@ -4,8 +4,7 @@ import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicLobby;
 import com.github.raresp.proiectip.TownOfSalem.API.projections.PublicLobbyListProjection;
 import com.github.raresp.proiectip.TownOfSalem.API.requests.AddCharacterTargetRequest;
 import com.github.raresp.proiectip.TownOfSalem.API.requests.AddUserToLobbyRequest;
-import com.github.raresp.proiectip.TownOfSalem.API.responses.CurrentUserAllUsersResponse;
-import com.github.raresp.proiectip.TownOfSalem.API.responses.PeersResponse;
+import com.github.raresp.proiectip.TownOfSalem.API.responses.*;
 import com.github.raresp.proiectip.TownOfSalem.exceptions.*;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
 import com.github.raresp.proiectip.TownOfSalem.models.GameState;
@@ -37,16 +36,16 @@ public class LobbyAPI {
     }
 
     @GetMapping("/lobbies")
-    List<PublicLobbyListProjection> allLobbies() {
-        return lobbyRepository.findBy();
+    AllLobbiesResponse allLobbies() {
+        return new AllLobbiesResponse(lobbyRepository.findBy());
     }
 
     @GetMapping("/lobbies/{joinCode}")
-    PublicLobby lobbyByID(@PathVariable String joinCode) throws LobbyNotFoundException {
-        PublicLobby publicLobby = lobbyRepository.findPublicLobbyByJoinCode(joinCode);
-        if (publicLobby == null)
+    LobbyStateResponse lobbyByID(@PathVariable String joinCode) throws LobbyNotFoundException {
+        LobbyStateResponse lobbyResponse = new LobbyStateResponse(lobbyRepository.findLobbyByJoinCode(joinCode));
+        if (lobbyResponse == null)
             throw new LobbyNotFoundException(joinCode);
-        return publicLobby;
+        return lobbyResponse;
     }
 
     @PostMapping(path = "/lobbies",
@@ -61,25 +60,25 @@ public class LobbyAPI {
     @PostMapping(path = "/lobbies/{joinCode}/add_user",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Lobby> addUserToLobby(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
+    ResponseEntity<?> addUserToLobby(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
         lobby.addPlayerInLobby(request.userId);
         lobbyRepository.save(lobby);
-        return new ResponseEntity<>(lobby, HttpStatus.OK);
+        return new ResponseEntity<>(new LobbyStateResponse(lobby), HttpStatus.OK);
     }
 
     @PostMapping(path = "/lobbies/{joinCode}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Lobby> addUserToLobbySprint1(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
+    ResponseEntity<?> addUserToLobbySprint1(@PathVariable String joinCode, @RequestBody AddUserToLobbyRequest request) throws LobbyNotFoundException, InvalidLobbyException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
         lobby.addPlayerInLobby(request.userId);
         lobbyRepository.save(lobby);
-        return new ResponseEntity<>(lobby, HttpStatus.OK);
+        return new ResponseEntity<>(new LobbyStateResponse(lobby), HttpStatus.OK);
     }
 
     @PostMapping(path = "/lobbies/{joinCode}/remove_user",
@@ -113,9 +112,7 @@ public class LobbyAPI {
         return lobby;
     }
 
-    @GetMapping(path="/lobbies/{joinCode}/peers",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/lobbies/{joinCode}/peers")
     PeersResponse getPeers(@PathVariable String joinCode, @RequestParam String userId) throws LobbyNotFoundException, CharacterNotFoundException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
@@ -152,7 +149,7 @@ public class LobbyAPI {
             return ResponseEntity.ok(lobby.getGame());
         }
         if(lobby.getState() == LobbyState.WAITING_PLAYERS)
-            return ResponseEntity.ok("{\"state\":\"Lobby\"}");
+            return ResponseEntity.ok(new LobbyStateResponse(lobby));
         Character character = lobby.getGame().getCharacterByName(userId);
         ResponseEntity<?> resp = ResponseEntity.ok(new CurrentUserAllUsersResponse(lobby.getGame(), character));
         if(lobby.getGame().gameState == GameState.NightEnding)
@@ -164,7 +161,7 @@ public class LobbyAPI {
     @PostMapping(path = "/state/{joinCode}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Character> postGameByLobbyId(@PathVariable String joinCode, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException, LobbyNotFoundException {
+    ResponseEntity<AddTargetResponse> postGameByLobbyId(@PathVariable String joinCode, @RequestBody AddCharacterTargetRequest request) throws GameNotFoundException, CharacterNotFoundException, LobbyNotFoundException {
         Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
         if(lobby == null)
             throw new LobbyNotFoundException(joinCode);
@@ -175,6 +172,18 @@ public class LobbyAPI {
         for(String username : request.targets)
             game.getCharacterByName(request.userId).targets.add(game.getCharacterByName(username));
         gameRepository.save(game);
-        return new ResponseEntity<>(character, HttpStatus.OK);
+        return new ResponseEntity<>(new AddTargetResponse(character), HttpStatus.OK);
+    }
+
+    @PostMapping("/reset/{joinCode}")
+    HttpStatus resetLobbyById(@PathVariable String joinCode) throws LobbyNotFoundException {
+        Lobby lobby = lobbyRepository.findLobbyByJoinCode(joinCode);
+        if(lobby == null)
+            throw new LobbyNotFoundException(joinCode);
+        lobbyRepository.delete(lobby);
+        Lobby newLobby = new Lobby();
+        newLobby.setJoinCode(joinCode);
+        lobbyRepository.save(newLobby);
+        return HttpStatus.OK;
     }
 }

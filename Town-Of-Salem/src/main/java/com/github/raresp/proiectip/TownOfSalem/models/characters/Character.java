@@ -2,6 +2,7 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Arsonist;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Veteran;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
@@ -24,6 +25,7 @@ public abstract class Character implements Comparable<Character> {
     protected String actionText;
 
     public Boolean canAct = true;
+    public Boolean canSpeak = true;
 
     public String getActionText() {
         return actionText;
@@ -40,6 +42,9 @@ public abstract class Character implements Comparable<Character> {
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
     protected boolean isJailed;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)//asta sau ElementCollection?
+    public List<Character> visitors = new ArrayList<>();
 
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //@JoinColumn(name = "night_results")
@@ -66,7 +71,10 @@ public abstract class Character implements Comparable<Character> {
     }
     public abstract void resetDefense();
 
-    public abstract void act (List<Character> listOfTargets);
+    public void act (List<Character> listOfTargets){};
+    public abstract Interaction createInteraction();
+
+    //public void addInteraction();
     public void act () {
         if(this.targets.isEmpty())
         {
@@ -88,15 +96,21 @@ public abstract class Character implements Comparable<Character> {
 
     }
 
+    public boolean isFramed() {
+        return framed;
+    }
+
     public boolean IsInnocent() {
         return innocent;
     }
 
     public void ResetEffects() {
+        resetDefense();
         framed = false;
         roleBlocked = false;
         lastInteraction = null;
         healed = false;
+        visitors.clear();
     }
 
     public DefenseTypes getDefense() {
@@ -173,9 +187,11 @@ public abstract class Character implements Comparable<Character> {
 
     public void resetStats()
     {
+        resetDefense();
         this.roleBlocked = false;
         this.healed = false;
         this.nightResults.clear();
+        this.resetDefense();
     }
 
     @Transactional

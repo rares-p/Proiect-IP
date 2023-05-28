@@ -2,7 +2,9 @@ package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.SerialKiller;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.ConsortInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.DistractInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
@@ -20,40 +22,15 @@ public class Consort extends MafiaCharacter {
 
     public Consort() {
     }
-
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
     }
 
     @Override
-    public void act() {
-
-    }
-
-    @Override
-    public void act(List<Character> listOfTargets) {
-        if(this.targets.isEmpty()) {
-            this.AddNightResult("You decided to stay at home.");
-            return;
-        }
-        Character target = this.targets.get(0);
-
-        if(target instanceof SerialKiller){
-            //this.isAlive = false;
-            //this.AddNightResult("You were murdered by the Serial Killer you visited.");
-            //target.AddNightResult("Someone tried to role block you. You murdered them!");
-            target.AddNightResult("Someone tried to role block you, but you are immune");
-        }
-//        else if(target.getImmunity() == ImmunityTypes.Roleblock) {
-//            this.AddNightResult("You tried to distract " + target.getPlayerUsername() + " but were unsuccessful!");
-//            target.AddNightResult("Someone tried to role block you, but you are immune!");
-//        }
-        else{
-            target.setRoleBlocked(true);
-            target.AddNightResult("Someone occupied your night. You were role blocked!");
-            this.AddNightResult("You kept " + target.getPlayerUsername() + " occupied last night. They did not use their ability!");
-        }
-        //devine mafiot
+    public Interaction createInteraction() {
+        if(targets.isEmpty())
+            return null;
+        return new ConsortInteraction(this, targets, 2);
     }
 }

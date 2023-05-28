@@ -14,6 +14,7 @@ public class BodyguardProtectSelfInteraction extends BasicInteraction {
     public void act() {
         bodyguard.setDefense(DefenseTypes.Basic);
         bodyguard.setHasProtectedHimself(true);
+        bodyguard.AddNightResult("You decided to protect yourself.");
         //ar tb sa-i apara mesaj "You were attacked but your bulletproof vest saved you!"
     }
 }

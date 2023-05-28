@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VeteranPassiveAttackInteraction extends PassiveAttackInteraction{
     public VeteranPassiveAttackInteraction(Character actioner, List<Character> targets) {
-        super(actioner, targets, 7);
+        super(actioner, targets, 4);
     }
 
     @Override

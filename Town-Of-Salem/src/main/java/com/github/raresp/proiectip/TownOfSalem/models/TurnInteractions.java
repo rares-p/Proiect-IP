@@ -8,6 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.AttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.MafiosoInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.BasicInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.distractinteractions.DistractInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.BodyguardAttackInteraction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.passiveinteractions.SerialKillerPassiveAttackInteraction;
@@ -57,14 +58,17 @@ public class TurnInteractions {
     public void computeInteractionsOutcome() {
         for (int p = 1; p <= 7; p++) {
             switch (p) {
-                case 2 -> computeDistractInteraction();
-                case 4 -> computeBodyguardInteraction();
-                case 5 -> {
-                    computeMafiosoInteraction();
+                case 2 -> {
+                    computeDistractInteraction();
+                    computeVisitorLists();
                 }
+                case 4 ->{
+                    computeMafiosoInteraction();
+                    computeVeteranInteraction();
+                }
+                //case 5
                 case 6 -> computeSpyMessage();
                 case 7 -> {
-                    computeVeteranInteraction();
                     computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
                     computeLookoutMessage();
                 }
@@ -83,8 +87,11 @@ public class TurnInteractions {
         }
         computeDoctorMessage();
     }
-    private void computeBodyguardInteraction(){
-
+    private void computeVisitorLists(){
+        interactions.stream()
+                .filter(i -> !(i instanceof BasicInteraction))
+                .filter(i -> !i.targets.isEmpty())
+                .forEach(i -> i.targets.get(0).visitors.add(i.actioner));
     }
     private void computeDistractInteraction(){
         var distractInteractions = interactions.stream().filter(i -> i instanceof DistractInteraction).toList();
@@ -94,12 +101,13 @@ public class TurnInteractions {
             Character target = distractInteraction.targets.get(0);
 
             if(target instanceof SerialKiller serialKiller) {
+                serialKiller.visitors.add(distractInteraction.actioner);
                 interactions.remove(distractInteraction);
                 interactions.add(new SerialKillerPassiveAttackInteraction(serialKiller, Arrays.asList(distractInteraction.actioner))); //nush exact care-i prioritatea, dupa heal
             }
-            if(target instanceof Werewolf werewolf && werewolf.isFullMoon()){
-                //interactions.remove(distractInteraction);
-                //scot si toate interactiunile in care werewolf ataca pe altii
+            else if(target instanceof Werewolf werewolf && werewolf.isFullMoon()){
+                interactions.remove(distractInteraction);
+                werewolf.visitors.add(distractInteraction.actioner);
                 interactions.removeIf(i -> i.actioner instanceof Werewolf);
                 //werewolf sta acasa si ataca roleblockerul
                 interactions.add(new WerewolfSetTargetInteraction(target, new ArrayList<>()));
@@ -117,18 +125,36 @@ public class TurnInteractions {
 
         Mafioso mafioso = (Mafioso) mafiosoInteraction.actioner;
         GodFather godFather = (GodFather) godfatherInteraction.actioner;
+        Character mafiosoTarget = null;
+        Character godfatherTarget = null;
+        if(!mafiosoInteraction.targets.isEmpty())
+            mafiosoTarget = mafiosoInteraction.targets.get(0);
+        if(!godfatherInteraction.targets.isEmpty())
+            godfatherTarget = godfatherInteraction.targets.get(0);
 
         if (godFather.roleBlocked) {
-            if (!mafioso.roleBlocked)
+            if (!mafioso.roleBlocked) {
                 interactions.add(mafiosoInteraction);
-        } else if (mafioso.roleBlocked)
+                if(godfatherTarget != null)
+                    godfatherTarget.visitors.remove(godFather);
+            }
+        } else if (mafioso.roleBlocked) {
             interactions.add(godfatherInteraction);
+            if(mafiosoTarget != null)
+                mafiosoTarget.visitors.remove(mafioso);
+        }
         else if (godfatherInteraction.targets.isEmpty())  ///godfather nu a selectat pe nimeni
             interactions.add(mafiosoInteraction);
         else {
             interactions.add(new MafiosoInteraction(mafioso, godfatherInteraction.targets));
+
             mafioso.AddNightResult("The Godfather ordered you to kill " + godfatherInteraction.targets.get(0).getPlayerUsername() + "!");
             godFather.AddNightResult("The mafioso attacked the target you selected.");
+
+            if(mafiosoTarget != null)
+                mafiosoTarget.visitors.remove(mafioso);
+            godfatherTarget.visitors.remove(godFather);
+            godfatherTarget.visitors.add(mafioso);
         }
     }
 

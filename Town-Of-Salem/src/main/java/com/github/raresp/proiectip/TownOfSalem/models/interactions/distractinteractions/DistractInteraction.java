@@ -27,7 +27,7 @@ public abstract class DistractInteraction extends Interaction {
             return false;
         }
         Character target = targets.get(0);
-        target.visitors.add(actioner);
+        //target.visitors.add(actioner);
 //        if(target instanceof SerialKiller) {
 //            turnInteractions.addInteraction(new SerialKillerPassiveAttackInteraction(target, Arrays.asList(actioner))); //nush exact care-i prioritatea, dupa heal
 //            return false;

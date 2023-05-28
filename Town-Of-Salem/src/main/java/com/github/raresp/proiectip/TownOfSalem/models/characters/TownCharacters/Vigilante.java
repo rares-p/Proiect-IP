@@ -1,10 +1,9 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
-import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.VigilanteKillInteraction;
-import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.VigilanteSuicideInteraction;
+import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.VigilanteSuicideInteraction;
 import jakarta.persistence.Entity;
 
 @Entity

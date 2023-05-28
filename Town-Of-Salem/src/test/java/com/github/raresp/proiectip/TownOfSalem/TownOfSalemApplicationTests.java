@@ -17,57 +17,7 @@ import java.util.List;
 @SpringBootTest
 class TownOfSalemApplicationTests {
 	@Test
-	void contextLoads() {
-		Bodyguard bodyguard = new Bodyguard("bodyguard");
-		Doctor doctor = new Doctor("doctor");
-		Escort escort = new Escort("escort");
-		GodFather godFather = new GodFather("godfather");
-		Lookout lookout = new Lookout("lookout");
-		Mafioso mafioso = new Mafioso("mafioso");
-		SerialKiller serialKiller = new SerialKiller("serial killer");
-		Veteran veteran = new Veteran("veteran");
-		Vigilante vigilante = new Vigilante("vigilante");
-		Werewolf werewolf = new Werewolf("werewolf");
+	void contextLoads(){
 
-
-		bodyguard.targets.add(doctor);
-		doctor.targets.add(bodyguard);
-		//escort.targets.add(werewolf);
-		//godFather.targets.add(veteran);
-		lookout.targets.add(doctor);
-		mafioso.targets.add(doctor);
-		veteran.targets.add(vigilante);
-		//serialKiller.targets.add(doctor);
-		//vigilante.targets.add(doctor);
-		//werewolf.targets.add(doctor);
-
-
-		List<Character> characters = List.of(bodyguard, doctor, escort, godFather, lookout, mafioso, serialKiller, veteran, vigilante, werewolf);
-		TurnInteractions turnInteractions = new TurnInteractions(characters, true);
-		turnInteractions.computeInteractionsOutcome();
-
-		for(Character character : characters)
-			System.out.println(character.getPlayerUsername() + ": " + character.nightResults);
-
-
-
-
-//		vigilante.resetStats();
-//		doctor.resetStats();
-//		mafioso.resetStats();
-//		escort.resetStats();
-//
-//		vigilante.targets.add(escort);
-//		mafioso.targets.add(doctor);
-//		doctor.targets.add(doctor);
-//
-//		turnInteractions = new TurnInteractions(List.of(vigilante, mafioso, doctor, escort), false);
-//		turnInteractions.computeInteractionsOutcome();
-//
-//		System.out.println("vigilante: " + vigilante.nightResults);
-//		System.out.println("mafioso: " + mafioso.nightResults);
-//		System.out.println("doctor: " + doctor.nightResults);
-//		System.out.println("escort: " + escort.nightResults);
 	}
-
 }

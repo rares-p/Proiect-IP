@@ -1,14 +1,13 @@
-package com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions;
+package com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacter;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Vigilante;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 
-public class VigilanteSuicideInteraction extends Interaction {
+public class VigilanteSuicideInteraction extends BasicInteraction {
     public VigilanteSuicideInteraction(Character actioner){
-        this.actioner = actioner;
-        this.priority = 5;
+        super(actioner, 5);
     }
 
     @Override

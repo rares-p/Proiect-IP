@@ -20,6 +20,7 @@ public class Veteran extends TownCharacter {
         this.defense = DefenseTypes.None;
         this.innocent = true;
         this.immunity = ImmunityTypes.DetectionImmunity;
+        this.actionText = "Alert";
     }
     protected Veteran() {
         super();

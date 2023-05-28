@@ -18,6 +18,7 @@ public class Jester extends NeutralCharacter {
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
         this.actionText = "Jest";//irelevant
+        this.canAct = false;
     }
     protected Jester() {
         super();

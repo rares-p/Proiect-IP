@@ -22,6 +22,7 @@ public class GodFather extends MafiaCharacter {
         this.defense = DefenseTypes.Basic;
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.innocent = true;
+        this.actionText = "Order Kill";
     }
 
     protected GodFather() {

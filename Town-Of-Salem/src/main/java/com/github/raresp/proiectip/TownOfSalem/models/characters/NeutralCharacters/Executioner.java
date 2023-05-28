@@ -4,6 +4,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 import java.util.List;
@@ -12,13 +14,14 @@ import java.util.List;
 public class Executioner extends NeutralCharacter {
     //primeste un target
     @OneToOne
-    private Character target;
+    public Character target;
     public Executioner(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.None;
         this.defense = DefenseTypes.Basic;
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.actionText = "Execute";
+        this.canAct = false;
         //ar trebui cand facem personajul sa ii generam targetul zic.
     }
     protected Executioner() {

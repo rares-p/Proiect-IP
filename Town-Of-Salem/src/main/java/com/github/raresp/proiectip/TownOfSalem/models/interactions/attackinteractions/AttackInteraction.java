@@ -22,7 +22,7 @@ public abstract class AttackInteraction extends Interaction {
         }
 
         Character target = targets.get(0);
-        target.visitors.add(actioner);
+        //target.visitors.add(actioner);
         if (actioner.roleBlocked)
             return false;
         if (target.getDefense().ordinal() >= actioner.getAttack().ordinal()) {

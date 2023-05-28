@@ -28,28 +28,22 @@ public class BodyguardAttackInteraction extends Interaction {
             return false;
         if(bodyguard.roleBlocked)
             return false;
-        Character target = targets.get(0);
-        target.visitors.add(bodyguard);
         return true;
     }
     @Override
     public void act() {
+        bodyguard.AddNightResult("You decided to protect " + targets.get(0).getPlayerUsername() + " tonight.");
+
+
         var attackInteractions = findAttackInteractions();
         if(attackInteractions == null || attackInteractions.isEmpty()) return;
         var firstInteraction = attackInteractions.get(0);
 
-        attack(firstInteraction.actioner); //pe wiki zice ca protejeaza doar de un atac
-        turnInteractions.getInteractions().remove(firstInteraction); //scoatem interactiunea atacatorului din lista de interactiuni
+        turnInteractions.getInteractions().remove(firstInteraction);
+        Character attacker = firstInteraction.actioner; //protejeaza doar de un atac
 
-        if(attackInteractions.size() > 1){
-            bodyguard.setAlive(false);
-            bodyguard.AddNightResult("You died while protecting your target.");
-        }
-    }
-
-    private void attack(Character attacker){
-        if(attacker.getDefense().ordinal() >= actioner.getAttack().ordinal()) {
-            actioner.AddNightResult("You tried to attack " + attacker.getPlayerUsername() + " but his defense was too strong!");
+        if(attacker.getDefense().ordinal() >= bodyguard.getAttack().ordinal()) {
+            bodyguard.AddNightResult("You tried to attack " + attacker.getPlayerUsername() + " but his defense was too strong!");
             if(attacker.healed) attacker.AddNightResult("You were attacked by a bodyguard but someone nursed you back to health");
             else attacker.AddNightResult("You were attacked by a bodyguard but your defense was too strong");
         }
@@ -59,11 +53,31 @@ public class BodyguardAttackInteraction extends Interaction {
             bodyguard.AddNightResult("You killed " + attacker.getPlayerUsername() + " while protecting your target.");
         }
 
-        if(attacker.getAttack().ordinal() >= actioner.getDefense().ordinal()) {
+        if(attackInteractions.size() > 1 || attacker.getAttack().ordinal() > bodyguard.getDefense().ordinal()){
             bodyguard.setAlive(false);
             bodyguard.AddNightResult("You died while protecting your target.");
         }
     }
+
+//    private boolean checkAttack(Character attacker){
+//        if(attacker.getDefense().ordinal() >= actioner.getAttack().ordinal()) {
+//            actioner.AddNightResult("You tried to attack " + attacker.getPlayerUsername() + " but his defense was too strong!");
+//            if(attacker.healed) attacker.AddNightResult("You were attacked by a bodyguard but someone nursed you back to health");
+//            else attacker.AddNightResult("You were attacked by a bodyguard but your defense was too strong");
+//        }
+//        else {
+//            attacker.setIsAlive(false);
+//            attacker.AddNightResult("You were killed by a Bodyguard.");
+//            bodyguard.AddNightResult("You killed " + attacker.getPlayerUsername() + " while protecting your target.");
+//        }
+//
+//        return attacker.getAttack().ordinal() < actioner.getDefense().ordinal();
+//
+//            //{
+////            bodyguard.setAlive(false);
+////            bodyguard.AddNightResult("You died while protecting your target.");
+////        }
+//    }
 
     private List<Interaction> findAttackInteractions(){
         Character target = targets.get(0);

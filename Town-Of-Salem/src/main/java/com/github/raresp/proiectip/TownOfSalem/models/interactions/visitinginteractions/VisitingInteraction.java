@@ -21,7 +21,7 @@ public abstract class VisitingInteraction extends Interaction {
             return false;
         }
         if(actioner.roleBlocked) return false;
-        targets.get(0).visitors.add(actioner);
+        //targets.get(0).visitors.add(actioner);
         return true;
     }
 }

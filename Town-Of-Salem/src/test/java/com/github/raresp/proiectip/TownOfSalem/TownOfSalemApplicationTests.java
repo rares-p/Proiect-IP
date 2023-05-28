@@ -76,5 +76,4 @@ class TownOfSalemApplicationTests {
 //		System.out.println("doctor: " + doctor.nightResults);
 //		System.out.println("escort: " + escort.nightResults);
 	}
-
 }

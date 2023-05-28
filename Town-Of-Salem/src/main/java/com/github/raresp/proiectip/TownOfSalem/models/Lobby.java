@@ -58,7 +58,7 @@ public class Lobby {
         return waitingToJoin;
     }
 
-    public void createGame() {
+    public void createGame() throws InvalidLobbyException {
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
         this.game = new Game(characters, id);
         this.state = LobbyState.STARTED;

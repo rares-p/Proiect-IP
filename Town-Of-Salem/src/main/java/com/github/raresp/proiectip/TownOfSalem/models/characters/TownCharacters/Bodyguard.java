@@ -17,7 +17,7 @@ public class Bodyguard extends TownCharacter{
         this.attack = AttackTypes.Powerful;
         this.defense = DefenseTypes.None;
         this.immunity = ImmunityTypes.None;
-        this.actionText = "Heal";
+        this.actionText = "Guard";
     }
 
     protected Bodyguard() {

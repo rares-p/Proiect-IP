@@ -188,7 +188,7 @@ public class Game {
 
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI("https://ip.tudorhutu.ro/lobbies/:lobbyId/announce"))
+                        .uri(new URI("https://townofsalem-backend.tedyst.ro/lobbies/:lobbyId/announce"))
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                         .header("Content-Type", "application/json")
                         .header("Accept", "application/json")
@@ -225,7 +225,7 @@ public class Game {
 
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI("https://ip.tudorhutu.ro/lobbies/:lobbyId/announce"))
+                        .uri(new URI("https://townofsalem-backend.tedyst.ro/lobbies/:lobbyId/announce"))
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                         .header("Content-Type", "application/json")
                         .header("Accept", "application/json")

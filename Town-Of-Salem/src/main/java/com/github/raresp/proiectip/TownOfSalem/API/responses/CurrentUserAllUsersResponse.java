@@ -23,7 +23,10 @@ public class CurrentUserAllUsersResponse {
     public List<PublicUserResponse> getUsers(){
         List<PublicUserResponse> publicUserResponses = new ArrayList<>();
         for(Character c : game.getCharacters())
-            publicUserResponses.add(new PublicUserResponse(c));
+            if(c.isAlive())
+                publicUserResponses.add(new PublicUserResponse(c));
+            else
+                publicUserResponses.add(new PublicDeadUserResponse(c));
         return publicUserResponses;
     }
 

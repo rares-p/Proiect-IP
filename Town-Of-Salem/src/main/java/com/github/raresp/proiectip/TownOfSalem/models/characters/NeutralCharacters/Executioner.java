@@ -22,7 +22,6 @@ public class Executioner extends NeutralCharacter {
         this.immunity = ImmunityTypes.DetectionImmunity;
         this.actionText = "Execute";
         this.canAct = false;
-        //ar trebui cand facem personajul sa ii generam targetul zic.
     }
     protected Executioner() {
         super();
@@ -47,5 +46,10 @@ public class Executioner extends NeutralCharacter {
     @Override
     public Interaction createInteraction() {
         return null;
+    }
+
+    @Override
+    public String getRole() {
+        return super.getRole() + " (" + target.getPlayerUsername() + ")";
     }
 }

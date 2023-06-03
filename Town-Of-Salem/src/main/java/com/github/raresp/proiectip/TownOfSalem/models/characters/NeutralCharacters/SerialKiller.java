@@ -7,6 +7,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinterac
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class SerialKiller extends NeutralCharacter {
@@ -30,5 +31,9 @@ public class SerialKiller extends NeutralCharacter {
         if(targets.isEmpty())
             return null;
         return new SerialKillerTargetInteraction(this, targets);
+    }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
     }
 }

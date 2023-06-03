@@ -7,6 +7,10 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinterac
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.miscellaneousinteractions.VigilanteSuicideInteraction;
 import jakarta.persistence.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 public class Vigilante extends TownCharacter {
     /*if you shoot another townie, you commit suicide because of the guilt*/
@@ -25,7 +29,6 @@ public class Vigilante extends TownCharacter {
     protected Vigilante() {
         super();
     }
-
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
@@ -59,5 +62,10 @@ public class Vigilante extends TownCharacter {
             return "You decided to put the gun away and suicide because of the guilt";
         }
         return "You have " + bulletsLeft + " bullets left";
+    }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+
     }
 }

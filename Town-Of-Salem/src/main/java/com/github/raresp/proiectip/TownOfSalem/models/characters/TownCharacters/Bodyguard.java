@@ -8,6 +8,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteract
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 public class Bodyguard extends TownCharacter{
     private boolean hasProtectedHimself = false;
@@ -46,6 +48,14 @@ public class Bodyguard extends TownCharacter{
     @Override
     public String nightBeginningMessage() {
         return "You have " + (hasProtectedHimself? 0 : 1) + " vests left";
+    }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        for(Character c : characters)
+            if(!(Objects.equals(this.getPlayerUsername(), c.getPlayerUsername()) && hasProtectedHimself) && c.isAlive())
+                this.possibleTargets.add(c.getPlayerUsername());
     }
 }
 

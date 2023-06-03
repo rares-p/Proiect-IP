@@ -36,4 +36,18 @@ public class Survivor extends NeutralCharacter {
     public String nightBeginningMessage() {
         return "You have " + bulletVestsCount + " vests left";
     }
+
+    @Override
+    public void checkIfCanAct() {
+        if(!canAct)
+            return;
+        if(bulletVestsCount <= 0)
+            canAct = false;
+    }
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        if(canAct)
+            this.possibleTargets.add(this.getPlayerUsername());
+    }
 }

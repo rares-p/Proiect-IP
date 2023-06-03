@@ -52,4 +52,9 @@ public class Executioner extends NeutralCharacter {
     public String getRole() {
         return super.getRole() + " (" + target.getPlayerUsername() + ")";
     }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+    }
 }

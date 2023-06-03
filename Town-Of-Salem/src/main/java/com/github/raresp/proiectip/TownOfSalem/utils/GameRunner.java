@@ -112,6 +112,10 @@ public class GameRunner{
     }
 
     private void runGameIfDayEndingTime(Game game) {
+        for(Character c : game.getCharacters()) {
+            c.checkIfCanAct();
+            c.setPossibleTargets(game.getCharacters());
+        }
         game.setGameState(GameState.Night);
     }
 
@@ -171,7 +175,7 @@ public class GameRunner{
 
         if(game.selectedCharacter == null) {
             System.out.println("Nobody has been selected");
-            game.setGameState(GameState.Night);
+            game.setGameState(GameState.DayEnding);
         }
         else {
             System.out.println(game.selectedCharacter + " has been selected");

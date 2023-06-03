@@ -7,6 +7,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.basicinteractions.VeteranSetAlertInteraction;
 import jakarta.persistence.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -54,5 +55,11 @@ public class Veteran extends TownCharacter {
     @Override
     public String nightBeginningMessage() {
         return "You have " + alerts + " alerts left";
+    }
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        if(canAct)
+            this.possibleTargets.add(this.getPlayerUsername());
     }
 }

@@ -1,5 +1,6 @@
 package com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.*;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.attackinteractions.*;
 import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.*;
@@ -36,5 +37,11 @@ public class Mafioso extends MafiaCharacter {
         return new MafiosoInteraction(this, targets);
     }
 
-
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        for(Character c : characters)
+            if(c.isAlive() && !(c instanceof MafiaCharacter))
+                this.possibleTargets.add(c.getPlayerUsername());
+    }
 }

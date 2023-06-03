@@ -8,6 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginter
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Doctor extends TownCharacter {
@@ -64,5 +65,13 @@ public class Doctor extends TownCharacter {
     @Override
     public String nightBeginningMessage() {
         return "You have " + (hasHealedHimself? 0 : 1) + " self heals left";
+    }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        for(Character c : characters)
+            if(!(Objects.equals(this.getPlayerUsername(), c.getPlayerUsername()) && hasHealedHimself) && c.isAlive())
+                this.possibleTargets.add(c.getPlayerUsername());
     }
 }

@@ -7,6 +7,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginter
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Sheriff extends TownCharacter {
@@ -44,5 +45,6 @@ public class Sheriff extends TownCharacter {
         target.setFramed(false);
     }
 
-
+    @Override
+    public void setPossibleTargets(List<Character> characters) {}
 }

@@ -6,6 +6,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.Interaction;
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Jester extends NeutralCharacter {
@@ -36,5 +37,10 @@ public class Jester extends NeutralCharacter {
     @Override
     public Interaction createInteraction() {
         return null;
+    }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
     }
 }

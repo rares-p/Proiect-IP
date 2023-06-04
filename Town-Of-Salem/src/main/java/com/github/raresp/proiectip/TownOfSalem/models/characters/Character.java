@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
@@ -26,6 +27,8 @@ public abstract class Character implements Comparable<Character> {
 
     public Boolean canAct = true;
     public Boolean canSpeak = true;
+    @ElementCollection(fetch = FetchType.EAGER)
+    public List<String> possibleTargets = new ArrayList<>();
 
     public String getActionText() {
         return actionText;
@@ -147,6 +150,8 @@ public abstract class Character implements Comparable<Character> {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+        if(alive == false)
+            canAct = false;
     }
 
     public void setAttack(AttackTypes attack) {
@@ -235,5 +240,13 @@ public abstract class Character implements Comparable<Character> {
 
     public void checkIfCanAct() {
 
+    }
+
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        if(canAct)
+            for(Character c : characters)
+                if(!Objects.equals(getPlayerUsername(), c.getPlayerUsername()) && c.isAlive)
+                    this.possibleTargets.add(c.getPlayerUsername());
     }
 }

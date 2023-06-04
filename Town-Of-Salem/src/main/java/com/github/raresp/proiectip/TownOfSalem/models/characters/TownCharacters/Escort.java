@@ -33,4 +33,6 @@ public class Escort extends TownCharacter {
             return null;
         return new EscortInteraction(this, targets);
     }
+    @Override
+    public void setPossibleTargets(List<Character> characters) {}
 }

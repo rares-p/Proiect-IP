@@ -20,6 +20,11 @@ public class Jailor extends TownCharacter {
     }
 
     @Override
+    public void setPossibleTargets(List<Character> characters) {
+
+    }
+
+    @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
     }

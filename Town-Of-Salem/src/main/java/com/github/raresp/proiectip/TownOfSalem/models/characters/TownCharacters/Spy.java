@@ -8,6 +8,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginter
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Spy extends TownCharacter {
@@ -22,6 +23,7 @@ public class Spy extends TownCharacter {
     protected Spy() {
         super();
     }
+
     @Override
     public void resetDefense() {
         this.defense = DefenseTypes.None;
@@ -33,4 +35,7 @@ public class Spy extends TownCharacter {
             return null;
         return new SpyInteraction(this, targets);
     }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {}
 }

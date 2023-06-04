@@ -3,6 +3,7 @@ package com.github.raresp.proiectip.TownOfSalem.API.responses;
 import com.github.raresp.proiectip.TownOfSalem.models.Game;
 import com.github.raresp.proiectip.TownOfSalem.models.GameState;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,10 @@ public class CurrentUserAllUsersResponse {
     public List<PublicUserResponse> getUsers(){
         List<PublicUserResponse> publicUserResponses = new ArrayList<>();
         for(Character c : game.getCharacters())
-            publicUserResponses.add(new PublicUserResponse(c));
+            if(!c.isAlive() || c instanceof MafiaCharacter && character instanceof MafiaCharacter)
+                publicUserResponses.add(new PublicUserResponseRole(c));
+            else
+                publicUserResponses.add(new PublicUserResponse(c));
         return publicUserResponses;
     }
 

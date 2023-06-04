@@ -21,4 +21,11 @@ public abstract class MafiaCharacter extends Character {
     public void becomeMafioso(){
 
     }
+    @Override
+    public void setPossibleTargets(List<Character> characters) {
+        this.possibleTargets.clear();
+        for(Character c : characters)
+            if(c.isAlive() && !(c instanceof MafiaCharacter))
+                this.possibleTargets.add(c.getPlayerUsername());
+    }
 }

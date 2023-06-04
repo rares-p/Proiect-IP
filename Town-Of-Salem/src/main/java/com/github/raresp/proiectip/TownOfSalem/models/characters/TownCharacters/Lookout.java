@@ -8,6 +8,8 @@ import com.github.raresp.proiectip.TownOfSalem.models.interactions.visitinginter
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
+
 ///vede toti userii care au vizitat targetul lor in seara precedenta
 @Entity
 public class Lookout extends TownCharacter {
@@ -32,4 +34,7 @@ public class Lookout extends TownCharacter {
             return null;
         return new LookoutInteraction(this, targets);
     }
+
+    @Override
+    public void setPossibleTargets(List<Character> characters) {}
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 
+import java.util.List;
+
 @Entity
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 public abstract class TownCharacter extends Character{
@@ -16,4 +18,6 @@ public abstract class TownCharacter extends Character{
     public TownCharacter() {
         super();
     }
+
+    public abstract void setPossibleTargets(List<Character> characters);
 }

@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,10 @@ import java.util.*;
 @Entity
 public class Game {
     private UUID lobbyId;
-    public final int discussionTime = 30;
-    public final int selectionTime = 30;
+    public final int discussionTime = 3;
+    public final int selectionTime = 3;
     public final int votingTime = 15;
-    public final int nightTime = 15;
+    public final int nightTime = 20;
     public final int dayEndingTime = 5;
     public final int nightEndingTime = 5;
     @Temporal(TemporalType.TIMESTAMP)
@@ -193,6 +194,9 @@ public class Game {
                         .header("Content-Type", "application/json")
                         .header("Accept", "application/json")
                         .build();
+                HttpClient client = HttpClient.newHttpClient();
+                client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                        .thenApply(HttpResponse::body);
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -230,6 +234,9 @@ public class Game {
                         .header("Content-Type", "application/json")
                         .header("Accept", "application/json")
                         .build();
+                HttpClient client = HttpClient.newHttpClient();
+                client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                        .thenApply(HttpResponse::body);
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class WerewolfRampageInteraction extends PassiveAttackInteraction {
     public WerewolfRampageInteraction(Character actioner, List<Character> targets) {
-        super(actioner, targets, 7);
+        super(actioner, targets, 5);
     }
 
     @Override

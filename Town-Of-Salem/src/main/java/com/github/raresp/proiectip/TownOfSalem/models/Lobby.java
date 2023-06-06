@@ -60,7 +60,7 @@ public class Lobby {
 
     public void createGame() throws InvalidLobbyException {
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
-        this.game = new Game(characters, id);
+        this.game = new Game(characters, id, joinCode);
         this.state = LobbyState.STARTED;
     }
 
@@ -70,7 +70,7 @@ public class Lobby {
         // if(state != LobbyState.WAITING_PLAYERS)
         //     throw new InvalidLobbyException("The Lobby is not in waiting state");
         List<Character> characters = GameUtils.generateCharacters(waitingToJoin);
-        this.game = new Game(characters, id);
+        this.game = new Game(characters, id, joinCode);
         this.game.getId();
         this.state = LobbyState.STARTED;
     }

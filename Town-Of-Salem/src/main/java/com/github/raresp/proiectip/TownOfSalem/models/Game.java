@@ -26,6 +26,7 @@ import java.util.*;
 @Entity
 public class Game {
     private UUID lobbyId;
+    public String lobbyJoinCode;
     public final int discussionTime = 30;
     public final int selectionTime = 30;
     public final int votingTime = 15;
@@ -74,11 +75,12 @@ public class Game {
         //this.lobbyId = lobbyId;
     }
 
-    public Game(List<Character> characters, UUID lobbyID) {
+    public Game(List<Character> characters, UUID lobbyID, String lobbyJoinCode) {
         this.characters = characters;
         this.timeOfCurrentState = Instant.now().plusSeconds(discussionTime);
         this.gameState = GameState.Discussion;
         this.lobbyId = lobbyID;
+        this.lobbyJoinCode = lobbyJoinCode;
     }
 
     public Character getCharacterByName(String name) throws CharacterNotFoundException {
@@ -208,7 +210,7 @@ public class Game {
 
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI("https://townofsalem-backend.tedyst.ro/lobbies/:lobbyId/announce"))
+                        .uri(new URI("https://townofsalem-backend.tedyst.ro/lobbies/" + lobbyJoinCode +"/announce"))
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                         .header("Content-Type", "application/json")
                         .header("Accept", "application/json")
@@ -248,7 +250,7 @@ public class Game {
 
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI("https://townofsalem-backend.tedyst.ro/lobbies/:lobbyId/announce"))
+                        .uri(new URI("https://townofsalem-backend.tedyst.ro/lobbies/" + lobbyJoinCode +"/announce"))
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                         .header("Content-Type", "application/json")
                         .header("Accept", "application/json")

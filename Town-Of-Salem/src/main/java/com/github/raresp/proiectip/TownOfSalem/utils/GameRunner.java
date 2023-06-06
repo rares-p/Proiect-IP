@@ -200,8 +200,6 @@ public class GameRunner{
         TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
         turnInteractions.computeInteractionsOutcome();
         game.setGameState(GameState.NightEnding);
-        for(Character c : game.getCharacters())
-            c.resetStats();
         gameService.updateGame(game);
     }
 

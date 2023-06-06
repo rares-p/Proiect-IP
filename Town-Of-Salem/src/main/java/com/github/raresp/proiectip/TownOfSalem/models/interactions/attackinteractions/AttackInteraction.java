@@ -17,7 +17,7 @@ public abstract class AttackInteraction extends Interaction {
     @Override
     public boolean isValid() {
         if (this.targets.isEmpty()) {
-            actioner.AddNightResult("You decided to stay at home.");
+           // actioner.AddNightResult("You decided to stay at home.");
             return false;
         }
 

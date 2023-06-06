@@ -9,7 +9,7 @@ public class WerewolfSetTargetInteraction extends Interaction {
     public WerewolfSetTargetInteraction(Character actioner, List<Character> targets){
         this.actioner = actioner;
         this.targets = targets;
-        this.priority = 5;
+        this.priority = 4;
     }
     @Override
     public boolean isValid() {

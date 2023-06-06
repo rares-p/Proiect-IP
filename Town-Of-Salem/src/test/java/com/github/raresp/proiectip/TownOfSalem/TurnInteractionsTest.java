@@ -183,4 +183,49 @@ public class TurnInteractionsTest {
 
     }
 
+    @Test
+    void GfNotSelectsMafTest(){
+        //mafioso.targets.add(doctor);
+        godFather.targets.add(doctor);
+        characters = List.of(doctor, godFather, mafioso);
+
+        TurnInteractions turnInteractions = new TurnInteractions(characters, true);
+        turnInteractions.computeInteractionsOutcome();
+
+        for (Character character : characters)
+            System.out.println(character.getPlayerUsername() + ": " + character.nightResults);
+
+    }
+
+    @Test
+    void GfRoleblockedMafTest(){
+        //mafioso.targets.add(doctor);
+        godFather.targets.add(doctor);
+        escort.targets.add(mafioso);
+        mafioso.targets.add(veteran);
+        characters = List.of(doctor, escort, godFather, mafioso, veteran);
+
+        TurnInteractions turnInteractions = new TurnInteractions(characters, true);
+        turnInteractions.computeInteractionsOutcome();
+
+        for (Character character : characters)
+            System.out.println(character.getPlayerUsername() + ": " + character.nightResults);
+
+    }
+
+    @Test
+    void MafAttacksWerewolfTest(){
+        //mafioso.targets.add(doctor);
+        werewolf.targets.add(escort);
+        mafioso.targets.add(werewolf);
+        characters = List.of(escort, mafioso, werewolf);
+
+        TurnInteractions turnInteractions = new TurnInteractions(characters, true);
+        turnInteractions.computeInteractionsOutcome();
+
+        for (Character character : characters)
+            System.out.println(character.getPlayerUsername() + ": " + character.nightResults);
+
+    }
+
 }

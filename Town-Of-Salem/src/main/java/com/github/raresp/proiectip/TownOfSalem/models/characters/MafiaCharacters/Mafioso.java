@@ -31,8 +31,6 @@ public class Mafioso extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
-        if(targets.isEmpty())
-            return null;
         return new MafiosoInteraction(this, targets);
     }
 

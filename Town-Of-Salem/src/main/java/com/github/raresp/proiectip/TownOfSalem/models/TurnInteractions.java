@@ -63,11 +63,11 @@ public class TurnInteractions {
                 case 4 ->{
                     computeMafiosoInteraction();
                     computeVeteranInteraction();
+                    computeWerewolfInteraction();
                 }
                 //case 5
                 case 6 -> computeSpyMessage();
                 case 7 -> {
-                    computeWerewolfInteraction(); //poate ar tb 6? sau 7? ca sa fi terminat de vizitat toata lumea
                     computeLookoutMessage();
                 }
             }
@@ -318,7 +318,10 @@ public class TurnInteractions {
         var target = werewolfInteraction.targets.get(0);
 
         //vad cine a mai vizitat si adaug attack interaction: mai bine le adaug separat
-        target.visitors.forEach(visitor -> interactions.add(new WerewolfRampageInteraction(werewolf, List.of(visitor))));
+        interactions.add(new WerewolfRampageInteraction(werewolf, List.of(target)));
+        target.visitors.stream()
+                .filter(visitor -> !visitor.equals(werewolf))
+                .forEach(visitor -> interactions.add(new WerewolfRampageInteraction(werewolf, List.of(visitor))));
 
     }
 }

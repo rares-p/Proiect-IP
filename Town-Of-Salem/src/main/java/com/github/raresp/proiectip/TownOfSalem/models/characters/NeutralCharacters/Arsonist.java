@@ -36,7 +36,4 @@ public class Arsonist extends NeutralCharacter {
         if (targets.get(0).getPlayerUsername().equals(this.playerUsername)) return new ArsonistIgniteInteraction(this, dousedPlayers);
         else return new ArsonistDouseInteraction(this, targets);
     }
-    @Override
-    public void setPossibleTargets(List<Character> characters) {
-    }
 }

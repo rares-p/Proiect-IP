@@ -66,9 +66,4 @@ public class Werewolf extends NeutralCharacter implements PassiveActing {
     public boolean isFullMoon() {
         return isFullMoon;
     }
-
-    @Override
-    public void setPossibleTargets(List<Character> characters) {
-
-    }
 }

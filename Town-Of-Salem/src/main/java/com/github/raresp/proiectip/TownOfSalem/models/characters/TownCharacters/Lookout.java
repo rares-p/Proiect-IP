@@ -34,7 +34,4 @@ public class Lookout extends TownCharacter {
             return null;
         return new LookoutInteraction(this, targets);
     }
-
-    @Override
-    public void setPossibleTargets(List<Character> characters) {}
 }

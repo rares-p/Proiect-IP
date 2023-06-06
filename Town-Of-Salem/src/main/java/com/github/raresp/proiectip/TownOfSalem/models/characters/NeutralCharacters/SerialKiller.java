@@ -32,8 +32,4 @@ public class SerialKiller extends NeutralCharacter {
             return null;
         return new SerialKillerTargetInteraction(this, targets);
     }
-
-    @Override
-    public void setPossibleTargets(List<Character> characters) {
-    }
 }

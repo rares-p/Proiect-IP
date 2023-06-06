@@ -18,6 +18,4 @@ public abstract class TownCharacter extends Character{
     public TownCharacter() {
         super();
     }
-
-    public abstract void setPossibleTargets(List<Character> characters);
 }

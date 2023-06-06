@@ -8,6 +8,7 @@ import java.util.List;
 
 public class GameEndResponse {
     public List<String> results = new ArrayList<>();
+    public String state = "End";
 
     public GameEndResponse(Game game) {
         for (Character c : game.getCharacters()) {

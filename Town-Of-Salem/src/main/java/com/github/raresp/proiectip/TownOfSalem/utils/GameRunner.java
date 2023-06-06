@@ -97,8 +97,9 @@ public class GameRunner{
                 break;
             case Selection:
                 runGameIfSelectionTime(game);
+                break;
             case End:
-                runGameIfEnd(game);
+                gameRepository.delete(game);
                 break;
         }
         for(Character c : game.getCharacters())
@@ -222,9 +223,5 @@ public class GameRunner{
             game.setGameState(GameState.Voting);
         }
         System.out.println(game.getCharacters());
-    }
-
-    private void runGameIfEnd(Game game) {
-        game.setGameState(GameState.End);
     }
 }

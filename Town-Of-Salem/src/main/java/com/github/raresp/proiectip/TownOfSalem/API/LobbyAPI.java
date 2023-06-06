@@ -61,9 +61,7 @@ public class LobbyAPI {
         return lobbyResponse;
     }
 
-    @PostMapping(path = "/lobbies",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/lobbies")
     ResponseEntity<Lobby> createLobby() {
         Lobby lobby = new Lobby();
         lobbyRepository.save(lobby);

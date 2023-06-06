@@ -21,16 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Sheriff;
-
-import javax.crypto.spec.ChaCha20ParameterSpec;
 import java.util.*;
 
 @Entity
 public class Game {
     private UUID lobbyId;
-    public final int discussionTime = 3;
-    public final int selectionTime = 3;
+    public final int discussionTime = 30;
+    public final int selectionTime = 30;
     public final int votingTime = 15;
     public final int nightTime = 20;
     public final int dayEndingTime = 5;
@@ -38,6 +35,7 @@ public class Game {
     public final int endTime = 60;
     public int daysSinceLastDeath = 0;
     public int aliveLastNight = 0;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<Character> winners = new ArrayList<>();
     @Temporal(TemporalType.TIMESTAMP)
     public Instant timeOfCurrentState;
@@ -155,6 +153,8 @@ public class Game {
             return Instant.now().plusSeconds(dayEndingTime);
         if (gameState == GameState.NightEnding)
             return Instant.now().plusSeconds(nightEndingTime);
+        if (gameState == GameState.End)
+            return Instant.now().plusSeconds(endTime);
         return null;
     }
 

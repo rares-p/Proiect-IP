@@ -14,6 +14,7 @@ import com.github.raresp.proiectip.TownOfSalem.models.characters.SelectionSessio
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
@@ -96,6 +97,8 @@ public class GameRunner{
                 break;
             case Selection:
                 runGameIfSelectionTime(game);
+            case End:
+                runGameIfEnd(game);
                 break;
         }
         for(Character c : game.getCharacters())
@@ -122,7 +125,7 @@ public class GameRunner{
     private void runGameIfNightEndingTime(Game game) {
         for (Character c : game.getCharacters()) {
             c.resetStats();
-            if(Objects.equals(c.getRole(), "Executioner") && !((Executioner) (c)).target.isAlive()) {
+            if(c instanceof Executioner && !((Executioner) (c)).target.isAlive()) {
                 try {
                     String username = c.getPlayerUsername();
                     game.getCharacters().remove(game.getCharacterByName(username));
@@ -131,7 +134,32 @@ public class GameRunner{
 
                 }
             }
+
         }
+
+        if (game.gameEnded()) {
+            game.setGameState(GameState.End);
+            gameService.updateGame(game);
+            return;
+        }
+
+        if (game.aliveLastNight > game.getAlivePlayers().size())
+            game.daysSinceLastDeath = 0;
+        else
+            game.daysSinceLastDeath++;
+
+        if (game.daysSinceLastDeath == 3) {
+            for (Character c : game.getCharacters()) {
+                if (c instanceof Jester || c instanceof Executioner)
+                    if (!game.winners.contains(c))
+                        game.winners.add(c);
+            }
+            game.setGameState(GameState.End);
+            gameService.updateGame(game);
+            return;
+        }
+
+        game.aliveLastNight = game.getAlivePlayers().size();
         game.setGameState(GameState.Discussion);
         gameService.updateGame(game);
     }
@@ -143,9 +171,22 @@ public class GameRunner{
 
     private void runGameIfVotingTime(Game game) {
         VotingSession votingSession = new VotingSession(game.selectedCharacter, game.getCharacters());
-        if(votingSession.calculateOutcome()) game.selectedCharacter.setIsAlive(false);
+        if(votingSession.calculateOutcome()) {
+            game.selectedCharacter.setIsAlive(false);
+            if (game.selectedCharacter instanceof Jester)
+                game.winners.add(game.selectedCharacter);
+            for (Character c : game.getCharacters())
+                if (c instanceof Executioner && ((Executioner) c).target.getPlayerUsername().equals(game.selectedCharacter.getPlayerUsername()))
+                    game.winners.add(c);
+            game.daysSinceLastDeath = 0;
+            if (game.gameEnded()) {
+                game.setGameState(GameState.End);
+                gameService.updateGame(game);
+                return;
+            }
+        }
         game.votingLog = votingSession.getVotes();
-        //game.sendVotingResults(votingSession.getVotes());
+        game.sendVotingResults(votingSession.getVotes());
 
         game.setGameState(GameState.Selection);
         System.out.println(game.votingLog);
@@ -154,14 +195,13 @@ public class GameRunner{
 
     private void runGameIfNightTime(Game game) {
         game.selectedCharacter = null;
-        //game.computeNightBeginningAnnouncements();
+        game.computeNightBeginningAnnouncements();
         TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
         turnInteractions.computeInteractionsOutcome();
         game.setGameState(GameState.NightEnding);
+        for(Character c : game.getCharacters())
+            c.resetStats();
         gameService.updateGame(game);
-
-        //for(Character c : game.getCharacters())
-          //  c.resetStats();
     }
 
 
@@ -182,5 +222,9 @@ public class GameRunner{
             game.setGameState(GameState.Voting);
         }
         System.out.println(game.getCharacters());
+    }
+
+    private void runGameIfEnd(Game game) {
+        game.setGameState(GameState.End);
     }
 }

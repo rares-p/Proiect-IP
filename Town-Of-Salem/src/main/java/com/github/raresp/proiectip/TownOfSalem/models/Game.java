@@ -6,6 +6,8 @@ import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundExcep
 import com.github.raresp.proiectip.TownOfSalem.exceptions.InvalidCharacterException;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.Character;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.*;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacter;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Jailor;
 import jakarta.persistence.*;
 
@@ -21,6 +23,7 @@ import java.util.Objects;
 
 import com.github.raresp.proiectip.TownOfSalem.models.characters.TownCharacters.Sheriff;
 
+import javax.crypto.spec.ChaCha20ParameterSpec;
 import java.util.*;
 
 @Entity
@@ -32,6 +35,10 @@ public class Game {
     public final int nightTime = 20;
     public final int dayEndingTime = 5;
     public final int nightEndingTime = 5;
+    public final int endTime = 60;
+    public int daysSinceLastDeath = 0;
+    public int aliveLastNight = 0;
+    public List<Character> winners = new ArrayList<>();
     @Temporal(TemporalType.TIMESTAMP)
     public Instant timeOfCurrentState;
 
@@ -104,6 +111,12 @@ public class Game {
                 .toList();
     }
 
+    public List<Character> getTownCharacters() {
+        return characters.stream()
+                .filter(c -> c instanceof TownCharacter)
+                .toList();
+    }
+
     public List<MafiaCharacter> getMafiaCharactersIfCharacterIsMafia(Character c) {
         if(c instanceof MafiaCharacter && characters.contains(c))
             return getMafiaCharacters();
@@ -152,6 +165,12 @@ public class Game {
     public List<Character> getDeadPlayers() {
         return characters.stream()
                 .filter(c -> !c.isAlive())
+                .toList();
+    }
+
+    public List<Character> getAlivePlayers() {
+        return characters.stream()
+                .filter(c -> c.isAlive())
                 .toList();
     }
 
@@ -241,6 +260,41 @@ public class Game {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public boolean gameEnded() {
+        if (getAlivePlayers().stream().allMatch(c -> (c instanceof Jester || c instanceof Executioner || c instanceof Survivor))) {
+            winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
+            return true;
+        }
+        if (getAlivePlayers().stream().filter(c -> !(c instanceof Jester || c instanceof Executioner || c instanceof Survivor)).allMatch(c -> c instanceof TownCharacter)) {
+            winners.addAll(getTownCharacters());
+            winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
+            return true;
+        }
+        if (getAlivePlayers().stream().filter(c -> !(c instanceof Jester || c instanceof Executioner || c instanceof Survivor)).allMatch(c -> c instanceof MafiaCharacter)) {
+            winners.addAll(getMafiaCharacters());
+            winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
+            return true;
+        }
+        if (getAlivePlayers().stream().filter(c -> !(c instanceof Jester || c instanceof Executioner || c instanceof Survivor)).allMatch(c -> c instanceof Arsonist)) {
+            winners.addAll(getCharacters().stream().filter(c -> c instanceof Arsonist).toList());
+            winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
+            return true;
+        }
+        if (getAlivePlayers().stream().filter(c -> !(c instanceof Jester || c instanceof Executioner || c instanceof Survivor)).allMatch(c -> c instanceof Werewolf)) {
+            winners.addAll(getCharacters().stream().filter(c -> c instanceof Werewolf).toList());
+            winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
+            return true;
+        }
+        if (getAlivePlayers().stream().filter(c -> !(c instanceof Jester || c instanceof Executioner || c instanceof Survivor)).allMatch(c -> c instanceof SerialKiller)) {
+            winners.addAll(getCharacters().stream().filter(c -> c instanceof SerialKiller).toList());
+            winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
+            return true;
+        }
+        if (getAlivePlayers().size() == 0)
+            return true;
+        return false;
     }
 
 //    @Override

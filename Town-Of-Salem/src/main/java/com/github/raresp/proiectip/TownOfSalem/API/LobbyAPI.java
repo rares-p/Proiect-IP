@@ -163,10 +163,14 @@ public class LobbyAPI {
         }
         if(lobby.getState() == LobbyState.WAITING_PLAYERS)
             return ResponseEntity.ok(new LobbyStateResponse(lobby));
+        if (lobby.getGame().getGameState() == GameState.End) {
+            ResponseEntity<?> resp = ResponseEntity.ok(new GameEndResponse(lobby.getGame()));
+            return resp;
+        }
         Character character = lobby.getGame().getCharacterByName(userId);
         ResponseEntity<?> resp = ResponseEntity.ok(new CurrentUserAllUsersResponse(lobby.getGame(), character));
-        if(lobby.getGame().gameState == GameState.NightEnding)
-            lobby.getGame().getCharacterByName(userId).targets.clear();
+//        if(lobby.getGame().gameState == GameState.NightEnding)
+//            lobby.getGame().getCharacterByName(userId).targets.clear();
         gameRepository.save(lobby.getGame());
         return resp;
     }

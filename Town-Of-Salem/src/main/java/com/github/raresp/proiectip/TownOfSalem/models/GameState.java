@@ -6,5 +6,6 @@ public enum GameState {
     Voting,
     Night,
     NightEnding,
-    DayEnding
+    DayEnding,
+    End
 }

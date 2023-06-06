@@ -35,7 +35,4 @@ public class Spy extends TownCharacter {
             return null;
         return new SpyInteraction(this, targets);
     }
-
-    @Override
-    public void setPossibleTargets(List<Character> characters) {}
 }

@@ -62,9 +62,4 @@ public class Vigilante extends TownCharacter {
         }
         return "You have " + bulletsLeft + " bullets left";
     }
-
-    @Override
-    public void setPossibleTargets(List<Character> characters) {
-
-    }
 }

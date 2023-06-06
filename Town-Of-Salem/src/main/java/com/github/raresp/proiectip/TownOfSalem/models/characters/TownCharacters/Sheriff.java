@@ -44,7 +44,4 @@ public class Sheriff extends TownCharacter {
         this.AddNightResult("Your target seems " + ((target.IsInnocent() && !target.isFramed())?"Innocent!":"Suspicious!"));
         target.setFramed(false);
     }
-
-    @Override
-    public void setPossibleTargets(List<Character> characters) {}
 }

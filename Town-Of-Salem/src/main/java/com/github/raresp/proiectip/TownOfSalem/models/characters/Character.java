@@ -45,6 +45,7 @@ public abstract class Character implements Comparable<Character> {
     protected AttackTypes attack;
     protected ImmunityTypes immunity;
     protected boolean isJailed;
+    private String role;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)//asta sau ElementCollection?
     public List<Character> visitors = new ArrayList<>();
@@ -61,6 +62,7 @@ public abstract class Character implements Comparable<Character> {
         this.roleBlocked = false;
         this.isAlive = true;
         this.healed = false;
+        this.role = getRole();
     }
 
     protected Character() {}
@@ -248,5 +250,13 @@ public abstract class Character implements Comparable<Character> {
             for(Character c : characters)
                 if(!Objects.equals(getPlayerUsername(), c.getPlayerUsername()) && c.isAlive)
                     this.possibleTargets.add(c.getPlayerUsername());
+    }
+
+    @Override
+    public String toString() {
+        return "Character{" +
+                "isAlive=" + isAlive +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

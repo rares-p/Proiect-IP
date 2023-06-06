@@ -93,45 +93,49 @@ public class GameUtils {
         }
         return characters;
 
-    /*public static List<Character> generateCharacters(List<String> playerNames) {
-        List<Character> characters = new ArrayList<>();
-        if(playerNames.size() < Lobby.MINIMUM_PLAYERS)
-            throw new InvalidLobbyException();
-        for(int i = 0; i < playerNames.size(); i ++) {
-            switch (i) {
-                case 0:
-                    characters.add(new Doctor(playerNames.get(i)));
-                    break;
-                case 1:
-                    characters.add(new Mafioso(playerNames.get(i)));
-                    break;
-                case 2:
-                    characters.add(new Escort(playerNames.get(i)));
-                    break;
-                case 3:
-                    characters.add(new Escort(playerNames.get(i)));
-                    break;
-                case 4:
-                    characters.add(new Veteran(playerNames.get(i)));
-                    break;
-                case 5:
-                    characters.add(new GodFather(playerNames.get(i)));
-                    break;
-                case 6:
-                    characters.add(new Vigilante(playerNames.get(i)));
-                    break;
-                case 7:
-                    characters.add(new Arsonist(playerNames.get(i)));
-                    break;
-                case 8:
-                    characters.add(new Consigliere(playerNames.get(i)));
-                    break;
-                case 9:
-                    characters.add(new SerialKiller(playerNames.get(i)));
-                    break;
-            }
-        }
-        return characters;
-    }*/
-    }
+//    public static List<Character> generateCharacters(List<String> playerNames) throws InvalidLobbyException {
+//        List<Character> characters = new ArrayList<>();
+//        if(playerNames.size() < Lobby.MINIMUM_PLAYERS)
+//            throw new InvalidLobbyException("Not enough players");
+//        for(int i = 0; i < playerNames.size(); i ++) {
+//            switch (i) {
+//                case 0:
+//                    characters.add(new Consort(playerNames.get(i)));
+//                    break;
+//                case 1:
+//                    characters.add(new Mafioso(playerNames.get(i)));
+//                    break;
+//                case 2:
+////                    Executioner executioner = new Executioner(playerNames.get(i));
+////                    executioner.target = characters.get(0);
+////                    characters.add(executioner);
+//                    characters.add(new Veteran(playerNames.get(i)));
+//                    break;
+//                case 3:
+//                    characters.add(new GodFather(playerNames.get(i)));
+//                    break;
+//                case 4:
+//                    characters.add(new Veteran(playerNames.get(i)));
+//                    break;
+//                case 5:
+//                    characters.add(new GodFather(playerNames.get(i)));
+//                    break;
+//                case 6:
+//                    characters.add(new Vigilante(playerNames.get(i)));
+//                    break;
+//                case 7:
+//                    characters.add(new Arsonist(playerNames.get(i)));
+//                    break;
+//                case 8:
+//                    characters.add(new Consigliere(playerNames.get(i)));
+//                    break;
+//                case 9:
+//                    characters.add(new SerialKiller(playerNames.get(i)));
+//                    break;
+//            }
+//        }
+//        return characters;
+//    //}
+//    }
+}
 }

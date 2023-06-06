@@ -50,7 +50,9 @@ public class Executioner extends NeutralCharacter {
 
     @Override
     public String getRole() {
-        return super.getRole() + " (" + target.getPlayerUsername() + ")";
+        if(target != null)
+            return super.getRole() + " (" + target.getPlayerUsername() + ")";
+        return "exectioner";
     }
 
     @Override

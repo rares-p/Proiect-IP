@@ -1,6 +1,9 @@
 package com.github.raresp.proiectip.TownOfSalem.utils;
 
 import com.github.raresp.proiectip.TownOfSalem.exceptions.CharacterNotFoundException;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacter;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.GodFather;
+import com.github.raresp.proiectip.TownOfSalem.models.characters.MafiaCharacters.Mafioso;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Executioner;
 import com.github.raresp.proiectip.TownOfSalem.models.characters.NeutralCharacters.Jester;
 import com.github.raresp.proiectip.TownOfSalem.repositories.GameService;
@@ -20,7 +23,10 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -36,12 +42,12 @@ public class GameRunner{
     public GameRunner() {}
 
     public void StartGame(Long gameId) throws GameNotFoundException {
-            CronTrigger cronTrigger
-                    = new CronTrigger("0/1 * * * * ?");
-            Game onlyGame = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException());
-            //gameRepository.deleteAll();
-            gameRepository.save(onlyGame);
-            scheduler.schedule(() -> runGame(gameId), cronTrigger);
+        CronTrigger cronTrigger
+                = new CronTrigger("0/1 * * * * ?");
+        Game onlyGame = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException());
+        //gameRepository.deleteAll();
+        gameRepository.save(onlyGame);
+        scheduler.schedule(() -> runGame(gameId), cronTrigger);
     }
 
     public void runGame(Long gameId) {
@@ -121,26 +127,55 @@ public class GameRunner{
             c.setPossibleTargets(game.getCharacters());
         }
         game.setGameState(GameState.Night);
+        game.computeNightBeginningAnnouncements();
     }
 
     private void runGameIfNightEndingTime(Game game) {
         for (Character c : game.getCharacters()) {
             c.resetStats();
-            if(c instanceof Executioner && !((Executioner) (c)).target.isAlive()) {
-                try {
-                    String username = c.getPlayerUsername();
-                    game.getCharacters().remove(game.getCharacterByName(username));
-                    game.getCharacters().add(new Jester(username));
-                } catch (CharacterNotFoundException e) {
+        }
 
-                }
+        Executioner executioner = (Executioner) game.getCharacters().stream().filter(c -> c instanceof Executioner && c.isAlive()).findFirst().orElse(null);
+        System.out.println("EXECUTIOJNERUL " + executioner);
+        if(executioner != null)
+            if(!executioner.target.isAlive() && !game.winners.contains(executioner)) {
+
+                String username = executioner.getPlayerUsername();
+                game.getCharacters().remove(executioner);
+                game.getCharacters().add(new Jester(username));
             }
 
+        //for(int i = 0; i < 2; i ++) {
+        if (game.getAlivePlayers().stream().noneMatch(gf -> gf instanceof GodFather)) {
+            Character mafioso = game.getAlivePlayers().stream().filter(c -> c instanceof Mafioso).findFirst().orElse(null);
+            if (mafioso != null) {
+                try {
+                    String username = mafioso.getPlayerUsername();
+                    game.getCharacters().remove(game.getCharacterByName(username));
+                    game.getCharacters().add(new GodFather(username));
+                } catch (CharacterNotFoundException e) {
+                    //ignored
+                }
+            }
         }
+
+        if (game.getAlivePlayers().stream().noneMatch(maf -> maf instanceof Mafioso)) {
+            try {
+                List<Character> supportMafiaCharacters = new ArrayList<>(game.getAlivePlayers().stream().filter(c -> c instanceof MafiaCharacter && !(c instanceof Mafioso) && !(c instanceof GodFather)).toList());
+                if (supportMafiaCharacters.size() > 0) {
+                    String username = supportMafiaCharacters.get(new Random().nextInt(supportMafiaCharacters.size())).getPlayerUsername();
+                    game.getCharacters().remove(game.getCharacterByName(username));
+                    game.getCharacters().add(new Mafioso(username));
+                }
+            } catch (CharacterNotFoundException e) {
+                //ignored
+            }
+        }
+        //}
 
         if (game.gameEnded()) {
             game.setGameState(GameState.End);
-            gameService.updateGame(game);
+            gameRepository.save(game);
             return;
         }
 
@@ -156,13 +191,13 @@ public class GameRunner{
                         game.winners.add(c);
             }
             game.setGameState(GameState.End);
-            gameService.updateGame(game);
+            gameRepository.save(game);
             return;
         }
 
         game.aliveLastNight = game.getAlivePlayers().size();
         game.setGameState(GameState.Discussion);
-        gameService.updateGame(game);
+        //gameRepository.save(game);
     }
 
     private void runGameIfDiscussionTime(Game game) {
@@ -171,8 +206,10 @@ public class GameRunner{
     }
 
     private void runGameIfVotingTime(Game game) {
+        boolean voted = false;
         VotingSession votingSession = new VotingSession(game.selectedCharacter, game.getCharacters());
         if(votingSession.calculateOutcome()) {
+            voted = true;
             game.selectedCharacter.setIsAlive(false);
             if (game.selectedCharacter instanceof Jester)
                 game.winners.add(game.selectedCharacter);
@@ -182,25 +219,26 @@ public class GameRunner{
             game.daysSinceLastDeath = 0;
             if (game.gameEnded()) {
                 game.setGameState(GameState.End);
-                gameService.updateGame(game);
+                gameRepository.save(game);
                 return;
             }
         }
         game.votingLog = votingSession.getVotes();
         game.sendVotingResults(votingSession.getVotes());
-
-        game.setGameState(GameState.Selection);
+        if(voted)
+            game.setGameState(GameState.DayEnding);
+        else
+            game.setGameState(GameState.Selection);
         System.out.println(game.votingLog);
-        gameService.updateGame(game);
+        gameRepository.save(game);
     }
 
     private void runGameIfNightTime(Game game) {
         game.selectedCharacter = null;
-        game.computeNightBeginningAnnouncements();
         TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
         turnInteractions.computeInteractionsOutcome();
         game.setGameState(GameState.NightEnding);
-        gameService.updateGame(game);
+        //gameRepository.save(game);
     }
 
 

@@ -13,6 +13,7 @@ public class CurrentUserResponse {
     public Boolean canAct;
     public List<String> nightResults;
     public List<String> possibleTargets;
+    public Long idDebug;
 
     public CurrentUserResponse(Character character) {
         this.isAlive = character.isAlive();
@@ -21,7 +22,8 @@ public class CurrentUserResponse {
         this.role = character.getRole();
         this.nrOfSelection = character.getNumberOfSelection();
         this.canAct = character.canAct;
-        this.nightResults = character.nightResults;
+        this.nightResults = character.nightResults;//.subList(0, character.nightResults.size() / 2);
         this.possibleTargets = character.possibleTargets;
+        idDebug = character.getId();
     }
 }

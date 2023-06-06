@@ -9,9 +9,6 @@ import java.util.List;
 
 @Entity
 public class Mafioso extends MafiaCharacter {
-    @OneToOne(mappedBy = "mafioso", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private GodFather godFather;
-
     public Mafioso(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Basic;
@@ -32,8 +29,6 @@ public class Mafioso extends MafiaCharacter {
 
     @Override
     public Interaction createInteraction() {
-        if(targets.isEmpty())
-            return null;
         return new MafiosoInteraction(this, targets);
     }
 

@@ -235,9 +235,16 @@ public class GameRunner{
 
     private void runGameIfNightTime(Game game) {
         game.selectedCharacter = null;
-        TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
-        turnInteractions.computeInteractionsOutcome();
-        game.setGameState(GameState.NightEnding);
+        try{
+            TurnInteractions turnInteractions = new TurnInteractions(game.getCharacters(), game.isFullMoonNight());
+            turnInteractions.computeInteractionsOutcome();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        finally {
+            game.setGameState(GameState.NightEnding);
+        }
         //gameRepository.save(game);
     }
 

@@ -22,7 +22,11 @@ public class CurrentUserResponse {
         this.role = character.getRole();
         this.nrOfSelection = character.getNumberOfSelection();
         this.canAct = character.canAct;
-        this.nightResults = character.nightResults;//.subList(0, character.nightResults.size() / 2);
+
+        if(!character.nightResults.isEmpty() && character.nightResults.size() > 2 && character.nightResults.get(0).equals(character.nightResults.get(character.nightResults.size() / 2)))
+            this.nightResults = character.nightResults.subList(0, character.nightResults.size() / 2);
+        else
+            this.nightResults = character.nightResults;//.subList(0, character.nightResults.size() / 2);
         this.possibleTargets = character.possibleTargets;
         idDebug = character.getId();
     }

@@ -1,0 +1,4 @@
+Am creat diverse task-uri legate de:
+-bug-uri in interactiunile rolurilor
+-comunicarea cu front-end-ul
+-adaugarea unei stari finale pentru joc

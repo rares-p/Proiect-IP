@@ -1,0 +1,1 @@
+Am finalizat clasa Interactions, am extins-o si am pus la punct actiunile jucatorilor si modul in care se afecteaza intre ele.

@@ -1,0 +1,1 @@
+Am testat reimplementarea acțiunilor din timpul nopții și am rezolvat buggurile descoperite.

@@ -1,0 +1,1 @@
+Am inceput sa creez actiunile personajelor si sa modelam clasa interactions ca sa putem afla mai usor outcome-ul unei runde de joc.

@@ -1,0 +1,2 @@
+Am lucrat la crearea lobby-urilor, am rezolvat diverse bug-uri pentru rolul de Arsonist si Executioner. Am facut ca Executionerul sa se transforme
+in Jester, daca tinta lui moare nespanzurata.

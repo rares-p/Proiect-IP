@@ -9,9 +9,6 @@ import java.util.List;
 
 @Entity
 public class Mafioso extends MafiaCharacter {
-    @OneToOne(mappedBy = "mafioso", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private GodFather godFather;
-
     public Mafioso(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Basic;

@@ -30,13 +30,14 @@ public class Game {
     public final int discussionTime = 30;
     public final int selectionTime = 30;
     public final int votingTime = 15;
-    public final int nightTime = 20;
+    public final int nightTime = 30;
     public final int dayEndingTime = 5;
     public final int nightEndingTime = 5;
     public final int endTime = 60;
     public int daysSinceLastDeath = 0;
     public int aliveLastNight = 0;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "game_winners")
     public List<Character> winners = new ArrayList<>();
     @Temporal(TemporalType.TIMESTAMP)
     public Instant timeOfCurrentState;
@@ -265,6 +266,7 @@ public class Game {
     }
 
     public boolean gameEnded() {
+        System.out.println(characters);
         if (getAlivePlayers().stream().allMatch(c -> (c instanceof Jester || c instanceof Executioner || c instanceof Survivor))) {
             winners.addAll(getAlivePlayers().stream().filter(c -> c instanceof Survivor).toList());
             return true;

@@ -12,10 +12,6 @@ import java.util.List;
 
 @Entity
 public class GodFather extends MafiaCharacter {
-    @OneToOne
-    @JoinColumn(name = "mafioso_godfather_id", nullable = true)
-    public Character mafioso = null;
-
     public GodFather(String playerUsername) {
         super(playerUsername);
         this.attack = AttackTypes.Basic;

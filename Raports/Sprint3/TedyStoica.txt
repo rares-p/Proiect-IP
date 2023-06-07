@@ -1,0 +1,1 @@
+Am facut deploy la partea de reguli folosind un Raspberry PI si am ajutat la integrarea tuturor partilor. 

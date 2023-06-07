@@ -1,0 +1,1 @@
+Am implementat sistemul de final al jocului, pentru toate cazurile posibile, prin care se determina jucatorii care au castigat, cat si cei care au pierdut.

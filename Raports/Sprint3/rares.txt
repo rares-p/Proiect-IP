@@ -1,0 +1,1 @@
+Am remodelat clasa de interactiuni intre personaje si am impartit task-uri legate de crearea lobby-urilor

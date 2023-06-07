@@ -1,0 +1,1 @@
+Am creat task-uri pentru membrii echipei si am supervizat crearea rolurilor de baza, precum: Sheriff, Mafioso, Doctor si Escort.

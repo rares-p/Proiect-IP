@@ -1,0 +1,1 @@
+Am remodelat complet modul în care evaluăm acțiunile jucătorilor din timpul nopții: multe schimbări la clasa TurnInteractions, am creat clasa Interaction ce descrie o interacțiune generică și subclasele acesteia.

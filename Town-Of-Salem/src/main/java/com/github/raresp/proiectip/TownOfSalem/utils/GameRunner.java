@@ -226,7 +226,7 @@ public class GameRunner{
         game.votingLog = votingSession.getVotes();
         game.sendVotingResults(votingSession.getVotes());
         if(voted)
-            game.setGameState(GameState.DayEnding);
+            game.setGameState(GameState.Voting);
         else
             game.setGameState(GameState.Selection);
         System.out.println(game.votingLog);
